@@ -2,7 +2,9 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:note_sharing_project/services/storage_service.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -29,12 +31,42 @@ class _OpenFilePageState extends State<OpenFilePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Expanded(
+              child: FutureBuilder(
+                  future: StorageService().getFiles(),
+                  builder: (context, AsyncSnapshot<List<String>?> snapshot) {
+                    if (snapshot.data != null) {
+                      final datalist = snapshot.data;
+                      return ListView.builder(
+                        itemCount: datalist?.length,
+                        itemBuilder: ((context, index) {
+                          return GestureDetector(
+                            onTap: () async {
+                              openFile(
+                                  url: datalist![index], fileName: "abc.jpeg");
+                            },
+                            child: ListTile(
+                              title: Text(datalist![index]),
+                            ),
+                          );
+                        }),
+                      );
+                    }
+
+                    return Center(
+                      child: Text("empty"),
+                    );
+                  }),
+            ),
             ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
+                  final downloadUrl = await FirebaseStorage.instance
+                      .ref("/docs/ApplicationDetails.pdf")
+                      .getDownloadURL();
+                  log("url:$downloadUrl");
                   openFile(
-                    url:
-                        "https://opengraph.githubassets.com/c09e331e20e8055bca600bad624e2dcd4f5bef8e887b9b91c180023f126e8fde/flutter/flutter/issues/48963",
-                    fileName: "test",
+                    url: downloadUrl,
+                    fileName: "ApplicationDetails.pdf",
                   );
                 },
                 child: const Text('Download'))
@@ -46,25 +78,33 @@ class _OpenFilePageState extends State<OpenFilePage> {
 
   Future openFile({required String url, String? fileName}) async {
     final file = await downloadFile(url, fileName!);
-    if (file != null) {
-      log("file:${file.path}");
-      OpenFile.open(file.path);
+    if (file == null) return;
+    log("file:${file.path}");
+    try {
+      await OpenFile.open(file.path);
+    } catch (e) {
+      log("openfile Error:$e");
     }
   }
 
   Future<File?> downloadFile(String url, String name) async {
-    final appStorage = await getApplicationDocumentsDirectory();
-    final file = File("${appStorage.path}/$name");
-    final response = await Dio().get(url,
-        options: Options(
-            responseType: ResponseType.bytes,
-            followRedirects: false,
-            receiveTimeout: 0));
+    try {
+      final appStorage = await getApplicationDocumentsDirectory();
+      final file = File("${appStorage.path}/$name");
+      final response = await Dio().get(url,
+          options: Options(
+              responseType: ResponseType.bytes,
+              followRedirects: false,
+              receiveTimeout: 0));
 
-    final raf = file.openSync(mode: FileMode.write);
-    raf.writeFromSync(response.data);
-    await raf.close();
+      final raf = file.openSync(mode: FileMode.write);
+      raf.writeFromSync(response.data);
+      await raf.close();
 
-    return file;
+      return file;
+    } catch (e) {
+      log("downloadFileEROR:$e");
+      rethrow;
+    }
   }
 }
