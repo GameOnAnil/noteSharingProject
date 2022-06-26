@@ -19,11 +19,11 @@ class FilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: blueTextColor,
+      backgroundColor: darkBlueBackground,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.white,
-        title: Text("$semester $program"),
+        title: Center(child: Text("$semester $program")),
         elevation: 0,
         actions: [
           IconButton(
@@ -36,6 +36,7 @@ class FilePage extends StatelessWidget {
         onPressed: () {
           FirebaseService().insertData("$program-$semester-$name");
         },
+        backgroundColor: Theme.of(context).primaryColor,
         child: const Icon(Icons.add),
       ),
       body: Column(
@@ -98,7 +99,7 @@ class FilePage extends StatelessWidget {
           Text(
             "Files",
             style: TextStyle(
-              color: blueTextColor,
+              color: darkBlueBackground,
               fontWeight: FontWeight.w700,
               fontSize: 20,
             ),

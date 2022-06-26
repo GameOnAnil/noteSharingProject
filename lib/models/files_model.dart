@@ -80,6 +80,16 @@ List<FileModel> dummyFileList = [
         "https://firebasestorage.googleapis.com/v0/b/notesharingapp-1ef6f.appspot.com/o/docs%2FmyRecording.mp4?alt=media&token=d2ded35d-9faf-42bd-b3bc-9f8b8613395e",
   ),
   FileModel(
+    fileType: "video/mp4",
+    filePath: "docs/myvideo.mp4",
+    name: "myvideo.mp4",
+    date: "10 Dec 2022",
+    time: "1:30 PM",
+    size: "30.7 MB",
+    url:
+        "https://firebasestorage.googleapis.com/v0/b/notesharingapp-1ef6f.appspot.com/o/docs%2Fmyvideo.mp4?alt=media&token=bd5ec262-1255-43b9-86bc-ea668e886398",
+  ),
+  FileModel(
     fileType: "application/pdf",
     filePath: "docs/ApplicationDetails.pdf",
     name: "ApplicationDetails.pdf",

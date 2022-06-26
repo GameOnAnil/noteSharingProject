@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: blueTextColor,
+      backgroundColor: darkBlueBackground,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -44,6 +44,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: darkBlueBackground,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -212,7 +213,7 @@ class _HomePageState extends State<HomePage> {
           final subList = ref.watch(subNotifierProvider).subList;
           if (subList.isEmpty) {
             return const Center(
-              child: Text("Subject Not Found..."),
+              child: Text("Please Enter Subject..."),
             );
           } else {
             return GridView.builder(

@@ -71,12 +71,13 @@ class HorizontalFileTile extends StatelessWidget {
           width: double.infinity,
           height: 100,
           decoration: BoxDecoration(
-              color: Colors.white,
-              //  border: Border.all(color: Colors.black.withOpacity(.3)),
+              color: lightBlueBackground,
               borderRadius: BorderRadius.circular(4)),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 getLogo(item.fileType, item.url),
                 const SizedBox(
@@ -90,26 +91,72 @@ class HorizontalFileTile extends StatelessWidget {
                       Text(
                         item.name,
                         style: const TextStyle(
-                          color: blueTextColor,
+                          color: darkBlueBackground,
                           fontWeight: FontWeight.w500,
                           fontSize: 18,
                         ),
                       ),
                       Text(
-                        item.size,
+                        item.date,
                         style: const TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.w400,
                           fontSize: 12,
                         ),
                       ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "Posted By: Anil Thapa",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12,
+                            ),
+                          ),
+                          Text(
+                            item.size,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
-                Image.asset(
-                  "assets/images/menu.png",
-                  width: 18,
-                  height: 18,
+                Padding(
+                  padding: const EdgeInsets.only(right: 4.0),
+                  child: SizedBox(
+                    width: 30,
+                    height: double.infinity,
+                    child: PopupMenuButton(
+                      onSelected: (value) {},
+                      itemBuilder: (context) => [
+                        const PopupMenuItem(
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.report,
+                              color: Colors.red,
+                            ),
+                            title: Text("Report"),
+                          ),
+                        ),
+                        const PopupMenuItem(
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.download,
+                              color: Color.fromARGB(255, 37, 68, 38),
+                            ),
+                            title: Text("Download"),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
