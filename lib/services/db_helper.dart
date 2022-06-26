@@ -24,7 +24,7 @@ class DbHelper {
       version: 1,
       onCreate: _onCreate,
     );
-    await populate(db);
+
     return db;
   }
 
@@ -37,6 +37,7 @@ class DbHelper {
       program TEXT)
       ''',
     );
+    await populate(db);
   }
 
   Future<void> populate(Database db) async {

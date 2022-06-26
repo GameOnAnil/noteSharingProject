@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
 
-class MyColor {
-  static const cream = Color.fromARGB(255, 254, 232, 243);
-}
+const cream = Color.fromARGB(255, 254, 232, 243);
+const blueTextColor = Color.fromARGB(255, 20, 36, 58);
+const lightBlueBackground = Color.fromARGB(255, 240, 249, 255);

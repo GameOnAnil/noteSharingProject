@@ -7,6 +7,7 @@ class FileModel {
   final String size;
   final String filePath;
   final String fileType;
+  final String url;
   FileModel({
     required this.name,
     required this.date,
@@ -14,6 +15,7 @@ class FileModel {
     required this.size,
     required this.filePath,
     required this.fileType,
+    required this.url,
   });
 
   Map<String, dynamic> toMap() {
@@ -24,6 +26,7 @@ class FileModel {
       'size': size,
       'filePath': filePath,
       'fileType': fileType,
+      'url': url,
     };
   }
 
@@ -35,6 +38,7 @@ class FileModel {
       size: map['size'] ?? '',
       filePath: map['filePath'] ?? '',
       fileType: map['fileType'] ?? '',
+      url: map['url'] ?? '',
     );
   }
 
@@ -46,31 +50,43 @@ class FileModel {
 
 List<FileModel> dummyFileList = [
   FileModel(
-      fileType: "image/jpeg",
-      filePath: "docs/bts2.jpeg",
-      name: "bts2.jpeg",
-      date: "10 Dec 2022",
-      time: "1:30 PM",
-      size: "1.7 MB"),
+    fileType: "image/jpeg",
+    filePath: "docs/bts2.jpeg",
+    name: "bts2.jpeg",
+    date: "10 Dec 2022",
+    time: "1:30 PM",
+    size: "1.7 MB",
+    url:
+        "https://firebasestorage.googleapis.com/v0/b/notesharingapp-1ef6f.appspot.com/o/docs%2Fbts2.jpeg?alt=media&token=9ab7171f-5344-4b2e-af41-7b7c78d680fa",
+  ),
   FileModel(
-      fileType: "image/jpeg",
-      filePath: "docs/twice.png",
-      name: "twice.jpeg",
-      date: "10 Nov 2022",
-      time: "12:30 PM",
-      size: "7.9 MB"),
+    fileType: "image/jpeg",
+    filePath: "docs/twice.png",
+    name: "twice.jpeg",
+    date: "10 Nov 2022",
+    time: "12:30 PM",
+    size: "7.9 MB",
+    url:
+        "https://firebasestorage.googleapis.com/v0/b/notesharingapp-1ef6f.appspot.com/o/docs%2Ftwice.png?alt=media&token=fd2c26de-157b-4612-94de-7e06e92d1577",
+  ),
   FileModel(
-      fileType: "image/jpeg",
-      filePath: "/docs/bts4.jpeg",
-      name: "bts4.jpeg",
-      date: "10 Dec 2022",
-      time: "1:30 PM",
-      size: "1.7 MB"),
+    fileType: "video/mp4",
+    filePath: "docs/myRecording.mp4",
+    name: "myRecording.mp4",
+    date: "10 Dec 2022",
+    time: "1:30 PM",
+    size: "1.7 MB",
+    url:
+        "https://firebasestorage.googleapis.com/v0/b/notesharingapp-1ef6f.appspot.com/o/docs%2FmyRecording.mp4?alt=media&token=d2ded35d-9faf-42bd-b3bc-9f8b8613395e",
+  ),
   FileModel(
-      fileType: "image/jpeg",
-      filePath: "docs/ApplicationDetails.pdf",
-      name: "ApplicationDetails.pdf",
-      date: "10 Nov 2022",
-      time: "12:30 PM",
-      size: "7.9 MB"),
+    fileType: "application/pdf",
+    filePath: "docs/ApplicationDetails.pdf",
+    name: "ApplicationDetails.pdf",
+    date: "10 Nov 2022",
+    time: "12:30 PM",
+    size: "7.9 MB",
+    url:
+        "https://firebasestorage.googleapis.com/v0/b/notesharingapp-1ef6f.appspot.com/o/docs%2FApplicationDetails.pdf?alt=media&token=da409ec5-3076-4fac-8a55-97b5908e0e15",
+  ),
 ];
