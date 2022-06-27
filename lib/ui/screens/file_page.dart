@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:note_sharing_project/models/files_model.dart';
 import 'package:note_sharing_project/services/firebase_service.dart';
+import 'package:note_sharing_project/ui/screens/add_file_page.dart';
 import 'package:note_sharing_project/ui/widgets/file_grid_tile.dart';
 import 'package:note_sharing_project/ui/widgets/horizontal_file_tile.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
@@ -19,10 +20,8 @@ class FilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: darkBlueBackground,
+      backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.white,
         title: Center(child: Text("$semester $program")),
         elevation: 0,
         actions: [
@@ -34,9 +33,14 @@ class FilePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          FirebaseService().insertData("$program-$semester-$name");
+          // FirebaseService().insertData("$program-$semester-$name");
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: ((context) => const AddFilePage()),
+            ),
+          );
         },
-        backgroundColor: Theme.of(context).primaryColor,
         child: const Icon(Icons.add),
       ),
       body: Column(

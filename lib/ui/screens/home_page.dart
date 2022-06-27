@@ -19,13 +19,14 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: darkBlueBackground,
+      backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.transparent,
         actions: [
           IconButton(
-              onPressed: () {}, icon: const Icon(Icons.notifications_outlined))
+            onPressed: () {},
+            icon: const Icon(Icons.notifications_outlined),
+          )
         ],
       ),
       body: Column(

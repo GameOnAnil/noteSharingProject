@@ -22,7 +22,16 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
-        theme: ThemeData(primaryColor: darkBlueBackground),
+        theme: ThemeData(
+          primaryColor: darkBlueBackground,
+          backgroundColor: Colors.white,
+          brightness: Brightness.light,
+          appBarTheme: const AppBarTheme(backgroundColor: darkBlueBackground),
+          textTheme: const TextTheme(),
+          floatingActionButtonTheme: const FloatingActionButtonThemeData(
+              backgroundColor: darkBlueBackground,
+              foregroundColor: Colors.white),
+        ),
         home: const HomePage(),
       ),
     );

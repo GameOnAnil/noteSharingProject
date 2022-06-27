@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:note_sharing_project/models/files_model.dart';
-import 'package:note_sharing_project/services/storage_service.dart';
 
 class FileGridTile extends StatelessWidget {
   const FileGridTile({
@@ -16,7 +15,7 @@ class FileGridTile extends StatelessWidget {
       onTap: () async {
         // final downloadUrl =
         //     await FirebaseStorage.instance.ref(item.filePath).getDownloadURL();
-        await StorageService().openFile(url: item.url, fileName: item.name);
+        //await StorageService().openFile(url: item.url, fileName: item.name);
       },
       child: Container(
         decoration: BoxDecoration(
