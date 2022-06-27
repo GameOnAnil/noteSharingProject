@@ -14,7 +14,16 @@ class FirebaseService {
             event.docs.map((e) => FileModel.fromMap(e.data())).toList());
   }
 
-  Future<void> insertData(String path) async {
+  Future<void> insertData(String path, FileModel fileModel) async {
+    final collectionRef =
+        firestore.collection("files").doc(path).collection("data");
+
+    await collectionRef.doc().set(fileModel.toMap());
+  }
+
+  Future<void> insertDummyData(
+    String path,
+  ) async {
     final collectionRef =
         firestore.collection("files").doc(path).collection("data");
 

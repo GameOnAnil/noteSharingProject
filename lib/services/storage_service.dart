@@ -7,6 +7,7 @@ import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
 class StorageService {
+  StorageService();
   FirebaseStorage storage = FirebaseStorage.instance;
 
   Future<List<String>> getFiles() async {

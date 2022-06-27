@@ -12,28 +12,28 @@ class HorizontalFileTile extends StatelessWidget {
   final FileModel item;
   Widget getLogo(String type, String url) {
     switch (type) {
-      case "image/jpeg":
+      case "jpeg":
         return Image.network(
           url,
           width: 70,
           height: 70,
           fit: BoxFit.cover,
         );
-      case "image/jpg":
+      case "jpg":
         return Image.network(
           url,
           width: 70,
           height: 70,
           fit: BoxFit.cover,
         );
-      case "image/png":
+      case "png":
         return Image.network(
           url,
           width: 70,
           height: 70,
           fit: BoxFit.cover,
         );
-      case "video/mp4":
+      case "mp4":
         return Image.asset(
           "assets/images/video.png",
           width: 70,
@@ -41,7 +41,7 @@ class HorizontalFileTile extends StatelessWidget {
           fit: BoxFit.cover,
           color: Colors.blue,
         );
-      case "application/pdf":
+      case "pdf":
         return Image.asset(
           "assets/images/pdf.png",
           width: 70,
@@ -95,6 +95,7 @@ class HorizontalFileTile extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                           fontSize: 18,
                         ),
+                        maxLines: 2,
                       ),
                       Text(
                         item.date,

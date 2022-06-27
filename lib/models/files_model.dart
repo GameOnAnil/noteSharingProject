@@ -50,7 +50,7 @@ class FileModel {
 
 List<FileModel> dummyFileList = [
   FileModel(
-    fileType: "image/jpeg",
+    fileType: "jpeg",
     filePath: "docs/bts2.jpeg",
     name: "bts2.jpeg",
     date: "10 Dec 2022",
@@ -60,7 +60,7 @@ List<FileModel> dummyFileList = [
         "https://firebasestorage.googleapis.com/v0/b/notesharingapp-1ef6f.appspot.com/o/docs%2Fbts2.jpeg?alt=media&token=9ab7171f-5344-4b2e-af41-7b7c78d680fa",
   ),
   FileModel(
-    fileType: "image/jpeg",
+    fileType: "jpeg",
     filePath: "docs/twice.png",
     name: "twice.jpeg",
     date: "10 Nov 2022",
@@ -70,7 +70,7 @@ List<FileModel> dummyFileList = [
         "https://firebasestorage.googleapis.com/v0/b/notesharingapp-1ef6f.appspot.com/o/docs%2Ftwice.png?alt=media&token=fd2c26de-157b-4612-94de-7e06e92d1577",
   ),
   FileModel(
-    fileType: "video/mp4",
+    fileType: "mp4",
     filePath: "docs/myRecording.mp4",
     name: "myRecording.mp4",
     date: "10 Dec 2022",
@@ -80,7 +80,7 @@ List<FileModel> dummyFileList = [
         "https://firebasestorage.googleapis.com/v0/b/notesharingapp-1ef6f.appspot.com/o/docs%2FmyRecording.mp4?alt=media&token=d2ded35d-9faf-42bd-b3bc-9f8b8613395e",
   ),
   FileModel(
-    fileType: "video/mp4",
+    fileType: "mp4",
     filePath: "docs/myvideo.mp4",
     name: "myvideo.mp4",
     date: "10 Dec 2022",
@@ -90,7 +90,7 @@ List<FileModel> dummyFileList = [
         "https://firebasestorage.googleapis.com/v0/b/notesharingapp-1ef6f.appspot.com/o/docs%2Fmyvideo.mp4?alt=media&token=bd5ec262-1255-43b9-86bc-ea668e886398",
   ),
   FileModel(
-    fileType: "application/pdf",
+    fileType: "pdf",
     filePath: "docs/ApplicationDetails.pdf",
     name: "ApplicationDetails.pdf",
     date: "10 Nov 2022",

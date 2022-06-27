@@ -26,8 +26,11 @@ class FilePage extends StatelessWidget {
         elevation: 0,
         actions: [
           IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.search),
+            onPressed: () async {
+              await FirebaseService()
+                  .insertDummyData("$program-$semester-$name");
+            },
+            icon: const Icon(Icons.add),
           ),
         ],
       ),
@@ -37,7 +40,11 @@ class FilePage extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: ((context) => const AddFilePage()),
+              builder: ((context) => AddFilePage(
+                    name: name,
+                    program: program,
+                    semester: semester,
+                  )),
             ),
           );
         },

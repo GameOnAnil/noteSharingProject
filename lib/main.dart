@@ -20,20 +20,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ProviderScope(
       child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primaryColor: darkBlueBackground,
-          backgroundColor: Colors.white,
-          brightness: Brightness.light,
-          appBarTheme: const AppBarTheme(backgroundColor: darkBlueBackground),
-          textTheme: const TextTheme(),
-          floatingActionButtonTheme: const FloatingActionButtonThemeData(
-              backgroundColor: darkBlueBackground,
-              foregroundColor: Colors.white),
-        ),
-        home: const HomePage(),
-      ),
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            primaryColor: darkBlueBackground,
+            backgroundColor: Colors.white,
+            brightness: Brightness.light,
+            appBarTheme: const AppBarTheme(backgroundColor: darkBlueBackground),
+            textTheme: const TextTheme(),
+            floatingActionButtonTheme: const FloatingActionButtonThemeData(
+                backgroundColor: darkBlueBackground,
+                foregroundColor: Colors.white),
+          ),
+          home: const HomePage()),
     );
   }
 }
