@@ -11,6 +11,7 @@ class UploadFileContainer extends StatelessWidget {
   final Function() removePicked;
   final String name;
   final String size;
+
   const UploadFileContainer({
     Key? key,
     required this.changeFile,

@@ -10,54 +10,6 @@ class HorizontalFileTile extends StatelessWidget {
   }) : super(key: key);
 
   final FileModel item;
-  Widget getLogo(String type, String url) {
-    switch (type) {
-      case "jpeg":
-        return Image.network(
-          url,
-          width: 70,
-          height: 70,
-          fit: BoxFit.cover,
-        );
-      case "jpg":
-        return Image.network(
-          url,
-          width: 70,
-          height: 70,
-          fit: BoxFit.cover,
-        );
-      case "png":
-        return Image.network(
-          url,
-          width: 70,
-          height: 70,
-          fit: BoxFit.cover,
-        );
-      case "mp4":
-        return Image.asset(
-          "assets/images/video.png",
-          width: 70,
-          height: 70,
-          fit: BoxFit.cover,
-          color: Colors.blue,
-        );
-      case "pdf":
-        return Image.asset(
-          "assets/images/pdf.png",
-          width: 70,
-          height: 70,
-          fit: BoxFit.cover,
-        );
-      default:
-        return Image.asset(
-          "assets/images/folder3.png",
-          width: 70,
-          height: 70,
-          fit: BoxFit.cover,
-          color: Colors.blue,
-        );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -165,5 +117,54 @@ class HorizontalFileTile extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget getLogo(String type, String url) {
+    switch (type) {
+      case "jpeg":
+        return Image.network(
+          url,
+          width: 70,
+          height: 70,
+          fit: BoxFit.cover,
+        );
+      case "jpg":
+        return Image.network(
+          url,
+          width: 70,
+          height: 70,
+          fit: BoxFit.cover,
+        );
+      case "png":
+        return Image.network(
+          url,
+          width: 70,
+          height: 70,
+          fit: BoxFit.cover,
+        );
+      case "mp4":
+        return Image.asset(
+          "assets/images/video.png",
+          width: 70,
+          height: 70,
+          fit: BoxFit.cover,
+          color: Colors.blue,
+        );
+      case "pdf":
+        return Image.asset(
+          "assets/images/pdf.png",
+          width: 70,
+          height: 70,
+          fit: BoxFit.cover,
+        );
+      default:
+        return Image.asset(
+          "assets/images/folder3.png",
+          width: 70,
+          height: 70,
+          fit: BoxFit.cover,
+          color: Colors.blue,
+        );
+    }
   }
 }

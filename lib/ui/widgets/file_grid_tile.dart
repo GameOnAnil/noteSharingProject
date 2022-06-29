@@ -12,11 +12,7 @@ class FileGridTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async {
-        // final downloadUrl =
-        //     await FirebaseStorage.instance.ref(item.filePath).getDownloadURL();
-        //await StorageService().openFile(url: item.url, fileName: item.name);
-      },
+      onTap: () {},
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),

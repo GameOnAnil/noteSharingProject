@@ -21,71 +21,75 @@ class FilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      appBar: AppBar(
-        title: Center(child: Text("$semester $program")),
-        elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () async {
-              await FirebaseService()
-                  .insertDummyData("$program-$semester-$name");
-            },
-            icon: const Icon(Icons.add),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // FirebaseService().insertData("$program-$semester-$name");
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: ((context) => AddFilePage(
-                    name: name,
-                    program: program,
-                    semester: semester,
-                  )),
-            ),
-          );
-        },
-        child: const Icon(Icons.add),
-      ),
+      appBar: _appBar(),
+      floatingActionButton: _fab(context),
       body: Column(
         children: [
           Expanded(
             child: Container(
               decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(25),
-                    topRight: Radius.circular(25),
-                  ),
+                      topLeft: Radius.circular(25),
+                      topRight: Radius.circular(25)),
                   color: Colors.white),
               child: Column(
                 children: [
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  const SizedBox(height: 10),
                   _sortingPart(),
-                  Expanded(
-                    child: StreamBuilder(
-                        stream: FirebaseService()
-                            .getFiles(path: "$program-$semester-$name"),
-                        builder:
-                            (context, AsyncSnapshot<List<FileModel>> snapshot) {
-                          if (snapshot.data != null) {
-                            final currentList = snapshot.data!;
-                            //  return _gridView(currentList);
-                            return _listView(currentList);
-                          }
-                          return Container();
-                        }),
-                  ),
+                  Expanded(child: _streamBuilder()),
                 ],
               ),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  StreamBuilder<List<FileModel>> _streamBuilder() {
+    return StreamBuilder(
+        stream: FirebaseService().getFiles(path: "$program-$semester-$name"),
+        builder: (context, AsyncSnapshot<List<FileModel>> snapshot) {
+          if (snapshot.data != null) {
+            final currentList = snapshot.data!;
+            //  return _gridView(currentList);
+            return _listView(currentList);
+          }
+          return Container();
+        });
+  }
+
+  FloatingActionButton _fab(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        // FirebaseService().insertData("$program-$semester-$name");
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: ((context) => AddFilePage(
+                  name: name,
+                  program: program,
+                  semester: semester,
+                )),
+          ),
+        );
+      },
+      child: const Icon(Icons.add),
+    );
+  }
+
+  AppBar _appBar() {
+    return AppBar(
+      title: Center(child: Text("$semester $program")),
+      elevation: 0,
+      actions: [
+        IconButton(
+          onPressed: () async {
+            await FirebaseService().insertDummyData("$program-$semester-$name");
+          },
+          icon: const Icon(Icons.add),
+        ),
+      ],
     );
   }
 

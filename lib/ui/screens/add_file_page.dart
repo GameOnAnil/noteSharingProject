@@ -68,63 +68,56 @@ class _AddFilePageState extends State<AddFilePage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20),
                   UploadFileContainer(
-                    changeFile: ((file, name, size) {
-                      setState(() {
-                        _file = file;
-                        _name = name;
-                        _size = size;
-                        nameController.text = _name.split(".")[0];
-                      });
-                    }),
-                    mFile: _file,
-                    removePicked: () {
-                      setState(() {
-                        _file = null;
-                      });
-                    },
-                    name: _name,
-                    size: _size,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      controller: nameController,
-                      decoration: InputDecoration(
-                        label: const Text("Edit Name"),
-                        border: const OutlineInputBorder(),
-                        suffix: (_name.isNotEmpty)
-                            ? Text(".${_name.split(".")[1]}")
-                            : null,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                      changeFile: ((file, name, size) {
+                        _chageFile(file, name, size);
+                      }),
+                      mFile: _file,
+                      removePicked: () {
+                        setState(() => _file = null);
+                      },
+                      name: _name,
+                      size: _size),
+                  const SizedBox(height: 10),
+                  _editNameTextField(),
+                  const SizedBox(height: 10),
                   _uploadButton(
                       context: context,
-                      onTap: () async {
-                        await handleUpload();
-                      }),
+                      onTap: () async => await handleUpload()),
                 ],
               ),
             ),
           ),
           (isLoading)
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
+              ? const Center(child: CircularProgressIndicator())
               : const Center()
         ],
       ),
     );
+  }
+
+  Padding _editNameTextField() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        controller: nameController,
+        decoration: InputDecoration(
+          label: const Text("Edit Name"),
+          border: const OutlineInputBorder(),
+          suffix: (_name.isNotEmpty) ? Text(".${_name.split(".")[1]}") : null,
+        ),
+      ),
+    );
+  }
+
+  void _chageFile(File file, String name, String size) {
+    setState(() {
+      _file = file;
+      _name = name;
+      _size = size;
+      nameController.text = _name.split(".")[0];
+    });
   }
 
   Future<void> handleUpload() async {
