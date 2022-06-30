@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_sharing_project/firebase_options.dart';
-import 'package:note_sharing_project/ui/screens/home_page.dart';
+import 'package:note_sharing_project/ui/screens/login_page.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
 void main() async {
@@ -20,19 +20,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ProviderScope(
       child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
-          theme: ThemeData(
-            primaryColor: darkBlueBackground,
-            backgroundColor: Colors.white,
-            brightness: Brightness.light,
-            appBarTheme: const AppBarTheme(backgroundColor: darkBlueBackground),
-            textTheme: const TextTheme(),
-            floatingActionButtonTheme: const FloatingActionButtonThemeData(
-                backgroundColor: darkBlueBackground,
-                foregroundColor: Colors.white),
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: Colors.deepPurple,
+          ).copyWith(
+            primary: darkBlueBackground,
           ),
-          home: const HomePage()),
+          floatingActionButtonTheme: const FloatingActionButtonThemeData(
+              backgroundColor: darkBlueBackground,
+              foregroundColor: Colors.white),
+        ),
+        home: const LoginPage(),
+      ),
     );
   }
 }

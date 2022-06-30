@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_sharing_project/models/subject.dart';
 import 'package:note_sharing_project/services/db_helper.dart';
 
-final subNotifierProvider =
-    ChangeNotifierProvider(((ref) => SubNotifier(dbHelper: DbHelper.instance)));
+final subNotifierProvider = ChangeNotifierProvider.autoDispose(
+    ((ref) => SubNotifier(dbHelper: DbHelper.instance)));
 
 class SubNotifier extends ChangeNotifier {
   final DbHelper dbHelper;

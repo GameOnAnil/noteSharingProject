@@ -4,14 +4,18 @@ import 'package:note_sharing_project/models/files_model.dart';
 class FirebaseService {
   final firestore = FirebaseFirestore.instance;
 
-  Stream<List<FileModel>> getFiles({required String path}) {
+  Stream<List<FileModel>> getFiles(
+      {required String path, required String orderBy}) {
     return firestore
         .collection("files")
         .doc(path)
         .collection("data")
+        .orderBy(orderBy)
         .snapshots()
-        .map((event) =>
-            event.docs.map((e) => FileModel.fromMap(e.data())).toList());
+        .map(
+          (event) =>
+              event.docs.map((e) => FileModel.fromMap(e.data())).toList(),
+        );
   }
 
   Future<void> insertData(String path, FileModel fileModel) async {

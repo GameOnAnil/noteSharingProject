@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_sharing_project/models/files_model.dart';
+import 'package:note_sharing_project/providers/file_page_notifier.dart';
 import 'package:note_sharing_project/services/firebase_service.dart';
 import 'package:note_sharing_project/ui/screens/add_file_page.dart';
-import 'package:note_sharing_project/ui/widgets/file_grid_tile.dart';
 import 'package:note_sharing_project/ui/widgets/horizontal_file_tile.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
-class FilePage extends StatelessWidget {
+class FilePage extends ConsumerWidget {
   final String name;
   final String semester;
   final String program;
@@ -18,13 +19,20 @@ class FilePage extends StatelessWidget {
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isSearchVisible = ref.watch(filePageNotiferProvicer).isSearchVisible;
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Theme.of(context).colorScheme.primary,
       appBar: AppBar(
         title: Center(child: Text("$semester $program")),
         elevation: 0,
         actions: [
+          IconButton(
+            onPressed: () async {
+              ref.read(filePageNotiferProvicer).enableSearch();
+            },
+            icon: const Icon(Icons.search),
+          ),
           IconButton(
             onPressed: () async {
               await FirebaseService()
@@ -36,7 +44,6 @@ class FilePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // FirebaseService().insertData("$program-$semester-$name");
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -52,6 +59,7 @@ class FilePage extends StatelessWidget {
       ),
       body: Column(
         children: [
+          isSearchVisible ? _searchBar() : const SizedBox(),
           Expanded(
             child: Container(
               decoration: const BoxDecoration(
@@ -62,23 +70,23 @@ class FilePage extends StatelessWidget {
                   color: Colors.white),
               child: Column(
                 children: [
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  _sortingPart(),
+                  const SizedBox(height: 10),
+                  _sortingPart(ref),
                   Expanded(
-                    child: StreamBuilder(
-                        stream: FirebaseService()
-                            .getFiles(path: "$program-$semester-$name"),
-                        builder:
-                            (context, AsyncSnapshot<List<FileModel>> snapshot) {
-                          if (snapshot.data != null) {
-                            final currentList = snapshot.data!;
-                            //  return _gridView(currentList);
-                            return _listView(currentList);
-                          }
-                          return Container();
-                        }),
+                    child: Consumer(
+                      builder: (context, ref, child) {
+                        final fileList =
+                            ref.watch(filePageNotiferProvicer).newFileList;
+
+                        if (fileList.isEmpty) {
+                          return const Center(
+                            child: Text("List empty"),
+                          );
+                        } else {
+                          return _listView(fileList);
+                        }
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -89,25 +97,37 @@ class FilePage extends StatelessWidget {
     );
   }
 
-  GridView _gridView(List<FileModel> currentList) {
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 4, childAspectRatio: .6),
-      itemCount: currentList.length,
-      itemBuilder: (context, index) {
-        final item = currentList[index];
-        return FileGridTile(item: item);
-      },
-    );
+  Consumer _searchBar() {
+    return Consumer(builder: (context, ref, child) {
+      return Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextFormField(
+              decoration: const InputDecoration(
+                label: Text("Search By"),
+                border: OutlineInputBorder(),
+                fillColor: Colors.white,
+                filled: true,
+              ),
+              onChanged: (value) {
+                ref.read(filePageNotiferProvicer).search(value);
+              },
+            ),
+          ),
+          const SizedBox(height: 8),
+        ],
+      );
+    });
   }
 
-  Widget _sortingPart() {
+  Widget _sortingPart(WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
-        children: const [
-          Text(
+        children: [
+          const Text(
             "Files",
             style: TextStyle(
               color: darkBlueBackground,
@@ -115,18 +135,29 @@ class FilePage extends StatelessWidget {
               fontSize: 20,
             ),
           ),
-          Expanded(child: SizedBox()),
-          Icon(
-            Icons.sort,
-            size: 20,
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          Text(
-            "Name",
-            style: TextStyle(
-                color: Colors.black, fontWeight: FontWeight.w400, fontSize: 18),
+          const Expanded(child: SizedBox()),
+          PopupMenuButton(
+            icon: const Icon(Icons.sort),
+            itemBuilder: ((context) => [
+                  PopupMenuItem(
+                    child: const Text("Sort By Name"),
+                    onTap: () {
+                      ref.read(filePageNotiferProvicer).orderedBy("name");
+                    },
+                  ),
+                  PopupMenuItem(
+                    child: const Text("Sort By Size"),
+                    onTap: () {
+                      ref.read(filePageNotiferProvicer).orderedBy("size");
+                    },
+                  ),
+                  PopupMenuItem(
+                    child: const Text("Sort By Date"),
+                    onTap: () {
+                      ref.read(filePageNotiferProvicer).orderedBy("date");
+                    },
+                  ),
+                ]),
           ),
         ],
       ),
