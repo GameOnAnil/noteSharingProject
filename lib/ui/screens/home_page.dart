@@ -31,11 +31,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Column(
         children: [
-          Column(
-            children: [
-              _header(),
-            ],
-          ),
+          Column(children: [_header()]),
           _chooseSemester(),
           _chooseProgram(),
           const SizedBox(
@@ -44,23 +40,27 @@ class _HomePageState extends State<HomePage> {
           Expanded(child: _dataFromLocal()),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: darkBlueBackground,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: "Setting",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "Profile",
-          )
-        ],
-      ),
+      bottomNavigationBar: _bottomNavBar(),
+    );
+  }
+
+  BottomNavigationBar _bottomNavBar() {
+    return BottomNavigationBar(
+      selectedItemColor: darkBlueBackground,
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: "Home",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.settings),
+          label: "Setting",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          label: "Profile",
+        )
+      ],
     );
   }
 

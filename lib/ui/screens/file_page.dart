@@ -64,9 +64,8 @@ class FilePage extends ConsumerWidget {
             child: Container(
               decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(25),
-                    topRight: Radius.circular(25),
-                  ),
+                      topLeft: Radius.circular(25),
+                      topRight: Radius.circular(25)),
                   color: Colors.white),
               child: Column(
                 children: [
