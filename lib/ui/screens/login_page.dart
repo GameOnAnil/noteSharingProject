@@ -35,9 +35,7 @@ class LoginPage extends StatelessWidget {
                           fontSize: 32,
                         ),
                       ),
-                      const SizedBox(
-                        height: 16,
-                      ),
+                      const SizedBox(height: 16),
                       TextField(
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -45,9 +43,7 @@ class LoginPage extends StatelessWidget {
                           label: const Text("Enter Email"),
                         ),
                       ),
-                      const SizedBox(
-                        height: 16,
-                      ),
+                      const SizedBox(height: 16),
                       TextField(
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -55,9 +51,7 @@ class LoginPage extends StatelessWidget {
                             label: const Text("Enter Password"),
                             suffixIcon: const Icon(Icons.visibility)),
                       ),
-                      const SizedBox(
-                        height: 16,
-                      ),
+                      const SizedBox(height: 16),
                       Container(
                         alignment: Alignment.centerRight,
                         child: const Text(

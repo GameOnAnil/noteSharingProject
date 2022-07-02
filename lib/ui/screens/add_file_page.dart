@@ -44,7 +44,7 @@ class _AddFilePageState extends State<AddFilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Theme.of(context).colorScheme.primary,
       appBar: AppBar(
         elevation: 0.0,
         title: const Text('Add File Page'),
@@ -187,9 +187,10 @@ class _AddFilePageState extends State<AddFilePage> {
       child: ElevatedButton(
         onPressed: onTap,
         style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(
-          Theme.of(context).primaryColor,
-        )),
+          backgroundColor: MaterialStateProperty.all(
+            Theme.of(context).colorScheme.primary,
+          ),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [

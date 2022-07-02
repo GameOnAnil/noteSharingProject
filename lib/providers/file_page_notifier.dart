@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_sharing_project/models/files_model.dart';
 import 'package:note_sharing_project/services/firebase_service.dart';
 
-final filePageNotiferProvicer =
-    ChangeNotifierProvider(((ref) => FilePageNotifer()));
+final filePageNotiferProvicer = ChangeNotifierProvider.family(
+    ((ref, String path) => FilePageNotifer(path: path)));
 
 class FilePageNotifer extends ChangeNotifier {
   FirebaseService firebaseService = FirebaseService();
@@ -13,8 +13,10 @@ class FilePageNotifer extends ChangeNotifier {
   List<FileModel> fileList = [];
   List<FileModel> newFileList = [];
 
-  FilePageNotifer() {
-    getFiles();
+  final String path;
+
+  FilePageNotifer({required this.path}) {
+    getFiles(path);
   }
 
   void sortByName() {
@@ -39,9 +41,8 @@ class FilePageNotifer extends ChangeNotifier {
     }
   }
 
-  void getFiles() async {
-    final response =
-        firebaseService.getFiles(path: "BESE-1st-C", orderBy: orderBy);
+  void getFiles(String path) async {
+    final response = firebaseService.getFiles(path: path, orderBy: orderBy);
     response.listen((event) {
       fileList = event;
       newFileList = event;
@@ -56,6 +57,6 @@ class FilePageNotifer extends ChangeNotifier {
 
   void orderedBy(String value) {
     orderBy = value;
-    getFiles();
+    getFiles(path);
   }
 }

@@ -20,7 +20,9 @@ class FilePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isSearchVisible = ref.watch(filePageNotiferProvicer).isSearchVisible;
+    String path = "$program-$semester-$name";
+    final isSearchVisible =
+        ref.watch(filePageNotiferProvicer(path)).isSearchVisible;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
       appBar: AppBar(
@@ -29,7 +31,7 @@ class FilePage extends ConsumerWidget {
         actions: [
           IconButton(
             onPressed: () async {
-              ref.read(filePageNotiferProvicer).enableSearch();
+              ref.read(filePageNotiferProvicer(path)).enableSearch();
             },
             icon: const Icon(Icons.search),
           ),
@@ -59,7 +61,7 @@ class FilePage extends ConsumerWidget {
       ),
       body: Column(
         children: [
-          isSearchVisible ? _searchBar() : const SizedBox(),
+          isSearchVisible ? _searchBar(path) : const SizedBox(),
           Expanded(
             child: Container(
               decoration: const BoxDecoration(
@@ -70,12 +72,13 @@ class FilePage extends ConsumerWidget {
               child: Column(
                 children: [
                   const SizedBox(height: 10),
-                  _sortingPart(ref),
+                  _sortingPart(ref, path),
                   Expanded(
                     child: Consumer(
                       builder: (context, ref, child) {
-                        final fileList =
-                            ref.watch(filePageNotiferProvicer).newFileList;
+                        final fileList = ref
+                            .watch(filePageNotiferProvicer(path))
+                            .newFileList;
 
                         if (fileList.isEmpty) {
                           return const Center(
@@ -96,7 +99,7 @@ class FilePage extends ConsumerWidget {
     );
   }
 
-  Consumer _searchBar() {
+  Consumer _searchBar(String path) {
     return Consumer(builder: (context, ref, child) {
       return Column(
         children: [
@@ -110,7 +113,7 @@ class FilePage extends ConsumerWidget {
                 filled: true,
               ),
               onChanged: (value) {
-                ref.read(filePageNotiferProvicer).search(value);
+                ref.read(filePageNotiferProvicer(path)).search(value);
               },
             ),
           ),
@@ -120,7 +123,7 @@ class FilePage extends ConsumerWidget {
     });
   }
 
-  Widget _sortingPart(WidgetRef ref) {
+  Widget _sortingPart(WidgetRef ref, String path) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
       child: Row(
@@ -141,19 +144,19 @@ class FilePage extends ConsumerWidget {
                   PopupMenuItem(
                     child: const Text("Sort By Name"),
                     onTap: () {
-                      ref.read(filePageNotiferProvicer).orderedBy("name");
+                      ref.read(filePageNotiferProvicer(path)).orderedBy("name");
                     },
                   ),
                   PopupMenuItem(
                     child: const Text("Sort By Size"),
                     onTap: () {
-                      ref.read(filePageNotiferProvicer).orderedBy("size");
+                      ref.read(filePageNotiferProvicer(path)).orderedBy("size");
                     },
                   ),
                   PopupMenuItem(
                     child: const Text("Sort By Date"),
                     onTap: () {
-                      ref.read(filePageNotiferProvicer).orderedBy("date");
+                      ref.read(filePageNotiferProvicer(path)).orderedBy("date");
                     },
                   ),
                 ]),

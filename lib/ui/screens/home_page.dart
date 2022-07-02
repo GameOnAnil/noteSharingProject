@@ -34,9 +34,7 @@ class _HomePageState extends State<HomePage> {
           Column(children: [_header()]),
           _chooseSemester(),
           _chooseProgram(),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           Expanded(child: _dataFromLocal()),
         ],
       ),
