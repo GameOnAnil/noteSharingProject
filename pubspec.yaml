@@ -31,11 +31,13 @@ dependencies:
   cupertino_icons: ^1.0.2
   dio: ^4.0.6
   file_picker: ^4.6.1
-  firebase_core: ^1.18.0
+  firebase_auth: ^3.4.1
+  firebase_core: ^1.19.1
   firebase_storage: ^10.2.18
   flutter:
     sdk: flutter
   flutter_riverpod: ^1.0.4
+  fluttertoast: ^8.0.9
   font_awesome_flutter: ^10.1.0
   google_fonts: ^3.0.1
   open_file: ^3.2.1

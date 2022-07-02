@@ -1,83 +1,142 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:note_sharing_project/ui/screens/home_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:note_sharing_project/services/auth_service.dart';
 import 'package:note_sharing_project/ui/screens/sign_up_page.dart';
+import 'package:note_sharing_project/ui/widgets/custom_text_field.dart';
 import 'package:note_sharing_project/ui/widgets/note_sharing_header.dart';
+import 'package:note_sharing_project/ui/widgets/password_text_field.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final GlobalKey<FormState> _globalKey = GlobalKey();
+
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+
+  @override
+  void initState() {
+    super.initState();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+  }
+
+  _validateForm(WidgetRef ref) {
+    if (_globalKey.currentState!.validate()) {
+      try {
+        ref.read(authServiceProvider).signIn(
+            emailController.text.trim(), passwordController.text.trim());
+      } catch (e) {
+        log("Caught:$e");
+        Fluttertoast.showToast(msg: e.toString());
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SizedBox(
-        width: double.infinity,
-        height: double.infinity,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const NoteSharingHeader(),
-              Container(
-                width: double.infinity,
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Login',
-                        style: TextStyle(
-                          color: bluePrimary,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 32,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      TextField(
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                          label: const Text("Enter Email"),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      TextField(
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15)),
-                            label: const Text("Enter Password"),
-                            suffixIcon: const Icon(Icons.visibility)),
-                      ),
-                      const SizedBox(height: 16),
-                      Container(
-                        alignment: Alignment.centerRight,
-                        child: const Text(
-                          'Forgot Password?',
-                          style: TextStyle(
-                            color: bluePrimary,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      _loginButton(context),
-                      const SizedBox(height: 16),
-                      _divider(),
-                      const SizedBox(height: 16),
-                      _googleSignIn(),
-                      const SizedBox(height: 10),
-                      _signUpText(context),
-                    ],
+      body: Form(
+        key: _globalKey,
+        child: SizedBox(
+          width: double.infinity,
+          height: double.infinity,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const NoteSharingHeader(),
+                Container(
+                  width: double.infinity,
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _title(),
+                        const SizedBox(height: 16),
+                        _loginTextField(),
+                        const SizedBox(height: 16),
+                        PasswordTextField(
+                            controller: passwordController,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Please Enter Password";
+                              }
+                            }),
+                        const SizedBox(height: 16),
+                        _forgotPassword(),
+                        const SizedBox(height: 16),
+                        _loginButton(context),
+                        const SizedBox(height: 16),
+                        _divider(),
+                        const SizedBox(height: 16),
+                        _googleSignIn(),
+                        const SizedBox(height: 10),
+                        _signUpText(context),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
+      ),
+    );
+  }
+
+  Container _forgotPassword() {
+    return Container(
+      alignment: Alignment.centerRight,
+      child: const Text(
+        'Forgot Password?',
+        style: TextStyle(
+          color: bluePrimary,
+          fontWeight: FontWeight.w600,
+          fontSize: 16,
+        ),
+      ),
+    );
+  }
+
+  CustomTextField _loginTextField() {
+    return CustomTextField(
+      controller: emailController,
+      label: "Enter Email",
+      validator: (value) {
+        if (value!.isEmpty) {
+          return "Please Enter Email";
+        }
+      },
+    );
+  }
+
+  Text _title() {
+    return const Text(
+      'Login',
+      style: TextStyle(
+        color: bluePrimary,
+        fontWeight: FontWeight.bold,
+        fontSize: 32,
       ),
     );
   }
@@ -119,27 +178,24 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Container _loginButton(BuildContext context) {
-    return Container(
-      height: 50,
-      width: double.infinity,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), color: bluePrimary),
-      child: TextButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: ((context) => const HomePage()),
-            ),
-          );
-        },
-        child: const Text(
-          "Login",
-          style: TextStyle(color: Colors.white),
+  Widget _loginButton(BuildContext context) {
+    return Consumer(builder: (context, ref, child) {
+      return Container(
+        height: 50,
+        width: double.infinity,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10), color: bluePrimary),
+        child: TextButton(
+          onPressed: () {
+            _validateForm(ref);
+          },
+          child: const Text(
+            "Login",
+            style: TextStyle(color: Colors.white),
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   Container _googleSignIn() {

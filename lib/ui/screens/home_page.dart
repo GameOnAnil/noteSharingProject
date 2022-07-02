@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_sharing_project/providers/sub_notifier.dart';
+import 'package:note_sharing_project/services/auth_service.dart';
 import 'package:note_sharing_project/ui/widgets/subject_grid_tile.dart';
 import 'package:note_sharing_project/utils/constants.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
@@ -20,15 +21,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
-      appBar: AppBar(
-        elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.notifications_outlined),
-          )
-        ],
-      ),
+      appBar: _appBar(),
       body: Column(
         children: [
           Column(children: [_header()]),
@@ -39,6 +32,22 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       bottomNavigationBar: _bottomNavBar(),
+    );
+  }
+
+  AppBar _appBar() {
+    return AppBar(
+      elevation: 0,
+      actions: [
+        Consumer(builder: (context, ref, child) {
+          return IconButton(
+            onPressed: () {
+              ref.read(authServiceProvider).signOut();
+            },
+            icon: const Icon(Icons.logout),
+          );
+        })
+      ],
     );
   }
 
