@@ -4,6 +4,7 @@ import 'package:note_sharing_project/models/files_model.dart';
 import 'package:note_sharing_project/providers/file_page_notifier.dart';
 import 'package:note_sharing_project/services/firebase_service.dart';
 import 'package:note_sharing_project/ui/screens/add_file_page.dart';
+import 'package:note_sharing_project/ui/widgets/file_grid_tile.dart';
 import 'package:note_sharing_project/ui/widgets/horizontal_file_tile.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
@@ -85,7 +86,8 @@ class FilePage extends ConsumerWidget {
                             child: Text("List empty"),
                           );
                         } else {
-                          return _listView(fileList);
+                          //return _listView(fileList);
+                          return _gridView(fileList);
                         }
                       },
                     ),
@@ -97,6 +99,18 @@ class FilePage extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  GridView _gridView(List<FileModel> fileList) {
+    return GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, childAspectRatio: .85),
+        itemCount: fileList.length,
+        itemBuilder: (context, index) {
+          return FileGridTile(
+            fileModel: fileList[index],
+          );
+        });
   }
 
   Consumer _searchBar(String path) {
