@@ -1,8 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:note_sharing_project/providers/login_page_notifier.dart';
 import 'package:note_sharing_project/services/auth_service.dart';
 import 'package:note_sharing_project/ui/screens/sign_up_page.dart';
 import 'package:note_sharing_project/ui/widgets/custom_text_field.dart';
@@ -39,13 +38,9 @@ class _LoginPageState extends State<LoginPage> {
 
   _validateForm(WidgetRef ref) {
     if (_globalKey.currentState!.validate()) {
-      try {
-        ref.read(authServiceProvider).signIn(
-            emailController.text.trim(), passwordController.text.trim());
-      } catch (e) {
-        log("Caught:$e");
-        Fluttertoast.showToast(msg: e.toString());
-      }
+      ref
+          .read(authServiceProvider)
+          .signIn(emailController.text.trim(), passwordController.text.trim());
     }
   }
 
@@ -58,47 +53,69 @@ class _LoginPageState extends State<LoginPage> {
         child: SizedBox(
           width: double.infinity,
           height: double.infinity,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const NoteSharingHeader(),
-                Container(
+          child: Column(
+            children: [
+              const NoteSharingHeader(),
+              Expanded(
+                child: Container(
                   width: double.infinity,
                   color: Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _title(),
-                        const SizedBox(height: 16),
-                        _loginTextField(),
-                        const SizedBox(height: 16),
-                        PasswordTextField(
-                            controller: passwordController,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Please Enter Password";
-                              }
-                            }),
-                        const SizedBox(height: 16),
-                        _forgotPassword(),
-                        const SizedBox(height: 16),
-                        _loginButton(context),
-                        const SizedBox(height: 16),
-                        _divider(),
-                        const SizedBox(height: 16),
-                        _googleSignIn(),
-                        const SizedBox(height: 10),
-                        _signUpText(context),
-                      ],
-                    ),
-                  ),
+                  child: Consumer(builder: (context, ref, child) {
+                    final isLoading =
+                        ref.watch(loginPageNotifierProvider).isLoading;
+                    final error = ref.watch(loginPageNotifierProvider).error;
+                    ref.listen(loginPageNotifierProvider, (previous, next) {
+                      if (error != null) {
+                        Fluttertoast.showToast(msg: error);
+                      }
+                    });
+                    if (isLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else {
+                      return _contentPart(context, ref);
+                    }
+                  }),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Padding _contentPart(BuildContext context, WidgetRef ref) {
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _title(),
+            const SizedBox(height: 16),
+            _loginTextField(),
+            const SizedBox(height: 16),
+            PasswordTextField(
+                controller: passwordController,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "Please Enter Password";
+                  }
+                }),
+            const SizedBox(height: 16),
+            _forgotPassword(),
+            const SizedBox(height: 16),
+            _loginButton(context, ref),
+            const SizedBox(height: 16),
+            _divider(),
+            const SizedBox(height: 16),
+            _googleSignIn(),
+            const SizedBox(height: 10),
+            _signUpText(context),
+          ],
         ),
       ),
     );
@@ -178,24 +195,25 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _loginButton(BuildContext context) {
-    return Consumer(builder: (context, ref, child) {
-      return Container(
-        height: 50,
-        width: double.infinity,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10), color: bluePrimary),
-        child: TextButton(
-          onPressed: () {
-            _validateForm(ref);
-          },
-          child: const Text(
-            "Login",
-            style: TextStyle(color: Colors.white),
-          ),
+  Widget _loginButton(BuildContext context, WidgetRef ref) {
+    return Container(
+      height: 50,
+      width: double.infinity,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10), color: bluePrimary),
+      child: TextButton(
+        onPressed: () {
+          // _validateForm(ref);
+          ref
+              .read(loginPageNotifierProvider)
+              .signIn("new@gmail.com", "password");
+        },
+        child: const Text(
+          "Login",
+          style: TextStyle(color: Colors.white),
         ),
-      );
-    });
+      ),
+    );
   }
 
   Container _googleSignIn() {
