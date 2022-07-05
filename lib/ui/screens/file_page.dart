@@ -12,8 +12,10 @@ class FilePage extends ConsumerWidget {
   final String name;
   final String semester;
   final String program;
+  final bool isNotificationOn;
   const FilePage(
       {Key? key,
+      required this.isNotificationOn,
       required this.name,
       required this.semester,
       required this.program})
@@ -26,25 +28,7 @@ class FilePage extends ConsumerWidget {
         ref.watch(filePageNotiferProvicer(path)).isSearchVisible;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
-      appBar: AppBar(
-        title: Center(child: Text("$semester $program")),
-        elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () async {
-              ref.read(filePageNotiferProvicer(path)).enableSearch();
-            },
-            icon: const Icon(Icons.search),
-          ),
-          IconButton(
-            onPressed: () async {
-              await FirebaseService()
-                  .insertDummyData("$program-$semester-$name");
-            },
-            icon: const Icon(Icons.add),
-          ),
-        ],
-      ),
+      appBar: _appBar(ref, path, isNotificationOn),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -98,6 +82,33 @@ class FilePage extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+
+  AppBar _appBar(WidgetRef ref, String path, bool isNotificationOn) {
+    return AppBar(
+      title: Center(child: Text("$semester $program")),
+      elevation: 0,
+      actions: [
+        IconButton(
+          onPressed: () async {
+            await FirebaseService().insertDummyData("$program-$semester-$name");
+          },
+          icon: const Icon(Icons.add),
+        ),
+        IconButton(
+          onPressed: () async {
+            ref.read(filePageNotiferProvicer(path)).enableSearch();
+          },
+          icon: const Icon(Icons.search),
+        ),
+        IconButton(
+          onPressed: () async {},
+          icon: (isNotificationOn)
+              ? const Icon(Icons.notifications_active)
+              : const Icon(Icons.notifications_off),
+        ),
+      ],
     );
   }
 

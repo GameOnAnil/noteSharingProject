@@ -1,15 +1,33 @@
+import 'dart:developer';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_sharing_project/firebase_options.dart';
 import 'package:note_sharing_project/ui/screens/auth_wrapper_page.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
+  await initOneSignal();
   runApp(const MyApp());
+}
+
+Future<void> initOneSignal() async {
+  OneSignal.shared.setAppId("e892472a-859e-47a0-927c-a95086253dfe");
+  OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+
+  OneSignal.shared
+      .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
+    log('NOTIFICATION OPENED HANDLER CALLED WITH: $result');
+  });
+
+  OneSignal.shared.setNotificationWillShowInForegroundHandler(
+      (OSNotificationReceivedEvent event) {
+    log('FOREGROUND HANDLER CALLED WITH: $event');
+  });
 }
 
 class MyApp extends StatelessWidget {

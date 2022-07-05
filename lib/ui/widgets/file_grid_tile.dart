@@ -50,17 +50,18 @@ class FileGridTile extends ConsumerWidget {
             ),
             _fileLogo(fileModel.fileType),
             Expanded(child: _nameText()),
-            _divider(),
+            (progress != 0) ? _progressIndicator(progress) : _divider(),
             _bottomPart(),
-            Visibility(
-              visible: (progress != 0) ? true : false,
-              child: LinearProgressIndicator(
-                value: progress / 100,
-              ),
-            )
           ],
         ),
       ),
+    );
+  }
+
+  LinearProgressIndicator _progressIndicator(double progress) {
+    return LinearProgressIndicator(
+      minHeight: 5,
+      value: progress / 100,
     );
   }
 

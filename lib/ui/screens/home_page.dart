@@ -227,7 +227,7 @@ class _HomePageState extends State<HomePage> {
           } else {
             return GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, childAspectRatio: 1.3),
+                  crossAxisCount: 2, childAspectRatio: 1.0),
               itemCount: subList.length,
               itemBuilder: (context, index) {
                 return SubjectGridTile(

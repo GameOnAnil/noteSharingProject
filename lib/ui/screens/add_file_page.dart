@@ -5,13 +5,15 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:note_sharing_project/models/files_model.dart';
 import 'package:note_sharing_project/services/firebase_service.dart';
+import 'package:note_sharing_project/services/notification_service.dart';
 import 'package:note_sharing_project/ui/widgets/upload_file_container.dart';
-import 'package:note_sharing_project/utils/my_colors.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class AddFilePage extends StatefulWidget {
   final String name;
   final String semester;
   final String program;
+
   const AddFilePage({
     Key? key,
     required this.name,
@@ -29,10 +31,13 @@ class _AddFilePageState extends State<AddFilePage> {
   String _size = "";
   late TextEditingController nameController;
   bool isLoading = false;
+  late String path;
+
   @override
   void initState() {
     super.initState();
     nameController = TextEditingController();
+    path = "${widget.program}-${widget.semester}-${widget.name}";
   }
 
   @override
@@ -48,6 +53,13 @@ class _AddFilePageState extends State<AddFilePage> {
       appBar: AppBar(
         elevation: 0.0,
         title: const Text('Add File Page'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                OneSignal.shared.sendTag(path, path);
+              },
+              icon: const Icon(Icons.upload))
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
@@ -151,20 +163,22 @@ class _AddFilePageState extends State<AddFilePage> {
             fileType: _name.split(".")[1],
             url: url);
 
-        await FirebaseService().insertData(
-            "${widget.program}-${widget.semester}-${widget.name}", newModel);
+        await FirebaseService().insertData(path, newModel);
 
+        await NotificationService().sendWithTagNotification(
+            heading: "New Notes Added for $path",
+            content: "New Notes Added Click to check it out.",
+            tag: path);
         setState(() {
           isLoading = false;
         });
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Successfully Added'),
           ),
         );
         Navigator.pop(context);
-
-        log("url:$url");
       } on FirebaseException catch (e) {
         log("firebase exception:$e");
         ScaffoldMessenger.of(context).showSnackBar(
@@ -204,31 +218,6 @@ class _AddFilePageState extends State<AddFilePage> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  RichText _buildRichText(String title, String value) {
-    return RichText(
-      text: TextSpan(
-        children: [
-          TextSpan(
-            text: title,
-            style: const TextStyle(
-              color: darkBlueBackground,
-              fontWeight: FontWeight.w600,
-              fontSize: 18,
-            ),
-          ),
-          TextSpan(
-            text: value,
-            style: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w300,
-              fontSize: 18,
-            ),
-          ),
-        ],
       ),
     );
   }

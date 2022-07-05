@@ -27,3 +27,6 @@ final List<String> subList = [
   "NM",
   "OODM",
 ];
+
+const oneSignalId = "e892472a-859e-47a0-927c-a95086253dfe";
+const oneSignalRestApi = "YmRhMWNlNTEtZDkyZS00Njk4LWFkMjgtNjQyZjg2NGM0ZjBl";
