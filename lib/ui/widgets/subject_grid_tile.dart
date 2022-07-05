@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:note_sharing_project/models/subject.dart';
+import 'package:note_sharing_project/services/db_helper.dart';
 import 'package:note_sharing_project/ui/screens/file_page.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
 class SubjectGridTile extends StatefulWidget {
-  final String semester;
-  final String program;
-  final String name;
+  final Subject subject;
   const SubjectGridTile({
     Key? key,
-    required this.name,
-    required this.semester,
-    required this.program,
+    required this.subject,
   }) : super(key: key);
 
   @override
@@ -18,7 +16,13 @@ class SubjectGridTile extends StatefulWidget {
 }
 
 class _SubjectGridTileState extends State<SubjectGridTile> {
-  bool notificationIsOn = false;
+  late bool notificationIsOn;
+  @override
+  void initState() {
+    super.initState();
+    notificationIsOn = widget.subject.notificationOn;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -26,9 +30,9 @@ class _SubjectGridTileState extends State<SubjectGridTile> {
         context,
         MaterialPageRoute(
           builder: ((context) => FilePage(
-                name: widget.name,
-                semester: widget.semester,
-                program: widget.program,
+                name: widget.subject.name,
+                semester: widget.subject.semester,
+                program: widget.subject.program,
                 isNotificationOn: notificationIsOn,
               )),
         ),
@@ -49,7 +53,7 @@ class _SubjectGridTileState extends State<SubjectGridTile> {
             ),
             Center(
               child: Text(
-                widget.name,
+                widget.subject.name,
                 style: const TextStyle(
                     fontSize: 20,
                     color: Colors.white,
@@ -60,10 +64,15 @@ class _SubjectGridTileState extends State<SubjectGridTile> {
               top: 0,
               right: 0,
               child: IconButton(
-                onPressed: () {
-                  setState(() {
-                    notificationIsOn = !notificationIsOn;
-                  });
+                onPressed: () async {
+                  final response = await DbHelper.instance.updateSubject(widget
+                      .subject
+                      .copyWith(notificationOn: !notificationIsOn));
+                  if (response == 1) {
+                    setState(() {
+                      notificationIsOn = !notificationIsOn;
+                    });
+                  }
                 },
                 icon: (notificationIsOn)
                     ? const Icon(Icons.notifications_active)

@@ -231,9 +231,7 @@ class _HomePageState extends State<HomePage> {
               itemCount: subList.length,
               itemBuilder: (context, index) {
                 return SubjectGridTile(
-                  name: subList[index].name,
-                  semester: selectedSem!,
-                  program: selectedProgram!,
+                  subject: subList[index],
                 );
               },
             );

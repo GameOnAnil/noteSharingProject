@@ -34,7 +34,8 @@ class DbHelper {
       (id INTEGER PRIMARY KEY, 
       name TEXT,
       semester TEXT,
-      program TEXT)
+      program TEXT,
+      notificationOn BOOLEAN)
       ''',
     );
     await populate(db);
@@ -51,6 +52,18 @@ class DbHelper {
       log("insert");
       final db = await instance.database;
       final response = await db.insert(_subjectTable, subject.toMap());
+      return response;
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<int?> updateSubject(Subject subject) async {
+    try {
+      final db = await instance.database;
+      final response = await db.update(_subjectTable, subject.toMap(),
+          where: "id= ?", whereArgs: [subject.id]);
       return response;
     } catch (e) {
       log(e.toString());
