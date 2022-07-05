@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:note_sharing_project/models/subject.dart';
-import 'package:note_sharing_project/services/db_helper.dart';
 import 'package:note_sharing_project/ui/screens/file_page.dart';
+import 'package:note_sharing_project/ui/widgets/notification_bell_dialog.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
 class SubjectGridTile extends StatefulWidget {
@@ -17,10 +17,13 @@ class SubjectGridTile extends StatefulWidget {
 
 class _SubjectGridTileState extends State<SubjectGridTile> {
   late bool notificationIsOn;
+  late String path;
   @override
   void initState() {
     super.initState();
     notificationIsOn = widget.subject.notificationOn;
+    path =
+        "${widget.subject.program}-${widget.subject.semester}-${widget.subject.name}";
   }
 
   @override
@@ -65,14 +68,18 @@ class _SubjectGridTileState extends State<SubjectGridTile> {
               right: 0,
               child: IconButton(
                 onPressed: () async {
-                  final response = await DbHelper.instance.updateSubject(widget
-                      .subject
-                      .copyWith(notificationOn: !notificationIsOn));
-                  if (response == 1) {
-                    setState(() {
-                      notificationIsOn = !notificationIsOn;
-                    });
-                  }
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return NotificationBellDialog(
+                          subject: widget.subject,
+                          onChange: () {
+                            setState(() {
+                              notificationIsOn = !notificationIsOn;
+                            });
+                          },
+                        );
+                      });
                 },
                 icon: (notificationIsOn)
                     ? const Icon(Icons.notifications_active)
