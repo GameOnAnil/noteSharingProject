@@ -173,34 +173,37 @@ class _HomePageCaroselState extends State<HomePageCarosel> {
     return Column(
       children: [
         Expanded(
-          child: CarouselSlider(
-            items: const [
-              CarauselTile(
-                color: purplePrimary,
-                title: "BESE",
+          child: SizedBox(
+            width: double.infinity,
+            child: CarouselSlider(
+              items: const [
+                CarauselTile(
+                  color: purplePrimary,
+                  title: "BESE",
+                ),
+                CarauselTile(
+                  color: Colors.red,
+                  title: "BEIT",
+                ),
+                CarauselTile(
+                  color: Colors.orange,
+                  title: "BCOM",
+                ),
+                CarauselTile(
+                  color: Colors.green,
+                  title: "Bsc IT",
+                ),
+              ],
+              options: CarouselOptions(
+                onPageChanged: (index, reason) {
+                  setState(() {
+                    mIndex = index;
+                  });
+                },
+                autoPlay: true,
+                aspectRatio: 1.0,
+                enlargeCenterPage: true,
               ),
-              CarauselTile(
-                color: Colors.red,
-                title: "BEIT",
-              ),
-              CarauselTile(
-                color: Colors.orange,
-                title: "BCOM",
-              ),
-              CarauselTile(
-                color: Colors.green,
-                title: "Bsc IT",
-              ),
-            ],
-            options: CarouselOptions(
-              onPageChanged: (index, reason) {
-                setState(() {
-                  mIndex = index;
-                });
-              },
-              autoPlay: true,
-              aspectRatio: 1.0,
-              enlargeCenterPage: true,
             ),
           ),
         ),

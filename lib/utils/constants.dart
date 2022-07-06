@@ -1,3 +1,5 @@
+import 'package:note_sharing_project/utils/my_colors.dart';
+
 final List<String> semesterList = [
   "1st",
   "2nd",
@@ -26,6 +28,13 @@ final List<String> subList = [
   "PST",
   "NM",
   "OODM",
+];
+
+final colorList = [
+  blueGradient,
+  pinkGradient,
+  orangeGradient,
+  purpleGradient,
 ];
 
 const oneSignalId = "e892472a-859e-47a0-927c-a95086253dfe";

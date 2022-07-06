@@ -13,6 +13,7 @@ class NavigationDrawer extends StatelessWidget {
       child: Column(
         children: [
           const UserAccountsDrawerHeader(
+            decoration: BoxDecoration(color: purplePrimary),
             accountEmail: Text(
               "test@gmail.com",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),

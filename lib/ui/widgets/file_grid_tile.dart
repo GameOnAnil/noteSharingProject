@@ -17,19 +17,15 @@ class FileGridTile extends ConsumerWidget {
         ref.watch(fileGridNotifierProvider(fileModel.name)).progress;
 
     return GestureDetector(
-      onTap: () async {
-        await ref
-            .read(fileGridNotifierProvider(fileModel.name))
-            .openFile(url: fileModel.url, fileName: fileModel.name);
-      },
+      onTap: () async {},
       child: Container(
         width: 200,
         height: 300,
         margin: const EdgeInsets.all(5),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            // border: Border.all(color: Colors.grey.withOpacity(.5)),
-            color: creamColor,
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(color: Colors.grey.withOpacity(.5)),
+            color: Colors.white,
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(.5),
@@ -48,7 +44,7 @@ class FileGridTile extends ConsumerWidget {
                 _popUpButton(),
               ],
             ),
-            _fileLogo(fileModel.fileType),
+            _getLogo(fileModel.fileType),
             Expanded(child: _nameText()),
             (progress != 0) ? _progressIndicator(progress) : _divider(),
             _bottomPart(),
@@ -76,10 +72,7 @@ class FileGridTile extends ConsumerWidget {
           itemBuilder: (context) => [
             const PopupMenuItem(
               child: ListTile(
-                leading: Icon(
-                  Icons.report,
-                  color: Colors.red,
-                ),
+                leading: Icon(Icons.report, color: Colors.red),
                 title: Text("Report"),
               ),
             ),
@@ -108,15 +101,11 @@ class FileGridTile extends ConsumerWidget {
         "assets/images/folder border.png",
       ))),
       child: Center(
-        child: Text(
-          type,
-          style: const TextStyle(
-            color: Colors.red,
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-          ),
-        ),
-      ),
+          child: Image.asset(
+        "assets/images/word.png",
+        width: 30,
+        height: 30,
+      )),
     );
   }
 
@@ -163,7 +152,7 @@ class FileGridTile extends ConsumerWidget {
       width: 30,
       height: 30,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), color: Colors.deepOrange),
+          borderRadius: BorderRadius.circular(10), color: purplePrimary),
       child: const Center(
         child: Text(
           'A',
@@ -201,63 +190,37 @@ class FileGridTile extends ConsumerWidget {
     );
   }
 
-  Widget getLogo(String type, String url) {
+  String getLogoUrl(String type) {
     switch (type) {
       case "jpeg":
-        return Image.network(
-          url,
-          width: 70,
-          height: 70,
-          fit: BoxFit.cover,
-        );
+        return "assets/images/picture.png";
       case "jpg":
-        return Image.network(
-          url,
-          width: 70,
-          height: 70,
-          fit: BoxFit.cover,
-        );
+        return "assets/images/picture.png";
       case "png":
-        return Image.network(
-          url,
-          width: 70,
-          height: 70,
-          fit: BoxFit.cover,
-        );
+        return "assets/images/picture.png";
       case "mp4":
-        return Image.asset(
-          "assets/images/video.png",
-          width: 70,
-          height: 70,
-          fit: BoxFit.cover,
-          color: Colors.blue,
-        );
+        return "assets/images/mp4.png";
       case "pdf":
-        return Container(
-          width: 90,
-          height: 50,
-          decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("assets/images/folderblue.png"))),
-          child: const Center(
-            child: Text(
-              'PDF',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-          ),
-        );
+        return "assets/images/pdf.png";
       default:
-        return Image.asset(
-          "assets/images/folder3.png",
-          width: 70,
-          height: 70,
-          fit: BoxFit.cover,
-          color: Colors.blue,
-        );
+        return "assets/images/picture.png";
     }
+  }
+
+  _getLogo(String type) {
+    return Container(
+      width: 90,
+      height: 90,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(100),
+        color: lightPurpleBackground,
+      ),
+      child: Center(
+          child: Image.asset(
+        getLogoUrl(type),
+        width: 40,
+        height: 40,
+      )),
+    );
   }
 }
