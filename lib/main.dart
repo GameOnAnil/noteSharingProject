@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_sharing_project/firebase_options.dart';
-import 'package:note_sharing_project/ui/screens/auth_wrapper_page.dart';
+import 'package:note_sharing_project/ui/screens/page1.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
@@ -41,16 +41,17 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: Colors.deepPurple,
-          ).copyWith(
-            primary: darkBlueBackground,
-          ),
+          primarySwatch: Colors.deepPurple,
+          // colorScheme: ColorScheme.fromSwatch(
+          //   primarySwatch: Colors.deepPurple,
+          // ).copyWith(
+          //   primary: darkBlueBackground,
+          // ),
           floatingActionButtonTheme: const FloatingActionButtonThemeData(
               backgroundColor: darkBlueBackground,
               foregroundColor: Colors.white),
         ),
-        home: const AuthWrapperPage(),
+        home: const Page1(),
       ),
     );
   }

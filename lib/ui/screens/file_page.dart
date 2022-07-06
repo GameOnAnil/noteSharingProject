@@ -102,12 +102,6 @@ class FilePage extends ConsumerWidget {
           },
           icon: const Icon(Icons.search),
         ),
-        IconButton(
-          onPressed: () async {},
-          icon: (isNotificationOn)
-              ? const Icon(Icons.notifications_active)
-              : const Icon(Icons.notifications_off),
-        ),
       ],
     );
   }

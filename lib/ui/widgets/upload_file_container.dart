@@ -25,8 +25,11 @@ class UploadFileContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        final response =
-            await FilePicker.platform.pickFiles(allowMultiple: false);
+        final response = await FilePicker.platform.pickFiles(
+          allowMultiple: false,
+          // type: FileType.custom,
+          // allowedExtensions: ["png", "jpg", "jpeg"],
+        );
         if (response == null) return;
 
         final file = response.files.first;
