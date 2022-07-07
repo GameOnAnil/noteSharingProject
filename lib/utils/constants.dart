@@ -30,7 +30,7 @@ final List<String> subList = [
   "OODM",
 ];
 
-final colorList = [
+final colorGradientList = [
   blueGradient,
   pinkGradient,
   orangeGradient,
