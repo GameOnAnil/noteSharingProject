@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:note_sharing_project/models/subject.dart';
 import 'package:note_sharing_project/providers/sub_notifier.dart';
+import 'package:note_sharing_project/ui/screens/file_page_new.dart';
 import 'package:note_sharing_project/ui/widgets/new_subject_grid_tile.dart';
 import 'package:note_sharing_project/utils/constants.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
@@ -164,9 +165,23 @@ class _SemesterPageState extends State<SemesterPage> {
         itemCount: subList.length,
         itemBuilder: (context, index) {
           final remainder = index % 4;
+          final currentSubject = subList[index];
           return NewSubjectGridTile(
             colors: colorGradientList[remainder],
-            subject: subList[index],
+            subject: currentSubject,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((context) => FilePageNew(
+                        name: currentSubject.name,
+                        semester: selectedSem!,
+                        program: widget.selectedProgram,
+                        isNotificationOn: false,
+                      )),
+                ),
+              );
+            },
           );
         },
       ),

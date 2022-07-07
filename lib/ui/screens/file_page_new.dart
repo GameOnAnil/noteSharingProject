@@ -1,46 +1,87 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:note_sharing_project/models/files_model.dart';
+import 'package:note_sharing_project/providers/file_page_notifier.dart';
 import 'package:note_sharing_project/ui/widgets/file_grid_tile.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
-class Page3 extends StatelessWidget {
-  const Page3({Key? key}) : super(key: key);
+class FilePageNew extends ConsumerWidget {
+  final String name;
+  final String semester;
+  final String program;
+  final bool isNotificationOn;
+  const FilePageNew(
+      {Key? key,
+      required this.name,
+      required this.semester,
+      required this.program,
+      required this.isNotificationOn})
+      : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    String path = "$program-$semester-$name";
+    final isSearchVisible =
+        ref.watch(filePageNotiferProvicer(path)).isSearchVisible;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       backgroundColor: purplePrimary,
-      appBar: _appBar(),
+      appBar: _appBar(ref, path, isNotificationOn),
       floatingActionButton: _floatingActionButton(),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30), color: Colors.white),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              _sortingPart("Bese"),
-              Expanded(child: _gridView(dummyFileList)),
-            ],
+      body: Column(
+        children: [
+          isSearchVisible ? _searchBar(path) : const SizedBox(),
+          Expanded(
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30), color: Colors.white),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    _sortingPart(path, ref),
+                    Expanded(
+                      child: Consumer(
+                        builder: (context, ref, child) {
+                          final fileList = ref
+                              .watch(filePageNotiferProvicer(path))
+                              .newFileList;
+
+                          if (fileList.isEmpty) {
+                            return const Center(
+                              child: Text("List empty"),
+                            );
+                          } else {
+                            //return _listView(fileList);
+                            return _gridView(fileList);
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
 
-  AppBar _appBar() {
+  AppBar _appBar(WidgetRef ref, String path, bool isNotificationOn) {
     return AppBar(
       elevation: 0.0,
       title: const Text('Files Page'),
       backgroundColor: purplePrimary,
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: () async {
+            ref.read(filePageNotiferProvicer(path)).enableSearch();
+          },
           icon: const Icon(Icons.search),
         ),
         IconButton(
@@ -49,6 +90,31 @@ class Page3 extends StatelessWidget {
         )
       ],
     );
+  }
+
+  Consumer _searchBar(String path) {
+    return Consumer(builder: (context, ref, child) {
+      return Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextFormField(
+              decoration: InputDecoration(
+                label: const Text("Search By"),
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+                fillColor: Colors.white,
+                filled: true,
+              ),
+              onChanged: (value) {
+                ref.read(filePageNotiferProvicer(path)).search(value);
+              },
+            ),
+          ),
+          const SizedBox(height: 8),
+        ],
+      );
+    });
   }
 
   Builder _floatingActionButton() {
@@ -157,7 +223,7 @@ class Page3 extends StatelessWidget {
         });
   }
 
-  Widget _sortingPart(String path) {
+  Widget _sortingPart(String path, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
       child: Row(
@@ -177,15 +243,21 @@ class Page3 extends StatelessWidget {
             itemBuilder: ((context) => [
                   PopupMenuItem(
                     child: const Text("Sort By Name"),
-                    onTap: () {},
+                    onTap: () {
+                      ref.read(filePageNotiferProvicer(path)).orderedBy("name");
+                    },
                   ),
                   PopupMenuItem(
                     child: const Text("Sort By Size"),
-                    onTap: () {},
+                    onTap: () {
+                      ref.read(filePageNotiferProvicer(path)).orderedBy("size");
+                    },
                   ),
                   PopupMenuItem(
                     child: const Text("Sort By Date"),
-                    onTap: () {},
+                    onTap: () {
+                      ref.read(filePageNotiferProvicer(path)).orderedBy("date");
+                    },
                   ),
                 ]),
           ),

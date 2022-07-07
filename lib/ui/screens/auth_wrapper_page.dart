@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_sharing_project/services/auth_service.dart';
-import 'package:note_sharing_project/ui/new%20design/login_page.dart';
-import 'package:note_sharing_project/ui/new%20design/page1.dart';
+import 'package:note_sharing_project/ui/screens/login_page.dart';
+import 'package:note_sharing_project/ui/screens/page1.dart';
 
 class AuthWrapperPage extends ConsumerWidget {
   const AuthWrapperPage({Key? key}) : super(key: key);

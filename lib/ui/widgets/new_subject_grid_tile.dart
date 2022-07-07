@@ -1,26 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:note_sharing_project/models/subject.dart';
-import 'package:note_sharing_project/ui/new%20design/page3.dart';
 
 class NewSubjectGridTile extends StatelessWidget {
   final List<Color> colors;
   final Subject subject;
+  final Function() onTap;
   const NewSubjectGridTile({
     Key? key,
     required this.colors,
     required this.subject,
+    required this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: ((context) => const Page3()),
-          ),
-        );
+        onTap();
       },
       child: Container(
         width: 200,
