@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_sharing_project/firebase_options.dart';
-import 'package:note_sharing_project/ui/screens/page1.dart';
+import 'package:note_sharing_project/ui/new%20design/auth_wrapper_page.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
               backgroundColor: darkBlueBackground,
               foregroundColor: Colors.white),
         ),
-        home: const Page1(),
+        home: const AuthWrapperPage(),
       ),
     );
   }

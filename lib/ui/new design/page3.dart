@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:note_sharing_project/models/files_model.dart';
 import 'package:note_sharing_project/ui/widgets/file_grid_tile.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
@@ -12,11 +13,7 @@ class Page3 extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       backgroundColor: purplePrimary,
-      appBar: AppBar(
-        elevation: 0.0,
-        title: const Text('Files Page'),
-        backgroundColor: purplePrimary,
-      ),
+      appBar: _appBar(),
       floatingActionButton: _floatingActionButton(),
       body: Container(
         width: double.infinity,
@@ -33,6 +30,24 @@ class Page3 extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  AppBar _appBar() {
+    return AppBar(
+      elevation: 0.0,
+      title: const Text('Files Page'),
+      backgroundColor: purplePrimary,
+      actions: [
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.search),
+        ),
+        IconButton(
+          onPressed: () {},
+          icon: const FaIcon(FontAwesomeIcons.bell),
+        )
+      ],
     );
   }
 

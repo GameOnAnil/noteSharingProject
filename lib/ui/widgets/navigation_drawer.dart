@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:note_sharing_project/services/auth_service.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
 class NavigationDrawer extends StatelessWidget {
@@ -32,28 +34,37 @@ class NavigationDrawer extends StatelessWidget {
                 DrawerTile(
                   title: "Profile",
                   icon: FontAwesomeIcons.userLarge,
+                  onTap: () {},
                 ),
                 DrawerTile(
                   title: "Downloads",
                   icon: FontAwesomeIcons.download,
+                  onTap: () {},
                 ),
                 DrawerTile(
                   title: "About Us",
                   icon: FontAwesomeIcons.addressBook,
+                  onTap: () {},
                 ),
                 DrawerTile(
                   title: "Share",
                   icon: FontAwesomeIcons.share,
+                  onTap: () {},
                 ),
                 const Expanded(child: SizedBox()),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.0),
                   child: Divider(color: Colors.black),
                 ),
-                DrawerTile(
-                  title: "Sign Out",
-                  icon: FontAwesomeIcons.arrowRightFromBracket,
-                ),
+                Consumer(builder: (context, ref, child) {
+                  return DrawerTile(
+                    title: "Sign Out",
+                    icon: FontAwesomeIcons.arrowRightFromBracket,
+                    onTap: () {
+                      ref.read(authServiceProvider).signOut();
+                    },
+                  );
+                }),
                 const SizedBox(height: 50)
               ],
             ),
@@ -65,12 +76,14 @@ class NavigationDrawer extends StatelessWidget {
 }
 
 class DrawerTile extends StatelessWidget {
-  String title;
-  IconData icon;
-  DrawerTile({
+  final String title;
+  final IconData icon;
+  final Function() onTap;
+  const DrawerTile({
     Key? key,
     required this.title,
     required this.icon,
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -88,7 +101,9 @@ class DrawerTile extends StatelessWidget {
           fontSize: 18,
         ),
       ),
-      onTap: () {},
+      onTap: () {
+        onTap();
+      },
     );
   }
 }

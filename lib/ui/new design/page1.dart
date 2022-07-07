@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:note_sharing_project/ui/widgets/carousel_tile.dart';
 import 'package:note_sharing_project/ui/widgets/navigation_drawer.dart';
+import 'package:note_sharing_project/utils/constants.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -176,24 +177,12 @@ class _HomePageCaroselState extends State<HomePageCarosel> {
           child: SizedBox(
             width: double.infinity,
             child: CarouselSlider(
-              items: const [
-                CarauselTile(
-                  color: purplePrimary,
-                  title: "BESE",
-                ),
-                CarauselTile(
-                  color: Colors.red,
-                  title: "BEIT",
-                ),
-                CarauselTile(
-                  color: Colors.orange,
-                  title: "BCOM",
-                ),
-                CarauselTile(
-                  color: Colors.green,
-                  title: "Bsc IT",
-                ),
-              ],
+              items: programList.map((e) {
+                final index = programList.indexOf(e);
+
+                return CarauselTile(
+                    color: caroucelColorList[index % 4], title: e);
+              }).toList(),
               options: CarouselOptions(
                 onPageChanged: (index, reason) {
                   setState(() {

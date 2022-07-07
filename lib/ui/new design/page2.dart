@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:note_sharing_project/ui/screens/page3.dart';
+import 'package:note_sharing_project/ui/new%20design/page3.dart';
 import 'package:note_sharing_project/utils/constants.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
@@ -99,7 +99,7 @@ class Page2 extends StatelessWidget {
         childrenDelegate: SliverChildBuilderDelegate(
           (context, index) {
             final remainder = index % 4;
-            return NewSubjectGridTile(colors: colorList[remainder]);
+            return NewSubjectGridTile(colors: colorGradientList[remainder]);
           },
         ),
       ),
@@ -148,7 +148,7 @@ class Page2 extends StatelessWidget {
             crossAxisCount: 2, crossAxisSpacing: 16, mainAxisSpacing: 16),
         itemBuilder: (context, index) {
           final remainder = index % 4;
-          return NewSubjectGridTile(colors: colorList[remainder]);
+          return NewSubjectGridTile(colors: colorGradientList[remainder]);
         },
       ),
     );

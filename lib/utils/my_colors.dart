@@ -32,3 +32,10 @@ const pinkGradient = [
   Color(0xfff45686),
   Color.fromARGB(255, 247, 138, 171),
 ];
+
+List<Color> caroucelColorList = [
+  const Color(0xff49c8eb),
+  const Color(0xff6256ff),
+  const Color(0xffffa743),
+  const Color(0xfff45686),
+];

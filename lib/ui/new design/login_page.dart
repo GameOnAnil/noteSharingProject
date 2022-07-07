@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:lottie/lottie.dart';
 import 'package:note_sharing_project/providers/login_page_notifier.dart';
 import 'package:note_sharing_project/services/auth_service.dart';
-import 'package:note_sharing_project/ui/screens/sign_up_page.dart';
+import 'package:note_sharing_project/ui/new%20design/sign_up_page.dart';
 import 'package:note_sharing_project/ui/widgets/custom_text_field.dart';
-import 'package:note_sharing_project/ui/widgets/note_sharing_header.dart';
 import 'package:note_sharing_project/ui/widgets/password_text_field.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
@@ -55,7 +55,8 @@ class _LoginPageState extends State<LoginPage> {
           height: double.infinity,
           child: Column(
             children: [
-              const NoteSharingHeader(),
+              const SizedBox(height: 20),
+              _header(context),
               Expanded(
                 child: Container(
                   width: double.infinity,
@@ -86,16 +87,31 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  SizedBox _header(BuildContext context) {
+    return SizedBox(
+      // color: Colors.red,
+      height: MediaQuery.of(context).size.height * .4,
+      child: Stack(
+        alignment: Alignment.bottomLeft,
+        children: [
+          Lottie.network(
+              "https://assets8.lottiefiles.com/packages/lf20_jcikwtux.json",
+              fit: BoxFit.fill),
+          Positioned(bottom: 0, left: 0, child: _title())
+        ],
+      ),
+    );
+  }
+
   Padding _contentPart(BuildContext context, WidgetRef ref) {
     return Padding(
-      padding: const EdgeInsets.all(24.0),
+      padding: const EdgeInsets.only(left: 24.0, right: 24, bottom: 24),
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _title(),
-            const SizedBox(height: 16),
+            const SizedBox(height: 10),
             _loginTextField(),
             const SizedBox(height: 16),
             PasswordTextField(
@@ -151,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
     return const Text(
       'Login',
       style: TextStyle(
-        color: bluePrimary,
+        color: purplePrimary,
         fontWeight: FontWeight.bold,
         fontSize: 32,
       ),
@@ -184,7 +200,7 @@ class _LoginPageState extends State<LoginPage> {
             child: const Text(
               'Sign Up',
               style: TextStyle(
-                color: Colors.blueAccent,
+                color: purpleText,
                 fontWeight: FontWeight.w400,
                 fontSize: 16,
               ),
@@ -200,7 +216,7 @@ class _LoginPageState extends State<LoginPage> {
       height: 50,
       width: double.infinity,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), color: bluePrimary),
+          borderRadius: BorderRadius.circular(30), color: purplePrimary),
       child: TextButton(
         onPressed: () {
           // _validateForm(ref);
@@ -222,7 +238,7 @@ class _LoginPageState extends State<LoginPage> {
       width: double.infinity,
       decoration: BoxDecoration(
         border: Border.all(color: bluePrimary),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(30),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,

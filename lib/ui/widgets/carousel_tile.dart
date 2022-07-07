@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:note_sharing_project/ui/screens/page2.dart';
+import 'package:note_sharing_project/ui/new%20design/page2.dart';
 
 class CarauselTile extends StatelessWidget {
   final Color color;
