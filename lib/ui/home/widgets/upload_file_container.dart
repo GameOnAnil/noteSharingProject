@@ -106,7 +106,7 @@ class UploadFileContainer extends StatelessWidget {
           TextSpan(
             text: title,
             style: TextStyle(
-              color: darkBlueBackground,
+              color: purpleText,
               fontWeight: FontWeight.w600,
               fontSize: 18.sp,
             ),

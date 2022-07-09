@@ -5,9 +5,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:note_sharing_project/providers/login_page_notifier.dart';
 import 'package:note_sharing_project/services/auth_service.dart';
+import 'package:note_sharing_project/ui/authentication/forgot_pass_page.dart';
 import 'package:note_sharing_project/ui/authentication/sign_up_page.dart';
-import 'package:note_sharing_project/ui/widgets/custom_text_field.dart';
-import 'package:note_sharing_project/ui/widgets/password_text_field.dart';
+import 'package:note_sharing_project/ui/authentication/widgets/custom_text_field.dart';
+import 'package:note_sharing_project/ui/authentication/widgets/password_text_field.dart';
+import 'package:note_sharing_project/ui/authentication/widgets/title_text.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
 class LoginPage extends StatefulWidget {
@@ -95,7 +97,14 @@ class _LoginPageState extends State<LoginPage> {
         alignment: Alignment.bottomLeft,
         children: [
           Lottie.asset("assets/animations/login.json", fit: BoxFit.fill),
-          Positioned(bottom: 0, left: 0, child: _title())
+          Positioned(
+            bottom: 0,
+            left: 0,
+            child: TitleText(
+              title: "Login",
+              fontSize: 32.sp,
+            ),
+          )
         ],
       ),
     );
@@ -135,15 +144,25 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Container _forgotPassword() {
-    return Container(
-      alignment: Alignment.centerRight,
-      child: Text(
-        'Forgot Password?',
-        style: TextStyle(
-          color: bluePrimary,
-          fontWeight: FontWeight.w600,
-          fontSize: 16.sp,
+  GestureDetector _forgotPassword() {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: ((context) => const ForgotPasswordPage()),
+          ),
+        );
+      },
+      child: Container(
+        alignment: Alignment.centerRight,
+        child: Text(
+          'Forgot Password?',
+          style: TextStyle(
+            color: bluePrimary,
+            fontWeight: FontWeight.w600,
+            fontSize: 16.sp,
+          ),
         ),
       ),
     );
@@ -158,17 +177,6 @@ class _LoginPageState extends State<LoginPage> {
           return "Please Enter Email";
         }
       },
-    );
-  }
-
-  Text _title() {
-    return Text(
-      'Login',
-      style: TextStyle(
-        color: purplePrimary,
-        fontWeight: FontWeight.bold,
-        fontSize: 32.sp,
-      ),
     );
   }
 

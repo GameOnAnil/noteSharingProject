@@ -72,7 +72,7 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
             Text(
               "Upload File",
               style: TextStyle(
-                color: darkBlueBackground,
+                color: purpleText,
                 fontWeight: FontWeight.w700,
                 fontSize: 24.sp,
               ),

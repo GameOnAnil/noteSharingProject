@@ -190,7 +190,7 @@ class FilePage extends ConsumerWidget {
           Text(
             "Files",
             style: TextStyle(
-              color: darkBlueBackground,
+              color: purpleText,
               fontWeight: FontWeight.w700,
               fontSize: 20.sp,
             ),

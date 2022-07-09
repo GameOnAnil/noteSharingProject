@@ -109,7 +109,7 @@ class FileGridTile extends ConsumerWidget {
       child: Text(
         fileModel.name,
         style: TextStyle(
-          color: blueTextColor,
+          color: purpleText,
           fontWeight: FontWeight.bold,
           fontSize: 16.sp,
         ),
