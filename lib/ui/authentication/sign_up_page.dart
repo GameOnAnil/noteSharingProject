@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
@@ -18,7 +19,7 @@ class SignUpPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
             _header(context),
             _textFieldsPart(),
           ],
@@ -42,36 +43,36 @@ class SignUpPage extends StatelessWidget {
 
   Padding _textFieldsPart() {
     return Padding(
-      padding: const EdgeInsets.only(left: 24.0, right: 24, bottom: 24),
+      padding: EdgeInsets.only(left: 24.0.w, right: 24.w, bottom: 24.h),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
           TextField(
             decoration: InputDecoration(
               border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(15.r)),
               label: const Text("Enter Email"),
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
           TextField(
             decoration: InputDecoration(
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15.r)),
                 label: const Text("Enter Password"),
                 suffixIcon: const Icon(Icons.visibility)),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
           TextField(
             decoration: InputDecoration(
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15.r)),
                 label: const Text("Confirm Password"),
                 suffixIcon: const Icon(Icons.visibility)),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
           _signupButton()
         ],
       ),
@@ -79,22 +80,22 @@ class SignUpPage extends StatelessWidget {
   }
 
   Text _title() {
-    return const Text(
+    return Text(
       'Sign Up',
       style: TextStyle(
         color: purplePrimary,
         fontWeight: FontWeight.bold,
-        fontSize: 32,
+        fontSize: 32.sp,
       ),
     );
   }
 
   Container _signupButton() {
     return Container(
-      height: 50,
+      height: 50.h,
       width: double.infinity,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), color: purplePrimary),
+          borderRadius: BorderRadius.circular(10.r), color: purplePrimary),
       child: TextButton(
         onPressed: () {},
         child: const Text(

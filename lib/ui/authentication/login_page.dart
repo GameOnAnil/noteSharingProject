@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:note_sharing_project/providers/login_page_notifier.dart';
 import 'package:note_sharing_project/services/auth_service.dart';
-import 'package:note_sharing_project/ui/screens/sign_up_page.dart';
+import 'package:note_sharing_project/ui/authentication/sign_up_page.dart';
 import 'package:note_sharing_project/ui/widgets/custom_text_field.dart';
 import 'package:note_sharing_project/ui/widgets/password_text_field.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
@@ -55,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
           height: double.infinity,
           child: Column(
             children: [
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
               _header(context),
               Expanded(
                 child: Container(
@@ -89,7 +90,6 @@ class _LoginPageState extends State<LoginPage> {
 
   SizedBox _header(BuildContext context) {
     return SizedBox(
-      // color: Colors.red,
       height: MediaQuery.of(context).size.height * .4,
       child: Stack(
         alignment: Alignment.bottomLeft,
@@ -103,15 +103,15 @@ class _LoginPageState extends State<LoginPage> {
 
   Padding _contentPart(BuildContext context, WidgetRef ref) {
     return Padding(
-      padding: const EdgeInsets.only(left: 24.0, right: 24, bottom: 24),
+      padding: EdgeInsets.only(left: 24.0.w, right: 24.w, bottom: 24.h),
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 10),
+            SizedBox(height: 10.h),
             _loginTextField(),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
             PasswordTextField(
                 controller: passwordController,
                 validator: (value) {
@@ -119,15 +119,15 @@ class _LoginPageState extends State<LoginPage> {
                     return "Please Enter Password";
                   }
                 }),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
             _forgotPassword(),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
             _loginButton(context, ref),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
             _divider(),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
             _googleSignIn(),
-            const SizedBox(height: 10),
+            SizedBox(height: 10.h),
             _signUpText(context),
           ],
         ),
@@ -138,12 +138,12 @@ class _LoginPageState extends State<LoginPage> {
   Container _forgotPassword() {
     return Container(
       alignment: Alignment.centerRight,
-      child: const Text(
+      child: Text(
         'Forgot Password?',
         style: TextStyle(
           color: bluePrimary,
           fontWeight: FontWeight.w600,
-          fontSize: 16,
+          fontSize: 16.sp,
         ),
       ),
     );
@@ -162,28 +162,28 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Text _title() {
-    return const Text(
+    return Text(
       'Login',
       style: TextStyle(
         color: purplePrimary,
         fontWeight: FontWeight.bold,
-        fontSize: 32,
+        fontSize: 32.sp,
       ),
     );
   }
 
   Padding _signUpText(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      padding: EdgeInsets.symmetric(horizontal: 4.0.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
+          Text(
             'Dont Have An Account?',
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w400,
-              fontSize: 16,
+              fontSize: 16.sp,
             ),
           ),
           GestureDetector(
@@ -195,12 +195,12 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               );
             }),
-            child: const Text(
+            child: Text(
               'Sign Up',
               style: TextStyle(
                 color: purpleText,
                 fontWeight: FontWeight.w400,
-                fontSize: 16,
+                fontSize: 16.sp,
               ),
             ),
           ),
@@ -211,10 +211,10 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _loginButton(BuildContext context, WidgetRef ref) {
     return Container(
-      height: 50,
+      height: 50.h,
       width: double.infinity,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30), color: purplePrimary),
+          borderRadius: BorderRadius.circular(30.r), color: purplePrimary),
       child: TextButton(
         onPressed: () {
           // _validateForm(ref);
@@ -232,11 +232,11 @@ class _LoginPageState extends State<LoginPage> {
 
   Container _googleSignIn() {
     return Container(
-      height: 50,
+      height: 50.h,
       width: double.infinity,
       decoration: BoxDecoration(
         border: Border.all(color: bluePrimary),
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(30.r),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -244,13 +244,11 @@ class _LoginPageState extends State<LoginPage> {
           Center(
             child: Image.asset(
               "assets/images/google.png",
-              width: 30,
-              height: 30,
+              width: 30.w,
+              height: 30.h,
             ),
           ),
-          const SizedBox(
-            width: 20,
-          ),
+          SizedBox(width: 20.w),
           const Text("Sign in with Google "),
         ],
       ),
@@ -259,22 +257,12 @@ class _LoginPageState extends State<LoginPage> {
 
   Row _divider() {
     return Row(
-      children: const [
-        Expanded(
-            child: Divider(
-          color: Colors.black,
-        )),
-        SizedBox(
-          width: 5,
-        ),
-        Text("or"),
-        SizedBox(
-          width: 5,
-        ),
-        Expanded(
-            child: Divider(
-          color: Colors.black,
-        )),
+      children: [
+        const Expanded(child: Divider(color: Colors.black)),
+        SizedBox(width: 5.w),
+        const Text("or"),
+        SizedBox(width: 5.w),
+        const Expanded(child: Divider(color: Colors.black)),
       ],
     );
   }

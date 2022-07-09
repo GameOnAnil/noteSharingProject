@@ -3,8 +3,9 @@ import 'dart:developer';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:note_sharing_project/firebase_options.dart';
-import 'package:note_sharing_project/ui/screens/auth_wrapper_page.dart';
+import 'package:note_sharing_project/ui/authentication/auth_wrapper_page.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
@@ -37,16 +38,23 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ProviderScope(
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.deepPurple,
-          floatingActionButtonTheme: const FloatingActionButtonThemeData(
-              backgroundColor: darkBlueBackground,
-              foregroundColor: Colors.white),
-        ),
-        home: const AuthWrapperPage(),
+      child: ScreenUtilInit(
+        designSize: const Size(390, 844),
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: (BuildContext context, Widget? child) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Flutter Demo',
+            theme: ThemeData(
+              primarySwatch: Colors.deepPurple,
+              floatingActionButtonTheme: const FloatingActionButtonThemeData(
+                  backgroundColor: darkBlueBackground,
+                  foregroundColor: Colors.white),
+            ),
+            home: const AuthWrapperPage(),
+          );
+        },
       ),
     );
   }

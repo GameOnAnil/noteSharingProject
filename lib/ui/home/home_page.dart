@@ -1,15 +1,13 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:note_sharing_project/ui/widgets/carousel_tile.dart';
+import 'package:note_sharing_project/ui/widgets/home_page_caroucel.dart';
 import 'package:note_sharing_project/ui/widgets/navigation_drawer.dart';
-import 'package:note_sharing_project/utils/constants.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class Page1 extends StatelessWidget {
-  const Page1({Key? key}) : super(key: key);
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,19 +26,19 @@ class Page1 extends StatelessWidget {
           begin: Alignment.bottomCenter,
           end: Alignment.topCenter,
         )),
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16.r),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildHeaderText(),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
             const Expanded(
               child: SizedBox(width: double.infinity, child: HomePageCarosel()),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
             _recentFolderText(),
             SizedBox(
-                height: 130, width: double.infinity, child: _buildListView()),
+                height: 130.h, width: double.infinity, child: _buildListView()),
           ],
         ),
       ),
@@ -50,14 +48,14 @@ class Page1 extends StatelessWidget {
   }
 
   Padding _recentFolderText() {
-    return const Padding(
-      padding: EdgeInsets.only(top: 8.0),
+    return Padding(
+      padding: EdgeInsets.only(top: 8.0.h),
       child: Text(
         'Recent Folder',
         style: TextStyle(
           color: purpleText,
           fontWeight: FontWeight.w400,
-          fontSize: 24,
+          fontSize: 24.sp,
         ),
       ),
     );
@@ -82,7 +80,7 @@ class Page1 extends StatelessWidget {
           style: GoogleFonts.montserrat(
             color: purpleText,
             fontWeight: FontWeight.w600,
-            fontSize: 32,
+            fontSize: 32.sp,
           ),
         ),
         Text(
@@ -90,7 +88,7 @@ class Page1 extends StatelessWidget {
           style: GoogleFonts.montserrat(
             color: purpleText,
             fontWeight: FontWeight.w600,
-            fontSize: 32,
+            fontSize: 32.sp,
           ),
         ),
       ],
@@ -120,9 +118,9 @@ class Page1 extends StatelessWidget {
 
   ClipRRect _bottomNavBar(BuildContext context) {
     return ClipRRect(
-      borderRadius: const BorderRadius.only(
-        topLeft: Radius.circular(16),
-        topRight: Radius.circular(16),
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(16.r),
+        topRight: Radius.circular(16.r),
       ),
       child: Builder(builder: (context) {
         return BottomNavigationBar(
@@ -138,11 +136,11 @@ class Page1 extends StatelessWidget {
             BottomNavigationBarItem(
               icon: Image.asset(
                 "assets/images/home.png",
-                height: 24,
+                height: 24.h,
               ),
               activeIcon: Image.asset(
                 "assets/images/home.png",
-                height: 24,
+                height: 24.h,
                 color: purplePrimary,
               ),
               label: "Home",
@@ -154,103 +152,6 @@ class Page1 extends StatelessWidget {
           ],
         );
       }),
-    );
-  }
-}
-
-class HomePageCarosel extends StatefulWidget {
-  const HomePageCarosel({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  State<HomePageCarosel> createState() => _HomePageCaroselState();
-}
-
-class _HomePageCaroselState extends State<HomePageCarosel> {
-  int mIndex = 0;
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: SizedBox(
-            width: double.infinity,
-            child: CarouselSlider(
-              items: programList.map((e) {
-                final index = programList.indexOf(e);
-
-                return CarauselTile(
-                    color: caroucelColorList[index % 4], title: e);
-              }).toList(),
-              options: CarouselOptions(
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    mIndex = index;
-                  });
-                },
-                autoPlay: true,
-                aspectRatio: 1.0,
-                enlargeCenterPage: true,
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        AnimatedSmoothIndicator(
-          activeIndex: mIndex,
-          count: 4,
-          effect: const ScrollingDotsEffect(
-              dotWidth: 10, dotHeight: 10, activeDotColor: purplePrimary),
-        ),
-      ],
-    );
-  }
-}
-
-class FolderHorizontalCard extends StatelessWidget {
-  const FolderHorizontalCard({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        width: 150,
-        height: 100,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8), color: Colors.white),
-        child: Center(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset(
-                  "assets/images/folderpurple.png",
-                  width: 50,
-                  height: 50,
-                ),
-                const Text(
-                  'BESE-1ST-C',
-                  style: TextStyle(
-                    color: purpleText,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                  ),
-                ),
-                const Text(
-                  '10 Files',
-                  style: TextStyle(
-                    color: purpleText,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                  ),
-                ),
-              ]),
-        ),
-      ),
     );
   }
 }
