@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:note_sharing_project/firebase_options.dart';
-import 'package:note_sharing_project/ui/splash/auth_wrapper_page.dart';
+import 'package:note_sharing_project/ui/splash/splash_screen.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
                   backgroundColor: purplePrimary,
                   foregroundColor: Colors.white),
             ),
-            home: const AuthWrapperPage(),
+            home: const SplashScreen(),
           );
         },
       ),

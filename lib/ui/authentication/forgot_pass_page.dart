@@ -42,8 +42,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(24.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Center(
@@ -53,24 +54,20 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             ),
             Container(
               alignment: Alignment.centerLeft,
-              padding: EdgeInsets.symmetric(horizontal: 8.w),
               child: TitleText(
                 title: "Reset Password",
-                fontSize: 28.sp,
+                fontSize: 24.sp,
               ),
             ),
-            Padding(
-              padding: EdgeInsets.all(8.0.r),
-              child: CustomTextField(
-                controller: emailController,
-                label: "Enter Email Address",
-                validator: (value) {},
-              ),
+            CustomTextField(
+              controller: emailController,
+              label: "Enter Email Address",
+              validator: (value) {},
             ),
             SizedBox(height: 8.h),
             Container(
               height: 50.h,
-              width: MediaQuery.of(context).size.width * .7,
+              width: double.infinity,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30.r),
                   color: purplePrimary),
