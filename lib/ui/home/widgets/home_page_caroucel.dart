@@ -47,7 +47,7 @@ class _HomePageCaroselState extends State<HomePageCarosel> {
         SizedBox(height: 10.h),
         AnimatedSmoothIndicator(
           activeIndex: mIndex,
-          count: 4,
+          count: programList.length,
           effect: ScrollingDotsEffect(
               dotWidth: 10.w, dotHeight: 10.h, activeDotColor: purplePrimary),
         ),
