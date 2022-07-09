@@ -4,7 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:note_sharing_project/providers/login_page_notifier.dart';
 import 'package:note_sharing_project/services/auth_service.dart';
-import 'package:note_sharing_project/ui/new%20design/sign_up_page.dart';
+import 'package:note_sharing_project/ui/screens/sign_up_page.dart';
 import 'package:note_sharing_project/ui/widgets/custom_text_field.dart';
 import 'package:note_sharing_project/ui/widgets/password_text_field.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
@@ -94,9 +94,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          Lottie.network(
-              "https://assets8.lottiefiles.com/packages/lf20_jcikwtux.json",
-              fit: BoxFit.fill),
+          Lottie.asset("assets/animations/login.json", fit: BoxFit.fill),
           Positioned(bottom: 0, left: 0, child: _title())
         ],
       ),
@@ -243,10 +241,12 @@ class _LoginPageState extends State<LoginPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
-            "assets/images/google.png",
-            width: 30,
-            height: 30,
+          Center(
+            child: Image.asset(
+              "assets/images/google.png",
+              width: 30,
+              height: 30,
+            ),
           ),
           const SizedBox(
             width: 20,

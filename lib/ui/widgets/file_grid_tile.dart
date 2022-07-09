@@ -17,7 +17,11 @@ class FileGridTile extends ConsumerWidget {
         ref.watch(fileGridNotifierProvider(fileModel.name)).progress;
 
     return GestureDetector(
-      onTap: () async {},
+      onTap: () async {
+        ref
+            .read(fileGridNotifierProvider(fileModel.name))
+            .openFile(url: fileModel.url, fileName: fileModel.name);
+      },
       child: Container(
         width: 200,
         height: 300,

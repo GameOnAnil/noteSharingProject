@@ -1,34 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lottie/lottie.dart';
 import 'package:note_sharing_project/models/files_model.dart';
+import 'package:note_sharing_project/models/subject.dart';
 import 'package:note_sharing_project/providers/file_page_notifier.dart';
+import 'package:note_sharing_project/ui/widgets/add_file_bottom_sheet.dart';
 import 'package:note_sharing_project/ui/widgets/file_grid_tile.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
 class FilePageNew extends ConsumerWidget {
-  final String name;
-  final String semester;
-  final String program;
-  final bool isNotificationOn;
-  const FilePageNew(
-      {Key? key,
-      required this.name,
-      required this.semester,
-      required this.program,
-      required this.isNotificationOn})
-      : super(key: key);
+  final Subject subject;
+  const FilePageNew({
+    required this.subject,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    String path = "$program-$semester-$name";
+    String path = "${subject.program}-${subject.semester}-${subject.name}";
     final isSearchVisible =
         ref.watch(filePageNotiferProvicer(path)).isSearchVisible;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       backgroundColor: purplePrimary,
-      appBar: _appBar(ref, path, isNotificationOn),
+      appBar: _appBar(ref, path, subject.notificationOn),
       floatingActionButton: _floatingActionButton(),
       body: Column(
         children: [
@@ -37,8 +33,13 @@ class FilePageNew extends ConsumerWidget {
             child: Container(
               width: double.infinity,
               height: double.infinity,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30), color: Colors.white),
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(30),
+                  topLeft: Radius.circular(30),
+                ),
+                color: Colors.white,
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -50,11 +51,16 @@ class FilePageNew extends ConsumerWidget {
                           final fileList = ref
                               .watch(filePageNotiferProvicer(path))
                               .newFileList;
-
-                          if (fileList.isEmpty) {
+                          final isLoading = ref
+                              .watch(filePageNotiferProvicer(path))
+                              .isLoading;
+                          if (isLoading) {
                             return const Center(
-                              child: Text("List empty"),
+                              child: CircularProgressIndicator(),
                             );
+                          }
+                          if (fileList.isEmpty) {
+                            return _listEmpty();
                           } else {
                             //return _listView(fileList);
                             return _gridView(fileList);
@@ -72,6 +78,23 @@ class FilePageNew extends ConsumerWidget {
     );
   }
 
+  Column _listEmpty() {
+    return Column(
+      children: [
+        const SizedBox(height: 40),
+        Lottie.asset("assets/animations/empty_list.json"),
+        const Text(
+          'No Files Found.',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w400,
+            fontSize: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
   AppBar _appBar(WidgetRef ref, String path, bool isNotificationOn) {
     return AppBar(
       elevation: 0.0,
@@ -86,7 +109,9 @@ class FilePageNew extends ConsumerWidget {
         ),
         IconButton(
           onPressed: () {},
-          icon: const FaIcon(FontAwesomeIcons.bell),
+          icon: (isNotificationOn)
+              ? const FaIcon(FontAwesomeIcons.bell)
+              : const Icon(Icons.notifications_off),
         )
       ],
     );
@@ -127,7 +152,11 @@ class FilePageNew extends ConsumerWidget {
                 backgroundColor: Colors.transparent,
                 context: context,
                 builder: (context) {
-                  return _bottomSheet(context);
+                  return AddFileBottomSheet(
+                    semester: subject.semester,
+                    program: subject.program,
+                    name: subject.name,
+                  );
                 });
           },
           label: SizedBox(
@@ -137,78 +166,6 @@ class FilePageNew extends ConsumerWidget {
                 "Add Files",
               ))));
     });
-  }
-
-  Container _bottomSheet(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: MediaQuery.of(context).size.height * .6,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20), color: Colors.white),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const SizedBox(height: 10),
-            const Text(
-              "Upload File",
-              style: TextStyle(
-                color: darkBlueBackground,
-                fontWeight: FontWeight.w700,
-                fontSize: 24,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Container(
-              width: double.infinity,
-              height: 200,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.black),
-              ),
-              child: Center(
-                child: Image.asset(
-                  "assets/images/upload.png",
-                  color: purplePrimary,
-                  width: 150,
-                  height: 150,
-                ),
-              ),
-            ),
-            _editNameTextField(),
-            SizedBox(
-              width: double.infinity,
-              height: 60,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16))),
-                  backgroundColor: MaterialStateProperty.all(purplePrimary),
-                ),
-                child: const Text(
-                  "Upload",
-                  style: TextStyle(color: Colors.white, fontSize: 20),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Padding _editNameTextField() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 10.0),
-      child: TextField(
-        decoration: InputDecoration(
-            label: Text("Edit Name"),
-            border: OutlineInputBorder(),
-            suffix: Text("png")),
-      ),
-    );
   }
 
   GridView _gridView(List<FileModel> fileList) {

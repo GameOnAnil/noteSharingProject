@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:note_sharing_project/models/subject.dart';
+import 'package:note_sharing_project/ui/screens/file_page_new.dart';
 
 class NewSubjectGridTile extends StatelessWidget {
   final List<Color> colors;
@@ -16,7 +17,14 @@ class NewSubjectGridTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        onTap();
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: ((context) => FilePageNew(
+                  subject: subject,
+                )),
+          ),
+        );
       },
       child: Container(
         width: 200,
@@ -33,7 +41,7 @@ class NewSubjectGridTile extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              "assets/images/fancy.png",
+              "assets/images/education.png",
               width: 70,
               height: 70,
             ),

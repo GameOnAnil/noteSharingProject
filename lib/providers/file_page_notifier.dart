@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_sharing_project/models/files_model.dart';
@@ -12,7 +14,7 @@ class FilePageNotifer extends ChangeNotifier {
   String orderBy = "name";
   List<FileModel> fileList = [];
   List<FileModel> newFileList = [];
-
+  bool isLoading = false;
   final String path;
 
   FilePageNotifer({required this.path}) {
@@ -42,12 +44,21 @@ class FilePageNotifer extends ChangeNotifier {
   }
 
   void getFiles(String path) async {
-    final response = firebaseService.getFiles(path: path, orderBy: orderBy);
-    response.listen((event) {
-      fileList = event;
-      newFileList = event;
+    try {
+      isLoading = true;
       notifyListeners();
-    });
+      final response = firebaseService.getFiles(path: path, orderBy: orderBy);
+      response.listen((event) {
+        fileList = event;
+        newFileList = event;
+        isLoading = false;
+        notifyListeners();
+      });
+    } catch (e) {
+      log(e.toString());
+      isLoading = false;
+      notifyListeners();
+    }
   }
 
   void enableSearch() {

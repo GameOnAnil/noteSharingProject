@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:note_sharing_project/models/subject.dart';
 import 'package:note_sharing_project/providers/sub_notifier.dart';
-import 'package:note_sharing_project/ui/screens/file_page_new.dart';
 import 'package:note_sharing_project/ui/widgets/new_subject_grid_tile.dart';
 import 'package:note_sharing_project/utils/constants.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
@@ -27,26 +26,23 @@ class _SemesterPageState extends State<SemesterPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       backgroundColor: purplePrimary,
       extendBodyBehindAppBar: true,
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(widget.selectedProgram),
       body: Column(
         children: [
           Expanded(flex: 2, child: _header()),
-          Expanded(
-            flex: 5,
-            child: _contentBody(),
-          ),
+          Expanded(flex: 5, child: _contentBody()),
         ],
       ),
     );
   }
 
-  AppBar _buildAppBar() {
+  AppBar _buildAppBar(String programName) {
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
-      title: const Text(
-        "BESE",
-        style: TextStyle(
+      title: Text(
+        programName,
+        style: const TextStyle(
           fontWeight: FontWeight.w600,
           fontSize: 24,
         ),
@@ -112,14 +108,29 @@ class _SemesterPageState extends State<SemesterPage> {
           builder: (context, ref, child) {
             final subList = ref.watch(subNotifierProvider).subList;
             if (subList.isEmpty) {
-              return const Center(
-                child: Text("Please Enter Subject..."),
-              );
+              return _listEmpty();
             } else {
               return _gridView(subList);
             }
           },
         ));
+  }
+
+  Column _listEmpty() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(height: 100),
+        Image.asset(
+          "assets/images/enter sem.png",
+          fit: BoxFit.cover,
+        ),
+        const Text(
+          "No Semester Selected.",
+          style: TextStyle(fontSize: 24, color: purpleText),
+        ),
+      ],
+    );
   }
 
   Container _header() {
@@ -169,19 +180,7 @@ class _SemesterPageState extends State<SemesterPage> {
           return NewSubjectGridTile(
             colors: colorGradientList[remainder],
             subject: currentSubject,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: ((context) => FilePageNew(
-                        name: currentSubject.name,
-                        semester: selectedSem!,
-                        program: widget.selectedProgram,
-                        isNotificationOn: false,
-                      )),
-                ),
-              );
-            },
+            onTap: () {},
           );
         },
       ),

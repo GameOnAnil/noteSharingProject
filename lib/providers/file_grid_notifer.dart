@@ -26,8 +26,8 @@ class FileGridNotifier extends ChangeNotifier {
     return fileList;
   }
 
-  Future openFile({required String url, String? fileName}) async {
-    final file = await downloadFile(url, fileName!);
+  Future openFile({required String url, required String fileName}) async {
+    final file = await downloadFile(url, fileName);
     if (file == null) return;
     log("file:${file.path}");
     try {

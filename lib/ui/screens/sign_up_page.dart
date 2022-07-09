@@ -33,9 +33,7 @@ class SignUpPage extends StatelessWidget {
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          Lottie.network(
-              "https://assets8.lottiefiles.com/packages/lf20_jcikwtux.json",
-              fit: BoxFit.fill),
+          Lottie.asset("assets/animations/login.json", fit: BoxFit.fill),
           Positioned(bottom: 0, left: 0, child: _title())
         ],
       ),

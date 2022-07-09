@@ -59,17 +59,22 @@ class UploadFileContainer extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 15.0, top: 10),
             child: Container(
-              height: 300,
+              height: 250,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
-                border: Border.all(color: Colors.black),
+                border: Border.all(color: purplePrimary),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(width: 100, height: 150, child: _getLogo()),
+                    SizedBox(
+                        width: 100,
+                        height: 100,
+                        child: Image.asset(
+                          _getLogoUrl(),
+                        )),
                     const SizedBox(
                       width: 10,
                     ),
@@ -120,24 +125,21 @@ class UploadFileContainer extends StatelessWidget {
     );
   }
 
-  Widget _getLogo() {
+  String _getLogoUrl() {
     final fileType = name.split('.')[1];
     switch (fileType) {
       case "jpeg":
-        return Image.file(mFile!, fit: BoxFit.cover);
-      case "png":
-        return Image.file(mFile!, fit: BoxFit.cover);
+        return "assets/images/picture.png";
       case "jpg":
-        return Image.file(mFile!, fit: BoxFit.cover);
-      case "pdf":
-        return Image.asset("assets/images/pdf.png", fit: BoxFit.contain);
+        return "assets/images/picture.png";
+      case "png":
+        return "assets/images/picture.png";
       case "mp4":
-        return Image.asset("assets/images/video.png", fit: BoxFit.contain);
-      case "mp3":
-        return Image.asset("assets/images/mp3.png", fit: BoxFit.contain);
-
+        return "assets/images/mp4.png";
+      case "pdf":
+        return "assets/images/pdf.png";
       default:
-        return Image.file(mFile!, width: 150, height: 150, fit: BoxFit.cover);
+        return "assets/images/picture.png";
     }
   }
 
@@ -175,6 +177,7 @@ class UploadFileContainer extends StatelessWidget {
             "assets/images/upload.png",
             width: 100,
             height: 100,
+            color: purplePrimary,
           ),
           const Text(
             'Upload File',
