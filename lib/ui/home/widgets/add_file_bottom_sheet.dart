@@ -3,10 +3,11 @@ import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:note_sharing_project/models/files_model.dart';
 import 'package:note_sharing_project/services/firebase_service.dart';
 import 'package:note_sharing_project/services/notification_service.dart';
-import 'package:note_sharing_project/ui/widgets/upload_file_container.dart';
+import 'package:note_sharing_project/ui/home/widgets/upload_file_container.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
 class AddFileBottomSheet extends StatefulWidget {
@@ -51,7 +52,7 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
       width: double.infinity,
       height: MediaQuery.of(context).size.height * .6,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20), color: Colors.white),
+          borderRadius: BorderRadius.circular(20.r), color: Colors.white),
       child: (isLoading)
           ? const Center(
               child: CircularProgressIndicator(),
@@ -62,21 +63,21 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
 
   Padding _body() {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: EdgeInsets.all(16.0.r),
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const SizedBox(height: 10),
-            const Text(
+            SizedBox(height: 10.h),
+            Text(
               "Upload File",
               style: TextStyle(
                 color: darkBlueBackground,
                 fontWeight: FontWeight.w700,
-                fontSize: 24,
+                fontSize: 24.sp,
               ),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10.h),
             UploadFileContainer(
                 changeFile: ((file, name, size) {
                   _chageFile(file, name, size);
@@ -90,19 +91,19 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
             _editNameTextField(),
             SizedBox(
               width: double.infinity,
-              height: 60,
+              height: 60.h,
               child: ElevatedButton(
                 onPressed: () async {
                   await handleUpload();
                 },
                 style: ButtonStyle(
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16))),
+                      borderRadius: BorderRadius.circular(16.r))),
                   backgroundColor: MaterialStateProperty.all(purplePrimary),
                 ),
-                child: const Text(
+                child: Text(
                   "Upload",
-                  style: TextStyle(color: Colors.white, fontSize: 20),
+                  style: TextStyle(color: Colors.white, fontSize: 20.sp),
                 ),
               ),
             ),
@@ -114,7 +115,7 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
 
   Padding _editNameTextField() {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      padding: EdgeInsets.symmetric(vertical: 10.0.h),
       child: TextField(
         controller: nameController,
         decoration: InputDecoration(

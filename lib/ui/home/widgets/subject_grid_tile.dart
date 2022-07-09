@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:note_sharing_project/models/subject.dart';
-import 'package:note_sharing_project/ui/screens/file_page_new.dart';
+import 'package:note_sharing_project/ui/home/file_page.dart';
 
-class NewSubjectGridTile extends StatelessWidget {
+class SubjectGridTile extends StatelessWidget {
   final List<Color> colors;
   final Subject subject;
   final Function() onTap;
-  const NewSubjectGridTile({
+  const SubjectGridTile({
     Key? key,
     required this.colors,
     required this.subject,
@@ -20,17 +21,17 @@ class NewSubjectGridTile extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: ((context) => FilePageNew(
+            builder: ((context) => FilePage(
                   subject: subject,
                 )),
           ),
         );
       },
       child: Container(
-        width: 200,
-        height: 400,
+        width: 200.w,
+        height: 400.h,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(30.r),
           gradient: LinearGradient(
             colors: colors,
             begin: Alignment.bottomRight,
@@ -42,15 +43,15 @@ class NewSubjectGridTile extends StatelessWidget {
           children: [
             Image.asset(
               "assets/images/education.png",
-              width: 70,
-              height: 70,
+              width: 70.w,
+              height: 70.h,
             ),
             Text(
               subject.name,
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
-                fontSize: 32,
+                fontSize: 32.sp,
               ),
             ),
           ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:note_sharing_project/models/files_model.dart';
 import 'package:note_sharing_project/providers/file_grid_notifer.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
@@ -23,11 +24,11 @@ class FileGridTile extends ConsumerWidget {
             .openFile(url: fileModel.url, fileName: fileModel.name);
       },
       child: Container(
-        width: 200,
-        height: 300,
-        margin: const EdgeInsets.all(5),
+        width: 200.w,
+        height: 300.h,
+        margin: EdgeInsets.all(5.r),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(15.r),
             border: Border.all(color: Colors.grey.withOpacity(.5)),
             color: Colors.white,
             boxShadow: [
@@ -35,7 +36,7 @@ class FileGridTile extends ConsumerWidget {
                 color: Colors.grey.withOpacity(.5),
                 spreadRadius: .25,
                 blurRadius: 5,
-                offset: const Offset(5, 5),
+                offset: Offset(5.w, 5.h),
               ),
             ]),
         child: Column(
@@ -60,7 +61,7 @@ class FileGridTile extends ConsumerWidget {
 
   LinearProgressIndicator _progressIndicator(double progress) {
     return LinearProgressIndicator(
-      minHeight: 5,
+      minHeight: 5.h,
       value: progress / 100,
     );
   }
@@ -69,8 +70,8 @@ class FileGridTile extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 4.0),
       child: SizedBox(
-        width: 30,
-        height: 30,
+        width: 30.w,
+        height: 30.h,
         child: PopupMenuButton(
           onSelected: (value) {},
           itemBuilder: (context) => [
@@ -95,43 +96,22 @@ class FileGridTile extends ConsumerWidget {
     );
   }
 
-  Widget _fileLogo(String type) {
-    return Container(
-      width: 85,
-      height: 85,
-      decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage(
-        "assets/images/folder border.png",
-      ))),
-      child: Center(
-          child: Image.asset(
-        "assets/images/word.png",
-        width: 30,
-        height: 30,
-      )),
-    );
-  }
-
   Padding _divider() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
-      child: Divider(
-        height: 2,
-        color: Colors.black,
-      ),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 8.0.w),
+      child: Divider(height: 2.h, color: Colors.black),
     );
   }
 
   Padding _nameText() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
+      padding: EdgeInsets.symmetric(horizontal: 16.0.w, vertical: 4.h),
       child: Text(
         fileModel.name,
-        style: const TextStyle(
+        style: TextStyle(
           color: blueTextColor,
           fontWeight: FontWeight.bold,
-          fontSize: 16,
+          fontSize: 16.sp,
         ),
         textAlign: TextAlign.center,
       ),
@@ -140,7 +120,7 @@ class FileGridTile extends ConsumerWidget {
 
   Padding _bottomPart() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(8.0.r),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -153,17 +133,17 @@ class FileGridTile extends ConsumerWidget {
 
   Container _userProfile() {
     return Container(
-      width: 30,
-      height: 30,
+      width: 30.w,
+      height: 30.h,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), color: purplePrimary),
-      child: const Center(
+          borderRadius: BorderRadius.circular(10.r), color: purplePrimary),
+      child: Center(
         child: Text(
           'A',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            fontSize: 16,
+            fontSize: 16.sp,
           ),
         ),
       ),
@@ -174,20 +154,20 @@ class FileGridTile extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           "File Size:",
           style: TextStyle(
             color: bluePrimary,
             fontWeight: FontWeight.bold,
-            fontSize: 14,
+            fontSize: 14.sp,
           ),
         ),
         Text(
           fileModel.size,
-          style: const TextStyle(
+          style: TextStyle(
             color: bluePrimary,
             fontWeight: FontWeight.w500,
-            fontSize: 16,
+            fontSize: 16.sp,
           ),
         ),
       ],
@@ -213,8 +193,8 @@ class FileGridTile extends ConsumerWidget {
 
   _getLogo(String type) {
     return Container(
-      width: 90,
-      height: 90,
+      width: 90.w,
+      height: 90.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100),
         color: lightPurpleBackground,
@@ -222,8 +202,8 @@ class FileGridTile extends ConsumerWidget {
       child: Center(
           child: Image.asset(
         getLogoUrl(type),
-        width: 40,
-        height: 40,
+        width: 40.w,
+        height: 40.h,
       )),
     );
   }

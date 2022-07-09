@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
 class UploadFileContainer extends StatelessWidget {
@@ -57,9 +58,9 @@ class UploadFileContainer extends StatelessWidget {
       child: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.only(right: 15.0, top: 10),
+            padding: EdgeInsets.only(right: 15.0.w, top: 10.h),
             child: Container(
-              height: 250,
+              height: 250.h,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
                 border: Border.all(color: purplePrimary),
@@ -70,14 +71,12 @@ class UploadFileContainer extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
-                        width: 100,
-                        height: 100,
+                        width: 100.w,
+                        height: 100.h,
                         child: Image.asset(
                           _getLogoUrl(),
                         )),
-                    const SizedBox(
-                      width: 10,
-                    ),
+                    SizedBox(width: 10.w),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,18 +105,18 @@ class UploadFileContainer extends StatelessWidget {
         children: [
           TextSpan(
             text: title,
-            style: const TextStyle(
+            style: TextStyle(
               color: darkBlueBackground,
               fontWeight: FontWeight.w600,
-              fontSize: 18,
+              fontSize: 18.sp,
             ),
           ),
           TextSpan(
             text: value,
-            style: const TextStyle(
+            style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w300,
-              fontSize: 18,
+              fontSize: 18.sp,
             ),
           ),
         ],
@@ -149,13 +148,13 @@ class UploadFileContainer extends StatelessWidget {
       right: 0,
       child: GestureDetector(
         onTap: () => removePicked(),
-        child: const CircleAvatar(
-          radius: 15,
+        child: CircleAvatar(
+          radius: 15.r,
           backgroundColor: Colors.red,
           child: Icon(
             Icons.delete,
             color: Colors.white,
-            size: 20,
+            size: 20.r,
           ),
         ),
       ),
@@ -164,27 +163,27 @@ class UploadFileContainer extends StatelessWidget {
 
   Container _noFile() {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10),
+      margin: EdgeInsets.symmetric(horizontal: 10.w),
       width: double.infinity,
-      height: 200,
+      height: 200.h,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(5.r),
           border: Border.all(color: Colors.black)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(
             "assets/images/upload.png",
-            width: 100,
-            height: 100,
+            width: 100.w,
+            height: 100.h,
             color: purplePrimary,
           ),
-          const Text(
+          Text(
             'Upload File',
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w500,
-              fontSize: 18,
+              fontSize: 18.sp,
             ),
           ),
         ],

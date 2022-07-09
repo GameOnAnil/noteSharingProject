@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:note_sharing_project/models/files_model.dart';
 import 'package:note_sharing_project/models/subject.dart';
 import 'package:note_sharing_project/providers/file_page_notifier.dart';
-import 'package:note_sharing_project/ui/widgets/add_file_bottom_sheet.dart';
-import 'package:note_sharing_project/ui/widgets/file_grid_tile.dart';
+import 'package:note_sharing_project/ui/home/widgets/add_file_bottom_sheet.dart';
+import 'package:note_sharing_project/ui/home/widgets/file_grid_tile.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
-class FilePageNew extends ConsumerWidget {
+class FilePage extends ConsumerWidget {
   final Subject subject;
-  const FilePageNew({
+  const FilePage({
     required this.subject,
   });
 
@@ -33,15 +34,15 @@ class FilePageNew extends ConsumerWidget {
             child: Container(
               width: double.infinity,
               height: double.infinity,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(30),
-                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30.r),
+                  topLeft: Radius.circular(30.r),
                 ),
                 color: Colors.white,
               ),
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(8.0.r),
                 child: Column(
                   children: [
                     _sortingPart(path, ref),
@@ -81,14 +82,14 @@ class FilePageNew extends ConsumerWidget {
   Column _listEmpty() {
     return Column(
       children: [
-        const SizedBox(height: 40),
+        SizedBox(height: 40.h),
         Lottie.asset("assets/animations/empty_list.json"),
-        const Text(
+        Text(
           'No Files Found.',
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.w400,
-            fontSize: 24,
+            fontSize: 24.sp,
           ),
         ),
       ],
@@ -122,7 +123,7 @@ class FilePageNew extends ConsumerWidget {
       return Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.0.r),
             child: TextFormField(
               decoration: InputDecoration(
                 label: const Text("Search By"),
@@ -136,7 +137,7 @@ class FilePageNew extends ConsumerWidget {
               },
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
         ],
       );
     });
@@ -182,16 +183,16 @@ class FilePageNew extends ConsumerWidget {
 
   Widget _sortingPart(String path, WidgetRef ref) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: 16.0.w, vertical: 8.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          const Text(
+          Text(
             "Files",
             style: TextStyle(
               color: darkBlueBackground,
               fontWeight: FontWeight.w700,
-              fontSize: 20,
+              fontSize: 20.sp,
             ),
           ),
           const Expanded(child: SizedBox()),

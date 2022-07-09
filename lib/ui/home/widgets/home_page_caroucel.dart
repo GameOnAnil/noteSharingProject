@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:note_sharing_project/ui/widgets/carousel_tile.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:note_sharing_project/ui/home/widgets/carousel_tile.dart';
 import 'package:note_sharing_project/utils/constants.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -43,12 +44,12 @@ class _HomePageCaroselState extends State<HomePageCarosel> {
             ),
           ),
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: 10.h),
         AnimatedSmoothIndicator(
           activeIndex: mIndex,
           count: 4,
-          effect: const ScrollingDotsEffect(
-              dotWidth: 10, dotHeight: 10, activeDotColor: purplePrimary),
+          effect: ScrollingDotsEffect(
+              dotWidth: 10.w, dotHeight: 10.h, activeDotColor: purplePrimary),
         ),
       ],
     );
@@ -65,10 +66,10 @@ class FolderHorizontalCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        width: 150,
-        height: 100,
+        width: 150.w,
+        height: 100.h,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8), color: Colors.white),
+            borderRadius: BorderRadius.circular(8.r), color: Colors.white),
         child: Center(
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -76,23 +77,23 @@ class FolderHorizontalCard extends StatelessWidget {
               children: [
                 Image.asset(
                   "assets/images/folderpurple.png",
-                  width: 50,
-                  height: 50,
+                  width: 50.w,
+                  height: 50.h,
                 ),
-                const Text(
+                Text(
                   'BESE-1ST-C',
                   style: TextStyle(
                     color: purpleText,
                     fontWeight: FontWeight.w600,
-                    fontSize: 16,
+                    fontSize: 16.sp,
                   ),
                 ),
-                const Text(
+                Text(
                   '10 Files',
                   style: TextStyle(
                     color: purpleText,
                     fontWeight: FontWeight.w400,
-                    fontSize: 14,
+                    fontSize: 14.sp,
                   ),
                 ),
               ]),

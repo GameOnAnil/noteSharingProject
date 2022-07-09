@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:note_sharing_project/services/auth_service.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
@@ -14,17 +15,17 @@ class NavigationDrawer extends StatelessWidget {
     return Drawer(
       child: Column(
         children: [
-          const UserAccountsDrawerHeader(
-            decoration: BoxDecoration(color: purplePrimary),
+          UserAccountsDrawerHeader(
+            decoration: const BoxDecoration(color: purplePrimary),
             accountEmail: Text(
               "test@gmail.com",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w400),
             ),
             accountName: Text(
               "Anil Thapa",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
             ),
-            currentAccountPicture: CircleAvatar(
+            currentAccountPicture: const CircleAvatar(
                 backgroundImage: NetworkImage(
                     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmDmmRze0UvLaOtjgNVcOhRjmHH0dL0GP18w&usqp=CAU")),
           ),
@@ -52,9 +53,9 @@ class NavigationDrawer extends StatelessWidget {
                   onTap: () {},
                 ),
                 const Expanded(child: SizedBox()),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Divider(color: Colors.black),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0.w),
+                  child: const Divider(color: Colors.black),
                 ),
                 Consumer(builder: (context, ref, child) {
                   return DrawerTile(
@@ -65,7 +66,7 @@ class NavigationDrawer extends StatelessWidget {
                     },
                   );
                 }),
-                const SizedBox(height: 50)
+                SizedBox(height: 50.h)
               ],
             ),
           )
@@ -91,14 +92,14 @@ class DrawerTile extends StatelessWidget {
     return ListTile(
       leading: FaIcon(
         icon,
-        size: 18,
+        size: 18.r,
         color: purplePrimary,
       ),
       title: Text(
         title,
-        style: const TextStyle(
+        style: TextStyle(
           color: Colors.black,
-          fontSize: 18,
+          fontSize: 18.sp,
         ),
       ),
       onTap: () {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:note_sharing_project/ui/screens/semester_page.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:note_sharing_project/ui/home/semester_page.dart';
 
 class CarauselTile extends StatelessWidget {
   final Color color;
@@ -15,7 +16,7 @@ class CarauselTile extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width * .8,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(30.r),
         color: color,
       ),
       child: Column(
@@ -27,25 +28,25 @@ class CarauselTile extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 40,
+                  fontSize: 40.sp,
                 ),
               ),
-              const Text(
+              Text(
                 "Files: 200",
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w400,
-                  fontSize: 24,
+                  fontSize: 24.sp,
                 ),
               ),
             ],
           ),
           const Expanded(child: SizedBox()),
           SizedBox(
-            width: 150,
+            width: 150.w,
             child: ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -59,7 +60,7 @@ class CarauselTile extends StatelessWidget {
               },
               style: ButtonStyle(
                 shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16))),
+                    borderRadius: BorderRadius.circular(16.r))),
                 backgroundColor: MaterialStateProperty.all(Colors.white),
               ),
               child: Text(
@@ -68,7 +69,7 @@ class CarauselTile extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
         ],
       ),
     );
