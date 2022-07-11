@@ -63,12 +63,12 @@ class _SemesterPageState extends State<SemesterPage> {
                 fillColor: Colors.white,
                 filled: true),
             elevation: 10,
-            hint: Text(
+            hint: const Text(
               "Choose Semester",
               style: TextStyle(
-                  fontSize: 18.sp,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w400),
+                color: Colors.black,
+                fontWeight: FontWeight.w400,
+              ),
             ),
             isExpanded: true,
             value: selectedSem,

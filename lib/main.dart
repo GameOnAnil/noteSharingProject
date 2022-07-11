@@ -48,6 +48,8 @@ class MyApp extends StatelessWidget {
             title: 'Flutter Demo',
             theme: ThemeData(
               primarySwatch: Colors.deepPurple,
+              colorScheme:
+                  const ColorScheme.light().copyWith(primary: purplePrimary),
               floatingActionButtonTheme: const FloatingActionButtonThemeData(
                   backgroundColor: purplePrimary,
                   foregroundColor: Colors.white),
