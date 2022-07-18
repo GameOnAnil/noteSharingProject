@@ -1,0 +1,137 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:note_sharing_project/ui/home/home_page/widgets/home_page_caroucel.dart';
+import 'package:note_sharing_project/ui/home/home_page/widgets/web_program_grid_tile.dart';
+import 'package:note_sharing_project/ui/home/widgets/navigation_drawer_web.dart';
+import 'package:note_sharing_project/utils/constants.dart';
+import 'package:note_sharing_project/utils/my_colors.dart';
+
+class HomePageWeb extends StatelessWidget {
+  const HomePageWeb({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: lightPurpleBackground,
+      //  appBar: _buildAppBar(context),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(
+          colors: [
+            lightPurpleBackground,
+            lightPurpleBackground2,
+          ],
+          begin: Alignment.bottomCenter,
+          end: Alignment.topCenter,
+        )),
+        child: Row(
+          children: [
+            const NavigationDrawerWeb(),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildHeaderText(),
+                      SizedBox(height: 20.h),
+                      Center(
+                        child: SizedBox(
+                          width: double.infinity,
+                          //
+                          child: GridView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.vertical,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 4),
+                              itemCount: programList.length,
+                              itemBuilder: (context, index) {
+                                return WebProgramTile(
+                                    color: caroucelColorList[index % 4],
+                                    title: programList[index]);
+                              }),
+                        ),
+                      ),
+                      SizedBox(height: 20.h),
+                      _recentFolderText(),
+                      SizedBox(
+                        height: 130.h,
+                        width: double.infinity,
+                        child: _buildListView(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding _recentFolderText() {
+    return Padding(
+      padding: EdgeInsets.only(top: 8.0.h),
+      child: Text(
+        'Recent Folder',
+        style: TextStyle(
+          color: purpleText,
+          fontWeight: FontWeight.w400,
+          fontSize: 24.sp,
+        ),
+      ),
+    );
+  }
+
+  ListView _buildListView() {
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: 4,
+      itemBuilder: ((context, index) {
+        return const FolderHorizontalCard();
+      }),
+    );
+  }
+
+  Column _buildHeaderText() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(
+          height: 70,
+        ),
+        Text(
+          'Hello Anil,',
+          style: GoogleFonts.montserrat(
+            color: purpleText,
+            fontWeight: FontWeight.w600,
+            fontSize: 32.sp,
+          ),
+        ),
+        Text(
+          'Welcome Back',
+          style: GoogleFonts.montserrat(
+            color: purpleText,
+            fontWeight: FontWeight.w600,
+            fontSize: 32.sp,
+          ),
+        ),
+      ],
+    );
+  }
+
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      automaticallyImplyLeading: false,
+      backgroundColor: purplePrimary,
+      elevation: 0,
+      actions: const [],
+    );
+  }
+}

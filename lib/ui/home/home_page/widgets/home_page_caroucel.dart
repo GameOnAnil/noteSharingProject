@@ -23,7 +23,7 @@ class _HomePageCaroselState extends State<HomePageCarosel> {
       children: [
         Expanded(
           child: SizedBox(
-            width: double.infinity,
+            // width: double.infinity,
             child: CarouselSlider(
               items: programList.map((e) {
                 final index = programList.indexOf(e);
@@ -38,7 +38,7 @@ class _HomePageCaroselState extends State<HomePageCarosel> {
                   });
                 },
                 autoPlay: true,
-                aspectRatio: 1.0,
+                //aspectRatio: .5,
                 enlargeCenterPage: true,
               ),
             ),
@@ -63,37 +63,43 @@ class FolderHorizontalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        width: 150.w,
-        height: 100.h,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.r), color: Colors.white),
-        child: Center(
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          width: 50.w,
+          height: 150.h,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.r), color: Colors.white),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset(
-                  "assets/images/folderpurple.png",
-                  width: 50.w,
-                  height: 50.h,
-                ),
-                Text(
-                  'BESE-1ST-C',
-                  style: TextStyle(
-                    color: purpleText,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16.sp,
+                Center(
+                  child: Image.asset(
+                    "assets/images/folderpurple.png",
+                    width: 50.w,
+                    height: 50.h,
                   ),
                 ),
-                Text(
-                  '10 Files',
-                  style: TextStyle(
-                    color: purpleText,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14.sp,
+                Center(
+                  child: Text(
+                    'BESE-1ST-C',
+                    style: TextStyle(
+                      color: purpleText,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16.sp,
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Text(
+                    '10 Files',
+                    style: TextStyle(
+                      color: purpleText,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14.sp,
+                    ),
                   ),
                 ),
               ]),

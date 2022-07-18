@@ -28,8 +28,6 @@ class SubjectGridTile extends StatelessWidget {
         );
       },
       child: Container(
-        width: 200.w,
-        height: 400.h,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30.r),
           gradient: LinearGradient(

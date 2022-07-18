@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:note_sharing_project/ui/home/semester_page/semester_page.dart';
+import 'package:note_sharing_project/ui/home/semester_page/semester_page_web.dart';
 
-class CarauselTile extends StatelessWidget {
+class WebProgramTile extends StatelessWidget {
   final Color color;
   final String title;
-  const CarauselTile({
+  const WebProgramTile({
     Key? key,
     required this.color,
     required this.title,
@@ -14,13 +14,13 @@ class CarauselTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * .8,
+      margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30.r),
         color: color,
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Expanded(child: SizedBox()),
           Column(
@@ -44,15 +44,15 @@ class CarauselTile extends StatelessWidget {
               ),
             ],
           ),
-          const Expanded(child: SizedBox()),
-          SizedBox(
-            width: 150.w,
+          //   const Expanded(child: SizedBox()),
+          Container(
+            padding: const EdgeInsets.all(8),
             child: ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: ((context) => SemesterPage(
+                    builder: ((context) => SemesterPageWeb(
                           selectedProgram: title,
                         )),
                   ),
@@ -63,13 +63,16 @@ class CarauselTile extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16.r))),
                 backgroundColor: MaterialStateProperty.all(Colors.white),
               ),
-              child: Text(
-                "View",
-                style: TextStyle(color: color),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Text(
+                  "View",
+                  style: TextStyle(color: color),
+                ),
               ),
             ),
           ),
-          SizedBox(height: 20.h),
+          //  SizedBox(height: 20.h),
         ],
       ),
     );
