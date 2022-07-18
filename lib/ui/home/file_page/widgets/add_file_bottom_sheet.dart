@@ -7,7 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:note_sharing_project/models/files_model.dart';
 import 'package:note_sharing_project/services/firebase_service.dart';
 import 'package:note_sharing_project/services/notification_service.dart';
-import 'package:note_sharing_project/ui/home/widgets/upload_file_container.dart';
+import 'package:note_sharing_project/ui/home/file_page/widgets/upload_file_container.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
 class AddFileBottomSheet extends StatefulWidget {

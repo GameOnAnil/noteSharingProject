@@ -6,16 +6,16 @@ import 'package:lottie/lottie.dart';
 import 'package:note_sharing_project/models/files_model.dart';
 import 'package:note_sharing_project/models/subject.dart';
 import 'package:note_sharing_project/providers/file_page_notifier.dart';
-import 'package:note_sharing_project/ui/home/widgets/add_file_bottom_sheet.dart';
-import 'package:note_sharing_project/ui/home/widgets/file_grid_tile.dart';
+import 'package:note_sharing_project/ui/home/file_page/widgets/add_file_bottom_sheet.dart';
+import 'package:note_sharing_project/ui/home/file_page/widgets/file_grid_tile.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
 class FilePage extends ConsumerWidget {
   final Subject subject;
   const FilePage({
+    Key? key,
     required this.subject,
-  });
-
+  }) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     String path = "${subject.program}-${subject.semester}-${subject.name}";

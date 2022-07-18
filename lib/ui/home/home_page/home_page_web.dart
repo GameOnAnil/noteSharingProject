@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,29 +9,31 @@ import 'package:note_sharing_project/utils/constants.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
 class HomePageWeb extends StatelessWidget {
-  const HomePageWeb({Key? key}) : super(key: key);
+  final int gridCount;
+  const HomePageWeb({
+    Key? key,
+    required this.gridCount,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: lightPurpleBackground,
-      //  appBar: _buildAppBar(context),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-            gradient: LinearGradient(
-          colors: [
-            lightPurpleBackground,
-            lightPurpleBackground2,
-          ],
-          begin: Alignment.bottomCenter,
-          end: Alignment.topCenter,
-        )),
-        child: Row(
-          children: [
-            const NavigationDrawerWeb(),
-            Expanded(
+    return Row(
+      children: [
+        const NavigationDrawerWeb(),
+        Expanded(
+          child: Scaffold(
+            body: Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                colors: [
+                  lightPurpleBackground,
+                  lightPurpleBackground2,
+                ],
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+              )),
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -47,8 +50,9 @@ class HomePageWeb extends StatelessWidget {
                               shrinkWrap: true,
                               scrollDirection: Axis.vertical,
                               gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 4),
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: gridCount,
+                                      childAspectRatio: 1),
                               itemCount: programList.length,
                               itemBuilder: (context, index) {
                                 return WebProgramTile(
@@ -69,9 +73,9 @@ class HomePageWeb extends StatelessWidget {
                 ),
               ),
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 
@@ -129,7 +133,7 @@ class HomePageWeb extends StatelessWidget {
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
-      backgroundColor: purplePrimary,
+      backgroundColor: Colors.transparent,
       elevation: 0,
       actions: const [],
     );

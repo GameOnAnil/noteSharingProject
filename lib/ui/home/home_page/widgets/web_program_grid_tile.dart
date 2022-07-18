@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:note_sharing_project/ui/home/semester_page/semester_page_web.dart';
@@ -22,27 +23,38 @@ class WebProgramTile extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Expanded(child: SizedBox()),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 40.sp,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FittedBox(
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Text(
+                      title,
+                      maxLines: 2,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 35.sp,
+                      ),
+                      textAlign: TextAlign.end,
+                    ),
+                  ),
                 ),
-              ),
-              Text(
-                "Files: 200",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w400,
-                  fontSize: 24.sp,
+                FittedBox(
+                  child: Text(
+                    "Files: 200",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 24.sp,
+                    ),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           //   const Expanded(child: SizedBox()),
           Container(
@@ -63,12 +75,10 @@ class WebProgramTile extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16.r))),
                 backgroundColor: MaterialStateProperty.all(Colors.white),
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: Text(
-                  "View",
-                  style: TextStyle(color: color),
-                ),
+              child: AutoSizeText(
+                "View",
+                maxLines: 1,
+                style: TextStyle(color: color),
               ),
             ),
           ),

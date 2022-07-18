@@ -1,6 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:note_sharing_project/ui/home/home_page/home_page.dart';
 import 'package:note_sharing_project/ui/home/home_page/home_page_web.dart';
 
@@ -11,10 +9,16 @@ class HomePageBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: ((context, constraints) {
-        if (constraints.maxWidth < 600) {
+        if (constraints.maxWidth < 700) {
           return const HomePage();
+        } else if (constraints.maxWidth < 1000) {
+          return const HomePageWeb(
+            gridCount: 3,
+          );
         } else {
-          return const HomePageWeb();
+          return const HomePageWeb(
+            gridCount: 4,
+          );
         }
       }),
     );

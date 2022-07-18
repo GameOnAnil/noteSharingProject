@@ -41,24 +41,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ProviderScope(
-      child: ScreenUtilInit(
-        designSize: const Size(390, 844),
-        minTextAdapt: true,
-        splitScreenMode: true,
-        builder: (BuildContext context, Widget? child) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Flutter Demo',
-            theme: ThemeData(
-              primarySwatch: Colors.deepPurple,
-              floatingActionButtonTheme: const FloatingActionButtonThemeData(
-                  backgroundColor: purplePrimary,
-                  foregroundColor: Colors.white),
-            ),
-            home: const HomePageBuilder(),
-          );
-        },
-      ),
-    );
+        child: ScreenUtilInit(
+      designSize: const Size(390, 844),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (BuildContext context, Widget? child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            primarySwatch: Colors.deepPurple,
+            floatingActionButtonTheme: const FloatingActionButtonThemeData(
+                backgroundColor: purplePrimary, foregroundColor: Colors.white),
+          ),
+          home: const HomePageBuilder(),
+        );
+      },
+    ));
   }
 }

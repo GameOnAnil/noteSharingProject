@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:note_sharing_project/models/files_model.dart';
 import 'package:note_sharing_project/services/firebase_service.dart';
 import 'package:note_sharing_project/services/notification_service.dart';
-import 'package:note_sharing_project/ui/home/widgets/upload_file_container.dart';
+import 'package:note_sharing_project/ui/home/file_page/widgets/upload_file_container.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class AddFilePage extends StatefulWidget {

@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:note_sharing_project/models/subject.dart';
 import 'package:note_sharing_project/providers/sub_notifier.dart';
-import 'package:note_sharing_project/ui/home/widgets/subject_grid_tile.dart';
+import 'package:note_sharing_project/ui/home/semester_page/widgets/subject_grid_tile.dart';
 import 'package:note_sharing_project/utils/constants.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 

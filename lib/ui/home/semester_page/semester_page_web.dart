@@ -6,8 +6,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:note_sharing_project/models/subject.dart';
 import 'package:note_sharing_project/providers/sub_notifier.dart';
+import 'package:note_sharing_project/ui/home/semester_page/widgets/subject_grid_tile_web.dart';
 import 'package:note_sharing_project/ui/home/widgets/navigation_drawer.dart';
-import 'package:note_sharing_project/ui/home/widgets/subject_grid_tile.dart';
 import 'package:note_sharing_project/utils/constants.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
@@ -26,30 +26,31 @@ class _SemesterPageWebState extends State<SemesterPageWeb> {
   String? selectedSem;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      backgroundColor: lightPurpleBackground,
-      extendBodyBehindAppBar: true,
-      appBar: _buildAppBar(widget.selectedProgram),
-      body: Row(
-        children: [
-          const NavigationDrawer(),
-          Expanded(
-            child: Column(
+    return Row(
+      children: [
+        const NavigationDrawer(),
+        Expanded(
+          child: Scaffold(
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            backgroundColor: lightPurpleBackground,
+            appBar: _buildAppBar(widget.selectedProgram),
+            body: Column(
               children: [
-                Expanded(flex: 2, child: _header()),
-                Expanded(flex: 5, child: _contentBody()),
+                _header(),
+                Expanded(child: _contentBody()),
               ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   AppBar _buildAppBar(String programName) {
     return AppBar(
-      backgroundColor: purplePrimary,
+      backgroundColor: Colors.transparent,
+      foregroundColor: purpleText,
       elevation: 0,
       centerTitle: true,
       title: Text(
@@ -97,7 +98,7 @@ class _SemesterPageWebState extends State<SemesterPageWeb> {
                 selectedSem = item.toString();
                 log("selected sem :$selectedSem");
                 if (selectedSem != null) {
-                  ref.read(subNotifierProvider).getSubByCategory(
+                  ref.read(subNotifierProvider).getSubByCategoryLocal(
                       program: widget.selectedProgram, semester: selectedSem!);
                 }
               });
@@ -121,17 +122,10 @@ class _SemesterPageWebState extends State<SemesterPageWeb> {
         child: Consumer(
           builder: (context, ref, child) {
             final subList = ref.watch(subNotifierProvider).subList;
-            if (subList.isNotEmpty) {
-              log("list empty");
+            if (subList.isEmpty) {
               return _listEmpty();
             } else {
-              return _gridView([
-                Subject(
-                    name: "C",
-                    semester: "1st",
-                    program: "BESE",
-                    notificationOn: false)
-              ]);
+              return _gridView(subList);
             }
           },
         ));
@@ -141,10 +135,13 @@ class _SemesterPageWebState extends State<SemesterPageWeb> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        SizedBox(height: 100.h),
-        Image.asset(
-          "assets/images/enter sem.png",
-          fit: BoxFit.cover,
+        SizedBox(
+          width: 400,
+          height: 400,
+          child: Image.asset(
+            "assets/images/enter sem.png",
+            fit: BoxFit.contain,
+          ),
         ),
         Text(
           "No Semester Selected.",
@@ -175,7 +172,7 @@ class _SemesterPageWebState extends State<SemesterPageWeb> {
                 child: Text(
                   'Choose Semester',
                   style: GoogleFonts.montserrat(
-                    color: Colors.white,
+                    color: purpleText,
                     fontWeight: FontWeight.w600,
                     fontSize: 30.sp,
                   ),
@@ -194,15 +191,16 @@ class _SemesterPageWebState extends State<SemesterPageWeb> {
     return Padding(
       padding: EdgeInsets.only(top: 20.0.h, left: 16.w, right: 16.w),
       child: GridView.builder(
-        scrollDirection: Axis.horizontal,
+        scrollDirection: Axis.vertical,
         padding: EdgeInsets.zero,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4, crossAxisSpacing: 16.w, mainAxisSpacing: 16.h),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+        ),
         itemCount: subList.length,
         itemBuilder: (context, index) {
           final remainder = index % 4;
           final currentSubject = subList[index];
-          return SubjectGridTile(
+          return SubjectGridTileWeb(
             colors: colorGradientList[remainder],
             subject: currentSubject,
             onTap: () {},
