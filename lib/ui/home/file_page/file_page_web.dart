@@ -1,4 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:math';
+import 'dart:typed_data';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,7 +12,7 @@ import 'package:lottie/lottie.dart';
 import 'package:note_sharing_project/models/files_model.dart';
 import 'package:note_sharing_project/models/subject.dart';
 import 'package:note_sharing_project/providers/file_page_notifier.dart';
-import 'package:note_sharing_project/ui/home/file_page/widgets/add_file_bottom_sheet.dart';
+import 'package:note_sharing_project/services/firebase_service.dart';
 import 'package:note_sharing_project/ui/home/file_page/widgets/file_grid_tile_web.dart';
 import 'package:note_sharing_project/ui/home/widgets/navigation_drawer.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
@@ -32,9 +37,8 @@ class FilePageWeb extends ConsumerWidget {
           child: Scaffold(
             resizeToAvoidBottomInset: false,
             floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-            // backgroundColor: purplePrimary,
             appBar: _appBar(ref, path, subject.notificationOn),
-            floatingActionButton: _floatingActionButton(),
+            floatingActionButton: _floatingActionButton(path),
             body: Column(
               children: [
                 _searchBar(path),
@@ -142,7 +146,8 @@ class FilePageWeb extends ConsumerWidget {
             padding: EdgeInsets.all(8.0.r),
             child: TextFormField(
               decoration: InputDecoration(
-                label: const Text("Search By"),
+                prefixIcon: const Icon(Icons.search),
+                label: const Text("Search Notes"),
                 border:
                     OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                 fillColor: Colors.white,
@@ -159,32 +164,86 @@ class FilePageWeb extends ConsumerWidget {
     });
   }
 
-  Builder _floatingActionButton() {
+  Builder _floatingActionButton(String path) {
     return Builder(builder: (context) {
       return FloatingActionButton(
         elevation: 8,
         backgroundColor: purplePrimary,
         onPressed: () {
-          showModalBottomSheet(
-              backgroundColor: Colors.transparent,
-              context: context,
-              builder: (context) {
-                return AddFileBottomSheet(
-                  semester: subject.semester,
-                  program: subject.program,
-                  name: subject.name,
-                );
-              });
+          _handleUploadWeb(context, path);
         },
         child: const Icon(Icons.add),
-        // label: SizedBox(
-        //     width: MediaQuery.of(context).size.width * .5,
-        //     child: const Center(
-        //         child: Text(
-        //       "Add Files",
-        //     ))),
       );
     });
+  }
+
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: Row(
+        children: [
+          const CircularProgressIndicator(),
+          Container(
+              margin: const EdgeInsets.only(left: 7),
+              child: const Text("Loading...")),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  Future<String> getFileSize(int raw, int decimals) async {
+    if (raw <= 0) return "0 B";
+    const suffixes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    var i = (log(raw) / log(1024)).floor();
+    return '${(raw / pow(1024, i)).toStringAsFixed(decimals)} ${suffixes[i]}';
+  }
+
+  _handleUploadWeb(BuildContext context, String path) async {
+    try {
+      FilePickerResult? result =
+          await FilePicker.platform.pickFiles(allowMultiple: false);
+      if (result != null) {
+        Uint8List? file = result.files.first.bytes;
+        String name = result.files.first.name;
+        UploadTask task =
+            FirebaseStorage.instance.ref().child("docs/$name").putData(file!);
+
+        showLoaderDialog(context);
+        final url = await task.snapshot.ref.getDownloadURL();
+        final date = DateTime.now();
+        final size = await getFileSize(file.length, 2);
+        final newModel = FileModel(
+            name: name,
+            date: date.toString(),
+            time: "02 00 Pm",
+            size: size,
+            filePath: "docs/$name",
+            fileType: name.split(".")[1],
+            url: url);
+
+        await FirebaseService().insertData(path, newModel);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Successfully Added'),
+          ),
+        );
+        Navigator.pop(context);
+      }
+    } on FirebaseException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('ERROR:$e'),
+        ),
+      );
+      Navigator.pop(context);
+    }
   }
 
   GridView _gridView(List<FileModel> fileList, int gridCount) {

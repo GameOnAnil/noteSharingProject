@@ -1,47 +1,42 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
 import 'dart:math';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
-class UploadFileContainer extends StatelessWidget {
+class UploadFileContainer extends StatefulWidget {
   final File? mFile;
   final Function(File file, String name, String size) changeFile;
   final Function() removePicked;
   final String name;
   final String size;
+  final Function onTap;
 
   const UploadFileContainer({
     Key? key,
-    required this.changeFile,
     this.mFile,
+    required this.changeFile,
     required this.removePicked,
     required this.name,
     required this.size,
+    required this.onTap,
   }) : super(key: key);
 
+  @override
+  State<UploadFileContainer> createState() => _UploadFileContainerState();
+}
+
+class _UploadFileContainerState extends State<UploadFileContainer> {
+  double progress = 0;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        final response = await FilePicker.platform.pickFiles(
-          allowMultiple: false,
-          // type: FileType.custom,
-          // allowedExtensions: ["png", "jpg", "jpeg"],
-        );
-        if (response == null) return;
-
-        final file = response.files.first;
-        file.name;
-        final size = await getFileSize(file.size, 2);
-
-        if (file.path != null) {
-          changeFile(File(file.path!), file.name, size);
-        }
+        widget.onTap();
       },
-      child: (mFile == null) ? _noFile() : _hasFile(),
+      child: (widget.mFile == null) ? _noFile() : _hasFile(),
     );
   }
 
@@ -70,6 +65,10 @@ class UploadFileContainer extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    Text(
+                      "Progress:$progress",
+                      style: const TextStyle(color: Colors.black),
+                    ),
                     SizedBox(
                         width: 100.w,
                         height: 100.h,
@@ -81,10 +80,10 @@ class UploadFileContainer extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildRichText("Name: ", name),
-                          _buildRichText("Size: ", size),
+                          _buildRichText("Name: ", widget.name),
+                          _buildRichText("Size: ", widget.size),
                           _buildRichText(
-                              "File Type: ", ".${name.split('.')[1]}"),
+                              "File Type: ", ".${widget.name.split('.')[1]}"),
                         ],
                       ),
                     ),
@@ -125,7 +124,7 @@ class UploadFileContainer extends StatelessWidget {
   }
 
   String _getLogoUrl() {
-    final fileType = name.split('.')[1];
+    final fileType = widget.name.split('.')[1];
     switch (fileType) {
       case "jpeg":
         return "assets/images/picture.png";
@@ -147,7 +146,7 @@ class UploadFileContainer extends StatelessWidget {
       top: 0,
       right: 0,
       child: GestureDetector(
-        onTap: () => removePicked(),
+        onTap: () => widget.removePicked(),
         child: CircleAvatar(
           radius: 15.r,
           backgroundColor: Colors.red,

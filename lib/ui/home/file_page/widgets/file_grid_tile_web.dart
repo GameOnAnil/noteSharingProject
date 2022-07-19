@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:note_sharing_project/models/files_model.dart';
 import 'package:note_sharing_project/providers/file_grid_notifer.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
+import "package:universal_html/html.dart" as html;
 
 class FileGridTileWeb extends ConsumerWidget {
   final FileModel fileModel;
@@ -12,6 +13,12 @@ class FileGridTileWeb extends ConsumerWidget {
     required this.fileModel,
   }) : super(key: key);
 
+  void downloadFile(String url) {
+    html.AnchorElement anchorElement = html.AnchorElement(href: url);
+    anchorElement.download = url;
+    anchorElement.click();
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final progress =
@@ -19,9 +26,11 @@ class FileGridTileWeb extends ConsumerWidget {
 
     return GestureDetector(
       onTap: () async {
-        ref
-            .read(fileGridNotifierProvider(fileModel.name))
-            .openFile(url: fileModel.url, fileName: fileModel.name);
+        // if (!await launchUrl(Uri.parse(fileModel.url))) {
+        //   throw 'Could not launch ${fileModel.url}}';
+        // }
+        // Dio().download(, savePath)
+        downloadFile("assets/images/bg.jpeg");
       },
       child: Container(
         width: 200.w,
