@@ -7,7 +7,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:note_sharing_project/models/files_model.dart';
 import 'package:note_sharing_project/models/subject.dart';
@@ -121,20 +120,6 @@ class FilePageWeb extends ConsumerWidget {
       title: const Text('Files Page'),
       backgroundColor: Colors.transparent,
       foregroundColor: Colors.black,
-      actions: [
-        IconButton(
-          onPressed: () async {
-            ref.read(filePageNotiferProvicer(path)).enableSearch();
-          },
-          icon: const Icon(Icons.search),
-        ),
-        IconButton(
-          onPressed: () {},
-          icon: (isNotificationOn)
-              ? const FaIcon(FontAwesomeIcons.bell)
-              : const Icon(Icons.notifications_off),
-        )
-      ],
     );
   }
 

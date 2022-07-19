@@ -5,21 +5,21 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:note_sharing_project/providers/login_page_notifier.dart';
 import 'package:note_sharing_project/services/auth_service.dart';
-import 'package:note_sharing_project/ui/authentication/forgot_pass_page.dart';
-import 'package:note_sharing_project/ui/authentication/sign_up_page.dart';
+import 'package:note_sharing_project/ui/authentication/forgot_pass_page/forgot_pass_page_web.dart';
+import 'package:note_sharing_project/ui/authentication/sign_up_page/sign_up_page_web.dart';
 import 'package:note_sharing_project/ui/authentication/widgets/custom_text_field.dart';
 import 'package:note_sharing_project/ui/authentication/widgets/password_text_field.dart';
 import 'package:note_sharing_project/ui/authentication/widgets/title_text.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class LoginPageWeb extends StatefulWidget {
+  const LoginPageWeb({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<LoginPageWeb> createState() => _LoginPageWebState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageWebState extends State<LoginPageWeb> {
   final GlobalKey<FormState> _globalKey = GlobalKey();
 
   late TextEditingController emailController;
@@ -50,40 +50,42 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Form(
         key: _globalKey,
-        child: SizedBox(
-          width: double.infinity,
-          height: double.infinity,
-          child: Column(
-            children: [
-              SizedBox(height: 20.h),
-              _header(context),
-              Expanded(
-                child: Container(
-                  width: double.infinity,
-                  color: Colors.white,
-                  child: Consumer(builder: (context, ref, child) {
-                    final isLoading =
-                        ref.watch(loginPageNotifierProvider).isLoading;
-                    final error = ref.watch(loginPageNotifierProvider).error;
-                    ref.listen(loginPageNotifierProvider, (previous, next) {
-                      if (error != null) {
-                        Fluttertoast.showToast(msg: error);
+        child: Center(
+          child: Container(
+            color: Colors.white,
+            width: 600,
+            height: double.infinity,
+            child: Column(
+              children: [
+                SizedBox(height: 20.h),
+                _header(context),
+                Expanded(
+                  child: Container(
+                    width: double.infinity,
+                    color: Colors.white,
+                    child: Consumer(builder: (context, ref, child) {
+                      final isLoading =
+                          ref.watch(loginPageNotifierProvider).isLoading;
+                      final error = ref.watch(loginPageNotifierProvider).error;
+                      ref.listen(loginPageNotifierProvider, (previous, next) {
+                        if (error != null) {
+                          Fluttertoast.showToast(msg: error);
+                        }
+                      });
+                      if (isLoading) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        return _contentPart(context, ref);
                       }
-                    });
-                    if (isLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else {
-                      return _contentPart(context, ref);
-                    }
-                  }),
+                    }),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -150,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: ((context) => const ForgotPasswordPage()),
+            builder: ((context) => const ForgotPasswordPageWeb()),
           ),
         );
       },
@@ -199,7 +201,7 @@ class _LoginPageState extends State<LoginPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: ((context) => const SignUpPage()),
+                  builder: ((context) => const SignUpPageWeb()),
                 ),
               );
             }),

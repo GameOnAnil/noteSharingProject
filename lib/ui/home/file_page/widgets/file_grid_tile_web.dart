@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:note_sharing_project/models/files_model.dart';
 import 'package:note_sharing_project/providers/file_grid_notifer.dart';
+import 'package:note_sharing_project/services/download_service.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 import "package:universal_html/html.dart" as html;
 
@@ -26,11 +27,7 @@ class FileGridTileWeb extends ConsumerWidget {
 
     return GestureDetector(
       onTap: () async {
-        // if (!await launchUrl(Uri.parse(fileModel.url))) {
-        //   throw 'Could not launch ${fileModel.url}}';
-        // }
-        // Dio().download(, savePath)
-        downloadFile("assets/images/bg.jpeg");
+        DownloadService().openInNewTap(fileModel.url);
       },
       child: Container(
         width: 200.w,
@@ -102,13 +99,18 @@ class FileGridTileWeb extends ConsumerWidget {
                 title: Text("Report"),
               ),
             ),
-            const PopupMenuItem(
-              child: ListTile(
-                leading: Icon(
-                  Icons.download,
-                  color: Color.fromARGB(255, 37, 68, 38),
+            PopupMenuItem(
+              child: GestureDetector(
+                onTap: () {
+                  _handleDownload(fileModel.url);
+                },
+                child: const ListTile(
+                  leading: Icon(
+                    Icons.download,
+                    color: Color.fromARGB(255, 37, 68, 38),
+                  ),
+                  title: Text("Download"),
                 ),
-                title: Text("Download"),
               ),
             ),
           ],
@@ -116,6 +118,8 @@ class FileGridTileWeb extends ConsumerWidget {
       ),
     );
   }
+
+  void _handleDownload(String url) async {}
 
   Padding _divider() {
     return Padding(

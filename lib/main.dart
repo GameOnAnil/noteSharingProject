@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:note_sharing_project/firebase_options.dart';
-import 'package:note_sharing_project/ui/home/home_page/home_page_builder.dart';
+import 'package:note_sharing_project/ui/splash/splash_screen/splash_screen_web.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
             floatingActionButtonTheme: const FloatingActionButtonThemeData(
                 backgroundColor: purplePrimary, foregroundColor: Colors.white),
           ),
-          home: const HomePageBuilder(),
+          home: const SplashScreenWeb(),
         );
       },
     ));

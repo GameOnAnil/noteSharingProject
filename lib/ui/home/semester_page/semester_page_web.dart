@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,6 +22,7 @@ class SemesterPageWeb extends StatefulWidget {
 
 class _SemesterPageWebState extends State<SemesterPageWeb> {
   String? selectedSem;
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -96,11 +95,8 @@ class _SemesterPageWebState extends State<SemesterPageWeb> {
             onChanged: (item) {
               setState(() {
                 selectedSem = item.toString();
-                log("selected sem :$selectedSem");
-                if (selectedSem != null) {
-                  ref.read(subNotifierProvider).getSubByCategoryLocal(
-                      program: widget.selectedProgram, semester: selectedSem!);
-                }
+                ref.read(subNotifierProvider).getSubByCategoryLocal(
+                    program: widget.selectedProgram, semester: selectedSem!);
               });
             },
           ),

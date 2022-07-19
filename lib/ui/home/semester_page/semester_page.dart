@@ -21,6 +21,7 @@ class SemesterPage extends StatefulWidget {
 
 class _SemesterPageState extends State<SemesterPage> {
   String? selectedSem;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
