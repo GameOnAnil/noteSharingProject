@@ -19,6 +19,7 @@ import 'package:note_sharing_project/utils/my_colors.dart';
 class FilePageWeb extends ConsumerWidget {
   final Subject subject;
   final int gridCount;
+
   const FilePageWeb({
     Key? key,
     required this.subject,
@@ -234,7 +235,9 @@ class FilePageWeb extends ConsumerWidget {
   GridView _gridView(List<FileModel> fileList, int gridCount) {
     return GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: gridCount, childAspectRatio: 1),
+            crossAxisCount: gridCount,
+            childAspectRatio: 1,
+            crossAxisSpacing: 2),
         itemCount: fileList.length,
         itemBuilder: (context, index) {
           return FileGridTileWeb(

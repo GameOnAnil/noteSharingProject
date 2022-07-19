@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:note_sharing_project/ui/home/semester_page/semester_page_web.dart';
+import 'package:note_sharing_project/ui/home/semester_page/semester_page_builder.dart';
 
 class WebProgramTile extends StatelessWidget {
   final Color color;
@@ -64,7 +64,7 @@ class WebProgramTile extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: ((context) => SemesterPageWeb(
+                    builder: ((context) => SemesterPageBuilder(
                           selectedProgram: title,
                         )),
                   ),

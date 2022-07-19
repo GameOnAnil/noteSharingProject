@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:note_sharing_project/models/subject.dart';
-import 'package:note_sharing_project/ui/home/file_page/file_page.dart';
+import 'package:note_sharing_project/ui/home/file_page/file_page_builder.dart';
 
 class SubjectGridTile extends StatelessWidget {
   final List<Color> colors;
@@ -21,7 +21,7 @@ class SubjectGridTile extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: ((context) => FilePage(
+            builder: ((context) => FilePageBuilder(
                   subject: subject,
                 )),
           ),

@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,9 +13,11 @@ import 'package:note_sharing_project/utils/my_colors.dart';
 
 class FilePage extends ConsumerWidget {
   final Subject subject;
+  final int gridCount;
   const FilePage({
     Key? key,
     required this.subject,
+    required this.gridCount,
   }) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -64,7 +67,7 @@ class FilePage extends ConsumerWidget {
                             return _listEmpty();
                           } else {
                             //return _listView(fileList);
-                            return _gridView(fileList);
+                            return _gridView(fileList, gridCount);
                           }
                         },
                       ),
@@ -169,10 +172,10 @@ class FilePage extends ConsumerWidget {
     });
   }
 
-  GridView _gridView(List<FileModel> fileList) {
+  GridView _gridView(List<FileModel> fileList, int gridCount) {
     return GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, childAspectRatio: .85),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: gridCount, childAspectRatio: .85),
         itemCount: fileList.length,
         itemBuilder: (context, index) {
           return FileGridTile(

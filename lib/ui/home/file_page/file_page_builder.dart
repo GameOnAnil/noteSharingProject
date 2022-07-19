@@ -21,12 +21,15 @@ class FilePageBuilder extends StatelessWidget {
             gridCount: 4,
           );
         } else if (constraints.maxWidth > 600 && constraints.maxWidth < 1000) {
-          return FilePageWeb(
+          return FilePage(
             subject: subject,
             gridCount: 3,
           );
         } else {
-          return FilePage(subject: subject);
+          return FilePage(
+            subject: subject,
+            gridCount: 2,
+          );
         }
       }),
     );

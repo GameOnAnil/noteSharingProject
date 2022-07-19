@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -60,7 +61,9 @@ class FileGridTileWeb extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _getLogo(fileModel.fileType),
+                  Expanded(
+                    child: _getLogo(fileModel.fileType),
+                  ),
                   _nameText(),
                 ],
               ),
@@ -84,38 +87,31 @@ class FileGridTileWeb extends ConsumerWidget {
     );
   }
 
-  Padding _popUpButton() {
-    return Padding(
-      padding: const EdgeInsets.only(right: 4.0),
-      child: SizedBox(
-        width: 30.w,
-        height: 30.h,
-        child: PopupMenuButton(
-          onSelected: (value) {},
-          itemBuilder: (context) => [
-            const PopupMenuItem(
-              child: ListTile(
-                leading: Icon(Icons.report, color: Colors.red),
-                title: Text("Report"),
-              ),
-            ),
-            PopupMenuItem(
-              child: GestureDetector(
-                onTap: () {
-                  _handleDownload(fileModel.url);
-                },
-                child: const ListTile(
-                  leading: Icon(
-                    Icons.download,
-                    color: Color.fromARGB(255, 37, 68, 38),
-                  ),
-                  title: Text("Download"),
-                ),
-              ),
-            ),
-          ],
+  PopupMenuButton _popUpButton() {
+    return PopupMenuButton(
+      onSelected: (value) {},
+      itemBuilder: (context) => [
+        const PopupMenuItem(
+          child: ListTile(
+            leading: Icon(Icons.report, color: Colors.red),
+            title: Text("Report"),
+          ),
         ),
-      ),
+        PopupMenuItem(
+          child: GestureDetector(
+            onTap: () {
+              _handleDownload(fileModel.url);
+            },
+            child: const ListTile(
+              leading: Icon(
+                Icons.download,
+                color: Color.fromARGB(255, 37, 68, 38),
+              ),
+              title: Text("Download"),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -123,7 +119,7 @@ class FileGridTileWeb extends ConsumerWidget {
 
   Padding _divider() {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8.0.w),
+      padding: EdgeInsets.symmetric(horizontal: 2.0.w),
       child: Divider(height: 2.h, color: Colors.black),
     );
   }
@@ -131,13 +127,14 @@ class FileGridTileWeb extends ConsumerWidget {
   Padding _nameText() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.0.w, vertical: 4.h),
-      child: Text(
+      child: AutoSizeText(
         fileModel.name,
         style: TextStyle(
           color: purpleText,
           fontWeight: FontWeight.bold,
           fontSize: 16.sp,
         ),
+        maxLines: 2,
         textAlign: TextAlign.center,
       ),
     );
