@@ -24,7 +24,7 @@ class Subject {
     };
   }
 
-  factory Subject.fromMap(Map<String, dynamic> map) {
+  factory Subject.fromMapDb(Map<String, dynamic> map) {
     final notFromDb = map['notificationOn'] as int?;
     bool notificationOn;
     if (notFromDb == null) {
@@ -65,5 +65,15 @@ class Subject {
   @override
   String toString() {
     return 'Subject(id: $id, name: $name, semester: $semester, program: $program, notificationOn: $notificationOn)';
+  }
+
+  factory Subject.fromMap(Map<String, dynamic> map) {
+    return Subject(
+      id: map['id']?.toInt(),
+      name: map['name'] ?? '',
+      semester: map['semester'] ?? '',
+      program: map['program'] ?? '',
+      notificationOn: map['notificationOn'] ?? false,
+    );
   }
 }

@@ -99,8 +99,9 @@ class DbHelper {
       where: "program=? and semester=?",
       whereArgs: [program, semester],
     );
-    List<Subject> subList =
-        result.isNotEmpty ? result.map((e) => Subject.fromMap(e)).toList() : [];
+    List<Subject> subList = result.isNotEmpty
+        ? result.map((e) => Subject.fromMapDb(e)).toList()
+        : [];
     return subList;
   }
 }

@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:note_sharing_project/ui/home/home_page/widgets/home_page_caroucel.dart';
 import 'package:note_sharing_project/ui/home/home_page/widgets/web_program_grid_tile.dart';
 import 'package:note_sharing_project/ui/home/widgets/navigation_drawer_web.dart';
 import 'package:note_sharing_project/utils/constants.dart';
@@ -98,7 +97,8 @@ class HomePageWeb extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       itemCount: 4,
       itemBuilder: ((context, index) {
-        return const FolderHorizontalCard();
+        // return const FolderHorizontalCard();
+        return const SizedBox();
       }),
     );
   }

@@ -41,7 +41,7 @@ class NotificationService {
   }
 
   removeNotificationTag(String tag) async {
-    OneSignal.shared.sendTag(tag, tag);
+    OneSignal.shared.deleteTag(tag);
   }
 
   Future<void> sendWithTagNotification(
@@ -65,9 +65,6 @@ class NotificationService {
           "app_id": oneSignalId,
           "headings": {"en": heading},
           "contents": {"en": content}
-        },
-        onSendProgress: (i, j) {
-          log("i=$i and j= $j");
         },
       );
     } catch (e) {

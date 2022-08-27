@@ -1,7 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:note_sharing_project/models/subject.dart';
 import 'package:note_sharing_project/ui/home/widgets/carousel_tile.dart';
+import 'package:note_sharing_project/utils/base_utils.dart';
 import 'package:note_sharing_project/utils/constants.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -57,20 +59,21 @@ class _HomePageCaroselState extends State<HomePageCarosel> {
 }
 
 class FolderHorizontalCard extends StatelessWidget {
+  final Subject subject;
   const FolderHorizontalCard({
     Key? key,
+    required this.subject,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          width: 50.w,
-          height: 150.h,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.r), color: Colors.white),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.r), color: Colors.white),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -84,7 +87,7 @@ class FolderHorizontalCard extends StatelessWidget {
                 ),
                 Center(
                   child: Text(
-                    'BESE-1ST-C',
+                    getPathFromSubject(subject),
                     style: TextStyle(
                       color: purpleText,
                       fontWeight: FontWeight.w600,

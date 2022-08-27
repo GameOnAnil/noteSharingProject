@@ -125,13 +125,7 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: 10.h),
             _loginTextField(),
             SizedBox(height: 16.h),
-            PasswordTextField(
-                controller: passwordController,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return "Please Enter Password";
-                  }
-                }),
+            _passwordTextField(),
             SizedBox(height: 16.h),
             _forgotPassword(),
             SizedBox(height: 16.h),
@@ -146,6 +140,16 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  PasswordTextField _passwordTextField() {
+    return PasswordTextField(
+        controller: passwordController,
+        validator: (value) {
+          if (value!.isEmpty) {
+            return "Please Enter Password";
+          }
+        });
   }
 
   GestureDetector _forgotPassword() {

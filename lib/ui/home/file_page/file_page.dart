@@ -8,6 +8,7 @@ import 'package:lottie/lottie.dart';
 import 'package:note_sharing_project/models/files_model.dart';
 import 'package:note_sharing_project/models/subject.dart';
 import 'package:note_sharing_project/providers/file_page_notifier.dart';
+import 'package:note_sharing_project/services/shared_pref_service.dart';
 import 'package:note_sharing_project/ui/home/file_page/widgets/add_file_bottom_sheet.dart';
 import 'package:note_sharing_project/ui/home/file_page/widgets/file_grid_tile.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
@@ -32,6 +33,8 @@ class _FilePageState extends ConsumerState<FilePage> {
     path =
         "${widget.subject.program}-${widget.subject.semester}-${widget.subject.name}";
     ref.read(filePageNotifierProvider(path)).initSubject(widget.subject);
+
+    SharedPrefService().setRecentSubject(widget.subject);
     super.initState();
   }
 
