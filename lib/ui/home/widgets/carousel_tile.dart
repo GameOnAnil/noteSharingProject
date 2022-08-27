@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:note_sharing_project/ui/home/semester_page.dart';
+import 'package:note_sharing_project/ui/home/semester_page/semester_page_builder.dart';
 
 class CarauselTile extends StatelessWidget {
   final Color color;
@@ -52,7 +52,7 @@ class CarauselTile extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: ((context) => SemesterPage(
+                    builder: ((context) => SemesterPageBuilder(
                           selectedProgram: title,
                         )),
                   ),

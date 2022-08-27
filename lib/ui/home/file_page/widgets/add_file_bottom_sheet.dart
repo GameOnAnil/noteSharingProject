@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,7 +10,7 @@ import 'package:note_sharing_project/models/files_model.dart';
 import 'package:note_sharing_project/models/subject.dart';
 import 'package:note_sharing_project/services/firebase_service.dart';
 import 'package:note_sharing_project/services/notification_service.dart';
-import 'package:note_sharing_project/ui/home/widgets/upload_file_container.dart';
+import 'package:note_sharing_project/ui/home/file_page/widgets/upload_file_container.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
 class AddFileBottomSheet extends StatefulWidget {
@@ -35,6 +37,7 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
   late TextEditingController nameController;
   bool isLoading = false;
   late String path;
+  double progress = 0;
 
   @override
   void initState() {
@@ -71,6 +74,10 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            Text(
+              progress.toString(),
+              style: const TextStyle(color: Colors.black),
+            ),
             SizedBox(height: 10.h),
             Text(
               "Upload File",
@@ -82,6 +89,9 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
             ),
             SizedBox(height: 10.h),
             UploadFileContainer(
+                onTap: () async {
+                  await _handleUploadWeb();
+                },
                 changeFile: ((file, name, size) {
                   _chageFile(file, name, size);
                 }),
@@ -116,6 +126,47 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
     );
   }
 
+  _handleUploadWeb() async {
+    try {
+      FilePickerResult? result =
+          await FilePicker.platform.pickFiles(allowMultiple: false);
+      if (result != null) {
+        Uint8List? file = result.files.first.bytes;
+        String name = result.files.first.name;
+        UploadTask task =
+            FirebaseStorage.instance.ref().child("docs/$name").putData(file!);
+        setState(() => isLoading = true);
+
+        final url = await task.snapshot.ref.getDownloadURL();
+        final newModel = FileModel(
+            name: name,
+            date: "2022-01-01",
+            time: "02 00 Pm",
+            size: _size,
+            filePath: "docs/$name",
+            fileType: name.split(".")[1],
+            url: url);
+
+        await FirebaseService().insertData(path, newModel);
+        setState(() => isLoading = false);
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Successfully Added'),
+          ),
+        );
+        Navigator.pop(context);
+      }
+    } on FirebaseException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('ERROR:$e'),
+        ),
+      );
+      Navigator.pop(context);
+    }
+  }
+
   Padding _editNameTextField() {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10.0.h),
@@ -141,6 +192,7 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
 
   Future<void> handleUpload() async {
     if (_file == null) {
+      Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please Add File'),

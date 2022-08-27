@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,10 +25,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -49,6 +43,16 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyDQYUiFz_gvfSPRZQznxNWM4mnlTa_Hmgg',
+    appId: '1:410524606035:web:e834e6add1a10d10ad70a6',
+    messagingSenderId: '410524606035',
+    projectId: 'notesharingapp-1ef6f',
+    authDomain: 'notesharingapp-1ef6f.firebaseapp.com',
+    storageBucket: 'notesharingapp-1ef6f.appspot.com',
+    measurementId: 'G-3K3YC65B5Q',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAqTVv5AT7zV83McjsLSlIZZAEKWY7hrJ4',
     appId: '1:410524606035:android:534e6ce364de47bbad70a6',
@@ -58,6 +62,16 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyAOFcp9Hw4ukby0l0McJhJ0BXCMkRFHm5I',
+    appId: '1:410524606035:ios:b3d6cfb21ce990d8ad70a6',
+    messagingSenderId: '410524606035',
+    projectId: 'notesharingapp-1ef6f',
+    storageBucket: 'notesharingapp-1ef6f.appspot.com',
+    iosClientId: '410524606035-g6qs8baf9cofb305fi3b71n2o2083f41.apps.googleusercontent.com',
+    iosBundleId: 'com.example.noteSharingProject',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyAOFcp9Hw4ukby0l0McJhJ0BXCMkRFHm5I',
     appId: '1:410524606035:ios:b3d6cfb21ce990d8ad70a6',
     messagingSenderId: '410524606035',

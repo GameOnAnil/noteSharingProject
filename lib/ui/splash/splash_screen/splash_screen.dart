@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
-import 'package:note_sharing_project/ui/splash/auth_wrapper_page.dart';
+import 'package:note_sharing_project/ui/splash/auth_wrapper_page/auth_wrapper_page.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
 class SplashScreen extends StatefulWidget {

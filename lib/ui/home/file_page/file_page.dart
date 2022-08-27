@@ -8,13 +8,15 @@ import 'package:lottie/lottie.dart';
 import 'package:note_sharing_project/models/files_model.dart';
 import 'package:note_sharing_project/models/subject.dart';
 import 'package:note_sharing_project/providers/file_page_notifier.dart';
-import 'package:note_sharing_project/ui/home/widgets/add_file_bottom_sheet.dart';
-import 'package:note_sharing_project/ui/home/widgets/file_grid_tile.dart';
+import 'package:note_sharing_project/ui/home/file_page/widgets/add_file_bottom_sheet.dart';
+import 'package:note_sharing_project/ui/home/file_page/widgets/file_grid_tile.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
 class FilePage extends ConsumerStatefulWidget {
   final Subject subject;
+  final int gridCount;
   const FilePage({
+    Key? key,
     Key? key,
     required this.subject,
   }) : super(key: key);
@@ -87,7 +89,7 @@ class _FilePageState extends ConsumerState<FilePage> {
                             return _listEmpty();
                           } else {
                             //return _listView(fileList);
-                            return _gridView(fileList);
+                            return _gridView(fileList, gridCount);
                           }
                         },
                       ),
@@ -198,10 +200,10 @@ class _FilePageState extends ConsumerState<FilePage> {
     });
   }
 
-  GridView _gridView(List<FileModel> fileList) {
+  GridView _gridView(List<FileModel> fileList, int gridCount) {
     return GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, childAspectRatio: .85),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: gridCount, childAspectRatio: .85),
         itemCount: fileList.length,
         itemBuilder: (context, index) {
           return FileGridTile(

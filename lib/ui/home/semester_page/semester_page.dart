@@ -1,18 +1,21 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:note_sharing_project/models/subject.dart';
 import 'package:note_sharing_project/providers/sub_notifier.dart';
-import 'package:note_sharing_project/ui/home/widgets/subject_grid_tile.dart';
+import 'package:note_sharing_project/ui/home/semester_page/widgets/subject_grid_tile.dart';
 import 'package:note_sharing_project/utils/constants.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
 class SemesterPage extends StatefulWidget {
   final String selectedProgram;
+  final int gridCount;
   const SemesterPage({
     Key? key,
     required this.selectedProgram,
+    required this.gridCount,
   }) : super(key: key);
 
   @override
@@ -21,6 +24,7 @@ class SemesterPage extends StatefulWidget {
 
 class _SemesterPageState extends State<SemesterPage> {
   String? selectedSem;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,7 +89,7 @@ class _SemesterPageState extends State<SemesterPage> {
               setState(() {
                 selectedSem = item.toString();
                 if (selectedSem != null) {
-                  ref.read(subNotifierProvider).getSubByCategory(
+                  ref.read(subNotifierProvider).getSubByCategoryLocal(
                       program: widget.selectedProgram, semester: selectedSem!);
                 }
               });
@@ -173,7 +177,9 @@ class _SemesterPageState extends State<SemesterPage> {
       child: GridView.builder(
         padding: EdgeInsets.zero,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, crossAxisSpacing: 16.w, mainAxisSpacing: 16.h),
+            crossAxisCount: widget.gridCount,
+            crossAxisSpacing: 16.w,
+            mainAxisSpacing: 16.h),
         itemCount: subList.length,
         itemBuilder: (context, index) {
           final remainder = index % 4;
