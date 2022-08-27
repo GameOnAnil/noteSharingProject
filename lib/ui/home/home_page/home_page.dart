@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:note_sharing_project/models/subject.dart';
-import 'package:note_sharing_project/services/shared_pref_service.dart';
 import 'package:note_sharing_project/ui/home/home_page/widgets/home_page_caroucel.dart';
+import 'package:note_sharing_project/ui/home/home_page/widgets/recent_file_list_view.dart';
 import 'package:note_sharing_project/ui/home/widgets/navigation_drawer.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
@@ -42,7 +41,7 @@ class HomePage extends StatelessWidget {
             SizedBox(
               height: 130.h,
               width: double.infinity,
-              child: _buildRecentListView(),
+              child: const RecentFileLitView(),
             ),
           ],
         ),
@@ -64,36 +63,6 @@ class HomePage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  _buildRecentListView() {
-    return FutureBuilder(
-        future: SharedPrefService().getRecentSubject(),
-        builder: (context, AsyncSnapshot<List<Subject>?> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.hasError) {
-            return const Center(
-              child: Text("No Recent Files Found"),
-            );
-          } else {
-            if (snapshot.data == null) {
-              return const Center(
-                child: Text("No Recent Files Found."),
-              );
-            }
-            return ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: snapshot.data?.length,
-              itemBuilder: ((context, index) {
-                return FolderHorizontalCard(
-                  subject: snapshot.data![index],
-                );
-              }),
-            );
-          }
-        });
   }
 
   Column _buildHeaderText() {
@@ -120,7 +89,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  AppBar _buildAppBar(BuildContext context) {
+  _buildAppBar(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
       backgroundColor: lightPurpleBackground2,
@@ -128,8 +97,7 @@ class HomePage extends StatelessWidget {
       leading: Builder(builder: (context) {
         return IconButton(
           onPressed: () async {
-            // Scaffold.of(context).openDrawer();
-            await SharedPrefService().clearRecent();
+            Scaffold.of(context).openDrawer();
           },
           icon: const FaIcon(
             FontAwesomeIcons.bars,
