@@ -1,3 +1,4 @@
+import 'dart:developer' as dev;
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
@@ -86,7 +87,13 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
             SizedBox(height: 10.h),
             UploadFileContainer(
                 onTap: () async {
-                  await _handleUploadWeb();
+                  if (Platform.isAndroid || Platform.isIOS) {
+                    dev.log("notification");
+                    // await handleNotification(widget.subject.notificationOn);
+                    _handleUploadMobile();
+                  } else {
+                    await _handleUploadWeb();
+                  }
                 },
                 changeFile: ((file, name, size) {
                   _chageFile(file, name, size);
@@ -175,6 +182,60 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
     }
   }
 
+  _handleUploadMobile() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        withData: true,
+      );
+      if (result != null) {
+        Uint8List? file = result.files.first.bytes;
+        String name = result.files.first.name;
+        if (file == null) {
+          throw "Failed to upload file.";
+        }
+        UploadTask task =
+            FirebaseStorage.instance.ref().child("docs/$name").putData(file);
+        setState(() => isLoading = true);
+
+        final url = await task.snapshot.ref.getDownloadURL();
+        final newModel = FileModel(
+            name: name,
+            date: getTodaysDate(),
+            time: DateFormat('HH:mm:ss').format(DateTime.now()),
+            size: await getFileSize(file.length, 2),
+            filePath: "docs/$name",
+            fileType: name.split(".")[1],
+            url: url);
+
+        await FirebaseService().insertData(path, newModel);
+        await _handleNotification(widget.subject.notificationOn);
+        setState(() => isLoading = false);
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Successfully Added'),
+          ),
+        );
+        Navigator.pop(context);
+      }
+    } on FirebaseException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('ERROR:$e'),
+        ),
+      );
+      Navigator.pop(context);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('ERROR:$e'),
+        ),
+      );
+      Navigator.pop(context);
+    }
+  }
+
   Padding _editNameTextField() {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10.0.h),
@@ -229,7 +290,7 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
             url: url);
 
         await FirebaseService().insertData(path, newModel);
-        await handleNotification(widget.subject.notificationOn);
+        await _handleNotification(widget.subject.notificationOn);
         setState(() => isLoading = false);
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
@@ -255,7 +316,7 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
     return formattedDate;
   }
 
-  handleNotification(bool notificationOn) async {
+  _handleNotification(bool notificationOn) async {
     if (notificationOn) {
       await NotificationService().sendWithTagNotification(
           heading: "New Notes Added for $path",

@@ -89,7 +89,7 @@ class _SemesterPageState extends State<SemesterPage> {
               setState(() {
                 selectedSem = item.toString();
                 if (selectedSem != null) {
-                  ref.read(subNotifierProvider).getSubByCategoryLocal(
+                  ref.read(subNotifierProvider).getSubByCategory(
                         program: widget.selectedProgram,
                         semester: selectedSem!,
                       );

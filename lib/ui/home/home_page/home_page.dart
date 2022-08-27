@@ -76,7 +76,7 @@ class HomePage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Hello Anil,',
+          'Hello User,',
           style: GoogleFonts.montserrat(
             color: purpleText,
             fontWeight: FontWeight.w600,
@@ -100,19 +100,17 @@ class HomePage extends StatelessWidget {
       automaticallyImplyLeading: false,
       backgroundColor: lightPurpleBackground2,
       elevation: 0,
-      actions: [
-        Builder(builder: (context) {
-          return IconButton(
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-            icon: const FaIcon(
-              FontAwesomeIcons.bars,
-              color: Colors.black,
-            ),
-          );
-        })
-      ],
+      leading: Builder(builder: (context) {
+        return IconButton(
+          onPressed: () {
+            Scaffold.of(context).openDrawer();
+          },
+          icon: const FaIcon(
+            FontAwesomeIcons.bars,
+            color: Colors.black,
+          ),
+        );
+      }),
     );
   }
 

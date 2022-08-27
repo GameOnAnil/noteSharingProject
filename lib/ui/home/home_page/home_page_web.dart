@@ -111,7 +111,7 @@ class HomePageWeb extends StatelessWidget {
           height: 70,
         ),
         Text(
-          'Hello Anil,',
+          'Hello User,',
           style: GoogleFonts.montserrat(
             color: purpleText,
             fontWeight: FontWeight.w600,

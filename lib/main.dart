@@ -1,5 +1,7 @@
 import 'dart:developer';
+import 'dart:io' show Platform;
 
+import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,7 +17,12 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // await initOneSignal();
+
+  if (Platform.isAndroid || Platform.isIOS) {
+    log("Platform ios or android");
+    await initOneSignal();
+  }
+
   runApp(const MyApp());
 }
 
@@ -47,6 +54,7 @@ class MyApp extends StatelessWidget {
         splitScreenMode: true,
         builder: (BuildContext context, Widget? child) {
           return MaterialApp(
+            navigatorObservers: [ChuckerFlutter.navigatorObserver],
             debugShowCheckedModeBanner: false,
             title: 'Flutter Demo',
             theme: ThemeData(
