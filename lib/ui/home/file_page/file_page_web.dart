@@ -62,10 +62,10 @@ class FilePageWeb extends ConsumerWidget {
                             child: Consumer(
                               builder: (context, ref, child) {
                                 final fileList = ref
-                                    .watch(filePageNotiferProvicer(path))
+                                    .watch(filePageNotifierProvider(path))
                                     .newFileList;
                                 final isLoading = ref
-                                    .watch(filePageNotiferProvicer(path))
+                                    .watch(filePageNotifierProvider(path))
                                     .isLoading;
                                 if (isLoading) {
                                   return const Center(
@@ -140,7 +140,7 @@ class FilePageWeb extends ConsumerWidget {
                 filled: true,
               ),
               onChanged: (value) {
-                ref.read(filePageNotiferProvicer(path)).search(value);
+                ref.read(filePageNotifierProvider(path)).search(value);
               },
             ),
           ),
@@ -267,19 +267,25 @@ class FilePageWeb extends ConsumerWidget {
                   PopupMenuItem(
                     child: const Text("Sort By Name"),
                     onTap: () {
-                      ref.read(filePageNotiferProvicer(path)).orderedBy("name");
+                      ref
+                          .read(filePageNotifierProvider(path))
+                          .orderedBy("name");
                     },
                   ),
                   PopupMenuItem(
                     child: const Text("Sort By Size"),
                     onTap: () {
-                      ref.read(filePageNotiferProvicer(path)).orderedBy("size");
+                      ref
+                          .read(filePageNotifierProvider(path))
+                          .orderedBy("size");
                     },
                   ),
                   PopupMenuItem(
                     child: const Text("Sort By Date"),
                     onTap: () {
-                      ref.read(filePageNotiferProvicer(path)).orderedBy("date");
+                      ref
+                          .read(filePageNotifierProvider(path))
+                          .orderedBy("date");
                     },
                   ),
                 ]),

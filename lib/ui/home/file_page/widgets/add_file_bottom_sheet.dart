@@ -1,11 +1,12 @@
-import 'dart:developer';
 import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:note_sharing_project/models/files_model.dart';
 import 'package:note_sharing_project/models/subject.dart';
 import 'package:note_sharing_project/services/firebase_service.dart';
@@ -37,7 +38,6 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
   late TextEditingController nameController;
   bool isLoading = false;
   late String path;
-  double progress = 0;
 
   @override
   void initState() {
@@ -74,10 +74,6 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(
-              progress.toString(),
-              style: const TextStyle(color: Colors.black),
-            ),
             SizedBox(height: 10.h),
             Text(
               "Upload File",
@@ -128,21 +124,26 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
 
   _handleUploadWeb() async {
     try {
-      FilePickerResult? result =
-          await FilePicker.platform.pickFiles(allowMultiple: false);
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        withData: true,
+      );
       if (result != null) {
         Uint8List? file = result.files.first.bytes;
         String name = result.files.first.name;
+        if (file == null) {
+          throw "Failed to upload file.";
+        }
         UploadTask task =
-            FirebaseStorage.instance.ref().child("docs/$name").putData(file!);
+            FirebaseStorage.instance.ref().child("docs/$name").putData(file);
         setState(() => isLoading = true);
 
         final url = await task.snapshot.ref.getDownloadURL();
         final newModel = FileModel(
             name: name,
-            date: "2022-01-01",
-            time: "02 00 Pm",
-            size: _size,
+            date: getTodaysDate(),
+            time: DateFormat('HH:mm:ss').format(DateTime.now()),
+            size: await getFileSize(file.length, 2),
             filePath: "docs/$name",
             fileType: name.split(".")[1],
             url: url);
@@ -158,6 +159,13 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
         Navigator.pop(context);
       }
     } on FirebaseException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('ERROR:$e'),
+        ),
+      );
+      Navigator.pop(context);
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('ERROR:$e'),
@@ -213,8 +221,8 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
         final url = await task.snapshot.ref.getDownloadURL();
         final newModel = FileModel(
             name: nameController.text,
-            date: "2022-01-01",
-            time: "02 00 Pm",
+            date: getTodaysDate(),
+            time: DateFormat('HH:mm:ss').format(DateTime.now()),
             size: _size,
             filePath: "docs/${nameController.text}",
             fileType: _name.split(".")[1],
@@ -231,7 +239,6 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
         );
         Navigator.pop(context);
       } on FirebaseException catch (e) {
-        log("firebase exception:$e");
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(e.toString()),
@@ -242,13 +249,25 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
     }
   }
 
+  String getTodaysDate() {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd').format(now);
+    return formattedDate;
+  }
+
   handleNotification(bool notificationOn) async {
-    log("send noti:$notificationOn");
     if (notificationOn) {
       await NotificationService().sendWithTagNotification(
           heading: "New Notes Added for $path",
           content: "New Notes Added Click to check it out.",
           tag: path);
     }
+  }
+
+  Future<String> getFileSize(int raw, int decimals) async {
+    if (raw <= 0) return "0 B";
+    const suffixes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    var i = (log(raw) / log(1024)).floor();
+    return '${(raw / pow(1024, i)).toStringAsFixed(decimals)} ${suffixes[i]}';
   }
 }

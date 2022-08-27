@@ -3,12 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:note_sharing_project/models/files_model.dart';
 import 'package:note_sharing_project/providers/file_grid_notifer.dart';
+import 'package:note_sharing_project/services/firebase_service.dart';
+import 'package:note_sharing_project/utils/basestateless_widget.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
-class FileGridTile extends ConsumerWidget {
+class FileGridTile extends BaseStatelessWidget {
   final FileModel fileModel;
+  final String path;
   const FileGridTile({
     Key? key,
+    required this.path,
     required this.fileModel,
   }) : super(key: key);
 
@@ -75,10 +79,26 @@ class FileGridTile extends ConsumerWidget {
         child: PopupMenuButton(
           onSelected: (value) {},
           itemBuilder: (context) => [
-            const PopupMenuItem(
+            PopupMenuItem(
               child: ListTile(
-                leading: Icon(Icons.report, color: Colors.red),
-                title: Text("Report"),
+                onTap: () async {
+                  Navigator.pop(context);
+                  showProgressDialog(context);
+
+                  await FirebaseService().insertReportFile(
+                    path,
+                    fileModel,
+                    "Offensive Content",
+                  );
+                  dismissProgressDialog();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('File Reported Successfully'),
+                    ),
+                  );
+                },
+                leading: const Icon(Icons.report, color: Colors.red),
+                title: const Text("Report"),
               ),
             ),
             const PopupMenuItem(
@@ -131,19 +151,23 @@ class FileGridTile extends ConsumerWidget {
     );
   }
 
-  Container _userProfile() {
-    return Container(
+  _userProfile() {
+    return SizedBox(
       width: 30.w,
-      height: 30.h,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.r), color: purplePrimary),
-      child: Center(
-        child: Text(
-          'A',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 16.sp,
+      child: AspectRatio(
+        aspectRatio: 1.0,
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.r), color: purplePrimary),
+          child: Center(
+            child: Text(
+              'A',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 16.sp,
+              ),
+            ),
           ),
         ),
       ),

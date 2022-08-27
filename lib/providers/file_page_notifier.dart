@@ -14,8 +14,10 @@ class FilePageNotifer extends ChangeNotifier {
   FirebaseService firebaseService = FirebaseService();
   bool isSearchVisible = false;
   String orderBy = "name";
+
   List<FileModel> fileList = [];
   List<FileModel> newFileList = [];
+
   bool isLoading = false;
   final String path;
 
@@ -25,8 +27,8 @@ class FilePageNotifer extends ChangeNotifier {
     subject ??= newSub;
   }
 
-  getNewSubject(int id) async {
-    final response = await DbHelper.instance.getSubById(id: id);
+  getNewSubject({required String name}) async {
+    final response = await DbHelper.instance.getSubById(name: name);
     log("res from db:${response.toString()}");
     subject = response;
     notifyListeners();

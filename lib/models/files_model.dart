@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class FileModel {
   final String name;
   final String date;
@@ -8,7 +6,10 @@ class FileModel {
   final String filePath;
   final String fileType;
   final String url;
+  final String documentId;
+
   FileModel({
+    this.documentId = "",
     required this.name,
     required this.date,
     required this.time,
@@ -30,22 +31,39 @@ class FileModel {
     };
   }
 
-  factory FileModel.fromMap(Map<String, dynamic> map) {
+  factory FileModel.fromMap(Map<String, dynamic> map, String documentId) {
     return FileModel(
-      name: map['name'] ?? '',
-      date: map['date'] ?? '',
-      time: map['time'] ?? '',
-      size: map['size'] ?? '',
-      filePath: map['filePath'] ?? '',
-      fileType: map['fileType'] ?? '',
-      url: map['url'] ?? '',
-    );
+        name: map['name'] ?? '',
+        date: map['date'] ?? '',
+        time: map['time'] ?? '',
+        size: map['size'] ?? '',
+        filePath: map['filePath'] ?? '',
+        fileType: map['fileType'] ?? '',
+        url: map['url'] ?? '',
+        documentId: documentId);
   }
 
-  String toJson() => json.encode(toMap());
-
-  factory FileModel.fromJson(String source) =>
-      FileModel.fromMap(json.decode(source));
+  FileModel copyWith(
+      {String? name,
+      String? date,
+      String? time,
+      String? size,
+      String? filePath,
+      String? fileType,
+      String? url,
+      String? path,
+      String? documentId}) {
+    return FileModel(
+      name: name ?? this.name,
+      date: date ?? this.date,
+      time: time ?? this.time,
+      size: size ?? this.size,
+      filePath: filePath ?? this.filePath,
+      fileType: fileType ?? this.fileType,
+      url: url ?? this.url,
+      documentId: documentId ?? this.documentId,
+    );
+  }
 }
 
 List<FileModel> dummyFileList = [

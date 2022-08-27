@@ -90,7 +90,9 @@ class _SemesterPageState extends State<SemesterPage> {
                 selectedSem = item.toString();
                 if (selectedSem != null) {
                   ref.read(subNotifierProvider).getSubByCategoryLocal(
-                      program: widget.selectedProgram, semester: selectedSem!);
+                        program: widget.selectedProgram,
+                        semester: selectedSem!,
+                      );
                 }
               });
             },

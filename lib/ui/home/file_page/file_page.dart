@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,7 +17,7 @@ class FilePage extends ConsumerStatefulWidget {
   final int gridCount;
   const FilePage({
     Key? key,
-    Key? key,
+    required this.gridCount,
     required this.subject,
   }) : super(key: key);
 
@@ -44,7 +44,6 @@ class _FilePageState extends ConsumerState<FilePage> {
         ref.watch(filePageNotifierProvider(path)).subject?.notificationOn;
 
     final sub = ref.watch(filePageNotifierProvider(path)).subject;
-    log("${sub?.notificationOn}");
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -89,7 +88,7 @@ class _FilePageState extends ConsumerState<FilePage> {
                             return _listEmpty();
                           } else {
                             //return _listView(fileList);
-                            return _gridView(fileList, gridCount);
+                            return _gridView(fileList, widget.gridCount);
                           }
                         },
                       ),
@@ -102,6 +101,13 @@ class _FilePageState extends ConsumerState<FilePage> {
         ],
       ),
     );
+  }
+
+  Future<String> getFileSize(int raw, int decimals) async {
+    if (raw <= 0) return "0 B";
+    const suffixes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    var i = (log(raw) / log(1024)).floor();
+    return '${(raw / pow(1024, i)).toStringAsFixed(decimals)} ${suffixes[i]}';
   }
 
   Column _listEmpty() {
@@ -138,7 +144,7 @@ class _FilePageState extends ConsumerState<FilePage> {
             await ref.read(filePageNotifierProvider(path)).setNotification();
             await ref
                 .read(filePageNotifierProvider(path))
-                .getNewSubject(widget.subject.id!);
+                .getNewSubject(name: widget.subject.name);
           },
           icon: (notifitionOn ?? false)
               ? const FaIcon(FontAwesomeIcons.bell)
@@ -207,6 +213,7 @@ class _FilePageState extends ConsumerState<FilePage> {
         itemCount: fileList.length,
         itemBuilder: (context, index) {
           return FileGridTile(
+            path: path,
             fileModel: fileList[index],
           );
         });

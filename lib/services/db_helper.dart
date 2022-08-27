@@ -78,13 +78,13 @@ class DbHelper {
     return list;
   }
 
-  Future<Subject> getSubById({required int id}) async {
+  Future<Subject> getSubById({required String name}) async {
     Database db = await instance.database;
     var result = await db.query(
       _subjectTable,
       orderBy: 'id',
-      where: "id=?",
-      whereArgs: [id],
+      where: "name=?",
+      whereArgs: [name],
     );
     Subject sub = Subject.fromMap(result.first);
     return sub;

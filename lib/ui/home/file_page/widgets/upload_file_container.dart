@@ -81,9 +81,6 @@ class _UploadFileContainerState extends State<UploadFileContainer> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _buildRichText("Name: ", widget.name),
-                          _buildRichText("Size: ", widget.size),
-                          _buildRichText(
-                              "File Type: ", ".${widget.name.split('.')[1]}"),
                         ],
                       ),
                     ),

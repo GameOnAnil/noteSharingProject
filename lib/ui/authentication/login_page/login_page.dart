@@ -30,6 +30,9 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     emailController = TextEditingController();
     passwordController = TextEditingController();
+
+    emailController.text = "new@gmail.com";
+    passwordController.text = "password";
   }
 
   @override
@@ -41,9 +44,10 @@ class _LoginPageState extends State<LoginPage> {
 
   _validateForm(WidgetRef ref) {
     if (_globalKey.currentState!.validate()) {
-      ref
-          .read(authServiceProvider)
-          .signIn(emailController.text.trim(), passwordController.text.trim());
+      ref.read(authServiceProvider).signIn(
+            emailController.text.trim(),
+            passwordController.text.trim(),
+          );
     }
   }
 
@@ -225,10 +229,7 @@ class _LoginPageState extends State<LoginPage> {
           borderRadius: BorderRadius.circular(30.r), color: purplePrimary),
       child: TextButton(
         onPressed: () {
-          // _validateForm(ref);
-          ref
-              .read(loginPageNotifierProvider)
-              .signIn("new@gmail.com", "password");
+          _validateForm(ref);
         },
         child: const Text(
           "Login",
