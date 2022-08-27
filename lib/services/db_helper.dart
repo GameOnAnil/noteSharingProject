@@ -78,6 +78,18 @@ class DbHelper {
     return list;
   }
 
+  Future<Subject> getSubById({required int id}) async {
+    Database db = await instance.database;
+    var result = await db.query(
+      _subjectTable,
+      orderBy: 'id',
+      where: "id=?",
+      whereArgs: [id],
+    );
+    Subject sub = Subject.fromMap(result.first);
+    return sub;
+  }
+
   Future<List<Subject>> getSubByCategory(
       {required String program, required String semester}) async {
     Database db = await instance.database;

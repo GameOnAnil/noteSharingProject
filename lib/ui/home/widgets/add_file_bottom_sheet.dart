@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:note_sharing_project/models/files_model.dart';
+import 'package:note_sharing_project/models/subject.dart';
 import 'package:note_sharing_project/services/firebase_service.dart';
 import 'package:note_sharing_project/services/notification_service.dart';
 import 'package:note_sharing_project/ui/home/widgets/upload_file_container.dart';
@@ -14,11 +15,13 @@ class AddFileBottomSheet extends StatefulWidget {
   final String name;
   final String semester;
   final String program;
+  final Subject subject;
   const AddFileBottomSheet({
     Key? key,
     required this.name,
     required this.semester,
     required this.program,
+    required this.subject,
   }) : super(key: key);
 
   @override
@@ -166,11 +169,7 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
             url: url);
 
         await FirebaseService().insertData(path, newModel);
-
-        await NotificationService().sendWithTagNotification(
-            heading: "New Notes Added for $path",
-            content: "New Notes Added Click to check it out.",
-            tag: path);
+        await handleNotification(widget.subject.notificationOn);
         setState(() => isLoading = false);
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
@@ -188,6 +187,16 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
         );
         setState(() => isLoading = false);
       }
+    }
+  }
+
+  handleNotification(bool notificationOn) async {
+    log("send noti:$notificationOn");
+    if (notificationOn) {
+      await NotificationService().sendWithTagNotification(
+          heading: "New Notes Added for $path",
+          content: "New Notes Added Click to check it out.",
+          tag: path);
     }
   }
 }

@@ -61,4 +61,9 @@ class Subject {
       notificationOn: notificationOn ?? this.notificationOn,
     );
   }
+
+  @override
+  String toString() {
+    return 'Subject(id: $id, name: $name, semester: $semester, program: $program, notificationOn: $notificationOn)';
+  }
 }

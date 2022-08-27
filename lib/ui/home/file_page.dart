@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,23 +12,44 @@ import 'package:note_sharing_project/ui/home/widgets/add_file_bottom_sheet.dart'
 import 'package:note_sharing_project/ui/home/widgets/file_grid_tile.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
-class FilePage extends ConsumerWidget {
+class FilePage extends ConsumerStatefulWidget {
   final Subject subject;
   const FilePage({
+    Key? key,
     required this.subject,
-  });
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    String path = "${subject.program}-${subject.semester}-${subject.name}";
+  ConsumerState<FilePage> createState() => _FilePageState();
+}
+
+class _FilePageState extends ConsumerState<FilePage> {
+  late String path;
+  @override
+  void initState() {
+    path =
+        "${widget.subject.program}-${widget.subject.semester}-${widget.subject.name}";
+    ref.read(filePageNotifierProvider(path)).initSubject(widget.subject);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final isSearchVisible =
-        ref.watch(filePageNotiferProvicer(path)).isSearchVisible;
+        ref.watch(filePageNotifierProvider(path)).isSearchVisible;
+
+    final notifitionOn =
+        ref.watch(filePageNotifierProvider(path)).subject?.notificationOn;
+
+    final sub = ref.watch(filePageNotifierProvider(path)).subject;
+    log("${sub?.notificationOn}");
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       backgroundColor: purplePrimary,
-      appBar: _appBar(ref, path, subject.notificationOn),
-      floatingActionButton: _floatingActionButton(),
+      appBar: _appBar(ref, path, notifitionOn),
+      floatingActionButton: (sub != null) ? _floatingActionButton(sub) : null,
       body: Column(
         children: [
           isSearchVisible ? _searchBar(path) : const SizedBox(),
@@ -50,10 +73,10 @@ class FilePage extends ConsumerWidget {
                       child: Consumer(
                         builder: (context, ref, child) {
                           final fileList = ref
-                              .watch(filePageNotiferProvicer(path))
+                              .watch(filePageNotifierProvider(path))
                               .newFileList;
                           final isLoading = ref
-                              .watch(filePageNotiferProvicer(path))
+                              .watch(filePageNotifierProvider(path))
                               .isLoading;
                           if (isLoading) {
                             return const Center(
@@ -96,7 +119,7 @@ class FilePage extends ConsumerWidget {
     );
   }
 
-  AppBar _appBar(WidgetRef ref, String path, bool isNotificationOn) {
+  AppBar _appBar(WidgetRef ref, String path, bool? notifitionOn) {
     return AppBar(
       elevation: 0.0,
       title: const Text('Files Page'),
@@ -104,13 +127,18 @@ class FilePage extends ConsumerWidget {
       actions: [
         IconButton(
           onPressed: () async {
-            ref.read(filePageNotiferProvicer(path)).enableSearch();
+            ref.read(filePageNotifierProvider(path)).enableSearch();
           },
           icon: const Icon(Icons.search),
         ),
         IconButton(
-          onPressed: () {},
-          icon: (isNotificationOn)
+          onPressed: () async {
+            await ref.read(filePageNotifierProvider(path)).setNotification();
+            await ref
+                .read(filePageNotifierProvider(path))
+                .getNewSubject(widget.subject.id!);
+          },
+          icon: (notifitionOn ?? false)
               ? const FaIcon(FontAwesomeIcons.bell)
               : const Icon(Icons.notifications_off),
         )
@@ -133,7 +161,7 @@ class FilePage extends ConsumerWidget {
                 filled: true,
               ),
               onChanged: (value) {
-                ref.read(filePageNotiferProvicer(path)).search(value);
+                ref.read(filePageNotifierProvider(path)).search(value);
               },
             ),
           ),
@@ -143,7 +171,7 @@ class FilePage extends ConsumerWidget {
     });
   }
 
-  Builder _floatingActionButton() {
+  Builder _floatingActionButton(Subject subject) {
     return Builder(builder: (context) {
       return FloatingActionButton.extended(
           elevation: 8,
@@ -157,6 +185,7 @@ class FilePage extends ConsumerWidget {
                     semester: subject.semester,
                     program: subject.program,
                     name: subject.name,
+                    subject: subject,
                   );
                 });
           },
@@ -202,19 +231,25 @@ class FilePage extends ConsumerWidget {
                   PopupMenuItem(
                     child: const Text("Sort By Name"),
                     onTap: () {
-                      ref.read(filePageNotiferProvicer(path)).orderedBy("name");
+                      ref
+                          .read(filePageNotifierProvider(path))
+                          .orderedBy("name");
                     },
                   ),
                   PopupMenuItem(
                     child: const Text("Sort By Size"),
                     onTap: () {
-                      ref.read(filePageNotiferProvicer(path)).orderedBy("size");
+                      ref
+                          .read(filePageNotifierProvider(path))
+                          .orderedBy("size");
                     },
                   ),
                   PopupMenuItem(
                     child: const Text("Sort By Date"),
                     onTap: () {
-                      ref.read(filePageNotiferProvicer(path)).orderedBy("date");
+                      ref
+                          .read(filePageNotifierProvider(path))
+                          .orderedBy("date");
                     },
                   ),
                 ]),
