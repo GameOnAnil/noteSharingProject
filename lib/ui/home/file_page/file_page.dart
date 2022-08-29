@@ -1,20 +1,28 @@
+import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:note_sharing_project/models/files_model.dart';
 import 'package:note_sharing_project/models/subject.dart';
 import 'package:note_sharing_project/providers/file_page_notifier.dart';
 import 'package:note_sharing_project/providers/recent_file_notifier.dart';
+import 'package:note_sharing_project/services/firebase_service.dart';
 import 'package:note_sharing_project/services/shared_pref_service.dart';
 import 'package:note_sharing_project/ui/home/file_page/widgets/add_file_bottom_sheet.dart';
 import 'package:note_sharing_project/ui/home/file_page/widgets/file_grid_tile.dart';
+import 'package:note_sharing_project/utils/base_page.dart';
+import 'package:note_sharing_project/utils/base_utils.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
-class FilePage extends ConsumerStatefulWidget {
+class FilePage extends BaseStatefulWidget {
   final Subject subject;
   final int gridCount;
   const FilePage({
@@ -184,12 +192,65 @@ class _FilePageState extends ConsumerState<FilePage> {
     });
   }
 
+  _handleUploadWeb() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        withData: true,
+      );
+      if (result != null) {
+        Uint8List? file = result.files.first.bytes;
+        String name = result.files.first.name;
+        if (file == null) {
+          throw "Failed to upload file.";
+        }
+        UploadTask task =
+            FirebaseStorage.instance.ref().child("docs/$name").putData(file);
+        widget.showProgressDialog(context);
+
+        final url = await task.snapshot.ref.getDownloadURL();
+        final newModel = FileModel(
+            name: name,
+            date: getTodaysDate(),
+            time: DateFormat('HH:mm:ss').format(DateTime.now()),
+            size: await getFileSize(file.length, 2),
+            filePath: "docs/$name",
+            fileType: name.split(".")[1],
+            url: url);
+
+        await FirebaseService().insertData(path, newModel);
+        widget.dismissProgressDialog();
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Successfully Added'),
+          ),
+        );
+      }
+    } on FirebaseException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('ERROR:$e'),
+        ),
+      );
+      widget.dismissProgressDialog();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('ERROR:$e'),
+        ),
+      );
+      widget.dismissProgressDialog();
+    }
+  }
+
   Builder _floatingActionButton(Subject subject) {
     return Builder(builder: (context) {
       return FloatingActionButton.extended(
-          elevation: 8,
-          backgroundColor: purplePrimary,
-          onPressed: () {
+        elevation: 8,
+        backgroundColor: purplePrimary,
+        onPressed: () async {
+          if (Platform.isAndroid || Platform.isIOS) {
             showModalBottomSheet(
                 backgroundColor: Colors.transparent,
                 context: context,
@@ -201,13 +262,19 @@ class _FilePageState extends ConsumerState<FilePage> {
                     subject: subject,
                   );
                 });
-          },
-          label: SizedBox(
-              width: MediaQuery.of(context).size.width * .5,
-              child: const Center(
-                  child: Text(
-                "Add Files",
-              ))));
+          } else {
+            _handleUploadWeb();
+          }
+        },
+        label: SizedBox(
+          width: MediaQuery.of(context).size.width * .5,
+          child: const Center(
+            child: Text(
+              "Add Files",
+            ),
+          ),
+        ),
+      );
     });
   }
 

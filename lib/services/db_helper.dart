@@ -74,7 +74,7 @@ class DbHelper {
   Future<List<Subject>> getAllSub() async {
     final db = await instance.database;
     final mapResponse = await db.query(_subjectTable);
-    final list = mapResponse.map((e) => Subject.fromMap(e)).toList();
+    final list = mapResponse.map((e) => Subject.fromMapDb(e)).toList();
     return list;
   }
 
@@ -86,7 +86,7 @@ class DbHelper {
       where: "name=?",
       whereArgs: [name],
     );
-    Subject sub = Subject.fromMap(result.first);
+    Subject sub = Subject.fromMapDb(result.first);
     return sub;
   }
 

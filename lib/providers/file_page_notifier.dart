@@ -7,6 +7,7 @@ import 'package:note_sharing_project/models/subject.dart';
 import 'package:note_sharing_project/services/db_helper.dart';
 import 'package:note_sharing_project/services/firebase_service.dart';
 import 'package:note_sharing_project/services/notification_service.dart';
+import 'package:note_sharing_project/utils/base_utils.dart';
 
 final filePageNotifierProvider = ChangeNotifierProvider.family(
     ((ref, String path) => FilePageNotifer(path: path)));
@@ -39,7 +40,7 @@ class FilePageNotifer extends ChangeNotifier {
     if (subject != null) {
       await DbHelper.instance.updateSubject(
           subject!.copyWith(notificationOn: !subject!.notificationOn));
-      final path = "${subject!.program}-${subject!.semester}-${subject!.name}";
+      final path = getPathFromSubject(subject!);
       if (subject!.notificationOn) {
         await NotificationService().removeNotificationTag(path);
       } else {

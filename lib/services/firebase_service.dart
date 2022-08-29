@@ -19,6 +19,13 @@ class FirebaseService {
         );
   }
 
+  Stream<List<ReportFileModel>> getRecentFiles() {
+    return firestore.collection("report").snapshots().map(
+          (event) =>
+              event.docs.map((e) => ReportFileModel.fromMap(e.data())).toList(),
+        );
+  }
+
   Future<void> insertData(String path, FileModel fileModel) async {
     final collectionRef =
         firestore.collection("files").doc(path).collection("data");
