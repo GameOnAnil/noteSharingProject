@@ -55,20 +55,18 @@ class _UploadFileContainerState extends State<UploadFileContainer> {
           Padding(
             padding: EdgeInsets.only(right: 15.0.w, top: 10.h),
             child: Container(
-              height: 250.h,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
                 border: Border.all(color: purplePrimary),
               ),
+              width: double.infinity,
+              height: 200.h,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                      "Progress:$progress",
-                      style: const TextStyle(color: Colors.black),
-                    ),
                     SizedBox(
                         width: 100.w,
                         height: 100.h,
@@ -76,14 +74,7 @@ class _UploadFileContainerState extends State<UploadFileContainer> {
                           _getLogoUrl(),
                         )),
                     SizedBox(width: 10.w),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildRichText("Name: ", widget.name),
-                        ],
-                      ),
-                    ),
+                    _buildRichText("Name: ", widget.name),
                   ],
                 ),
               ),

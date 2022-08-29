@@ -1,4 +1,3 @@
-import 'dart:developer' as dev;
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
@@ -88,13 +87,7 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
             SizedBox(height: 10.h),
             UploadFileContainer(
                 onTap: () async {
-                  if (Platform.isAndroid || Platform.isIOS) {
-                    dev.log("notification");
-                    // await handleNotification(widget.subject.notificationOn);
-                    _handleUploadMobile();
-                  } else {
-                    await _handleUploadWeb();
-                  }
+                  _uploadFile();
                 },
                 changeFile: ((file, name, size) {
                   _chageFile(file, name, size);
@@ -130,56 +123,19 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
     );
   }
 
-  _handleUploadWeb() async {
-    try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        allowMultiple: false,
-        withData: true,
-      );
-      if (result != null) {
-        Uint8List? file = result.files.first.bytes;
-        String name = result.files.first.name;
-        if (file == null) {
-          throw "Failed to upload file.";
-        }
-        UploadTask task =
-            FirebaseStorage.instance.ref().child("docs/$name").putData(file);
-        setState(() => isLoading = true);
+  _uploadFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      withData: true,
+    );
 
-        final url = await task.snapshot.ref.getDownloadURL();
-        final newModel = FileModel(
-            name: name,
-            date: getTodaysDate(),
-            time: DateFormat('HH:mm:ss').format(DateTime.now()),
-            size: await getFileSize(file.length, 2),
-            filePath: "docs/$name",
-            fileType: name.split(".")[1],
-            url: url);
+    if (result != null) {
+      File? file = File(result.files.first.path!);
+      String name = result.files.first.name;
+      int byte = await file.length();
+      final size = getFileSize(byte, 2);
 
-        await FirebaseService().insertData(path, newModel);
-        setState(() => isLoading = false);
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Successfully Added'),
-          ),
-        );
-        Navigator.pop(context);
-      }
-    } on FirebaseException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('ERROR:$e'),
-        ),
-      );
-      Navigator.pop(context);
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('ERROR:$e'),
-        ),
-      );
-      Navigator.pop(context);
+      _chageFile(file, name, size.toString());
     }
   }
 
