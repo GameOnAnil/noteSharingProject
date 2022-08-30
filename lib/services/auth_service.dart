@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:note_sharing_project/services/firebase_service.dart';
 
 final authServiceProvider =
     Provider(((ref) => AuthService(FirebaseAuth.instance)));
@@ -26,8 +27,10 @@ class AuthService {
 
   Future<String> signUp(String email, String password) async {
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(
+      final response = await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
+
+      await FirebaseService().insertUser(response);
 
       return "Success";
     } on FirebaseAuthException catch (e) {

@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:note_sharing_project/models/files_model.dart';
 import 'package:note_sharing_project/models/report_file_model.dart';
+import 'package:note_sharing_project/models/user_model.dart';
 
 class FirebaseService {
   final firestore = FirebaseFirestore.instance;
@@ -61,6 +63,33 @@ class FirebaseService {
 
     for (var element in dummyFileList) {
       await collectionRef.doc().set(element.toMap());
+    }
+  }
+
+  Future<void> insertUser(UserCredential response) async {
+    if (response.user != null) {
+      final collectionRef = firestore.collection("users");
+      await collectionRef
+          .doc(response.user!.uid)
+          .set(
+            UserModel(
+                    name: response.user!.displayName ?? "",
+                    email: response.user!.email ?? "",
+                    userType: "user")
+                .toMap(),
+          )
+          .onError((error, stackTrace) => null);
+    }
+  }
+
+  static Future<String> getUserType(String uid) async {
+    final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
+    DocumentSnapshot doc = await docRef.get();
+    if (doc.exists) {
+      String type = await doc.get("userType");
+      return type;
+    } else {
+      return "loading";
     }
   }
 }
