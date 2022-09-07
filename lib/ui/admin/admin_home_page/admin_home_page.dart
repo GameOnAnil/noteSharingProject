@@ -54,6 +54,7 @@ class _AdminHomePageState extends ConsumerState<AdminHomePage> {
                             ref.watch(adminPageNotifierProvider).reportFileList;
                         final isLoading =
                             ref.watch(adminPageNotifierProvider).isLoading;
+
                         if (isLoading) {
                           return const Center(
                             child: CircularProgressIndicator(),
@@ -77,14 +78,17 @@ class _AdminHomePageState extends ConsumerState<AdminHomePage> {
     );
   }
 
-  GridView _gridView(List<ReportFileModel> fileList, int gridCount) {
-    return GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: gridCount, childAspectRatio: .85),
-        itemCount: fileList.length,
-        itemBuilder: (context, index) {
-          return ReportFileGridTile(fileModel: fileList[index]);
-        });
+  _gridView(List<ReportFileModel> fileList, int gridCount) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: gridCount, childAspectRatio: .85),
+          itemCount: fileList.length,
+          itemBuilder: (context, index) {
+            return ReportFileGridTile(fileModel: fileList[index]);
+          }),
+    );
   }
 
   Column _listEmpty() {

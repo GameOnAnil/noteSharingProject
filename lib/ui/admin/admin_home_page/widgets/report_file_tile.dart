@@ -6,6 +6,7 @@ import 'package:note_sharing_project/models/report_file_model.dart';
 import 'package:note_sharing_project/providers/file_grid_notifer.dart';
 import 'package:note_sharing_project/utils/basestateless_widget.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
+import 'package:stylish_dialog/stylish_dialog.dart';
 
 class ReportFileGridTile extends BaseStatelessWidget {
   final ReportFileModel fileModel;
@@ -19,6 +20,13 @@ class ReportFileGridTile extends BaseStatelessWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final progress =
         ref.watch(fileGridNotifierProvider(fileModel.name)).progress;
+
+    final progressDialog = StylishDialog(
+      context: context,
+      alertType: StylishDialogType.PROGRESS,
+      contentText: 'Please wait...',
+      dismissOnTouchOutside: false,
+    );
 
     return GestureDetector(
       onTap: () async {
@@ -47,13 +55,26 @@ class ReportFileGridTile extends BaseStatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                const Icon(Icons.star_outline),
-                FaIcon(
-                  FontAwesomeIcons.trash,
-                  color: Colors.red,
-                  size: 18.r,
+                IconButton(
+                  onPressed: () async {
+                    StylishDialog(
+                      context: context,
+                      alertType: StylishDialogType.NORMAL,
+                      titleText: 'Delete File',
+                      contentText: 'Are you sure you want to delete?',
+                      confirmButton: ElevatedButton(
+                        onPressed: () {},
+                        child: const Text("Confirm"),
+                      ),
+                    ).show();
+                  },
+                  icon: FaIcon(
+                    FontAwesomeIcons.trash,
+                    color: Colors.red,
+                    size: 18.r,
+                  ),
                 )
               ],
             ),

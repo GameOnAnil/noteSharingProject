@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:note_sharing_project/services/auth_service.dart';
+import 'package:note_sharing_project/ui/authentication/widgets/password_text_field.dart';
 import 'package:note_sharing_project/utils/base_page.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
@@ -88,27 +90,17 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
             },
           ),
           SizedBox(height: 16.h),
-          TextFormField(
-            decoration: InputDecoration(
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15.r)),
-                label: const Text("Enter Password"),
-                suffixIcon: const Icon(Icons.visibility)),
-            controller: passwordController,
-            validator: (value) {
-              if (value?.isEmpty ?? true) {
-                return "Password cannot be empty.";
-              }
-              return null;
-            },
-          ),
+          PasswordTextField(
+              controller: passwordController,
+              validator: (value) {
+                if (value?.isEmpty ?? true) {
+                  return "Password cannot be empty.";
+                }
+                return null;
+              }),
           SizedBox(height: 16.h),
-          TextFormField(
-            decoration: InputDecoration(
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15.r)),
-                label: const Text("Confirm Password"),
-                suffixIcon: const Icon(Icons.visibility)),
+          PasswordTextField(
+            labelText: "Confirm Password",
             controller: confirmPassController,
             validator: (value) {
               if (value?.isEmpty ?? true) {
@@ -148,11 +140,17 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
         onPressed: () async {
           if (_globalKey.currentState?.validate() ?? true) {
             widget.showProgressDialog(context);
-            await ref.read(authServiceProvider).signUp(
+            final response = await ref.read(authServiceProvider).signUp(
                   emailController.text.trim(),
                   passwordController.text.trim(),
                 );
             widget.dismissProgressDialog();
+            if (response == "Success") {
+              Fluttertoast.showToast(msg: "Signup successfull.");
+              Navigator.pop(context);
+            } else {
+              Fluttertoast.showToast(msg: response);
+            }
           }
         },
         child: const Text(

@@ -1,25 +1,29 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
+import 'package:note_sharing_project/providers/auth_provider.dart';
 import 'package:note_sharing_project/providers/login_page_notifier.dart';
 import 'package:note_sharing_project/services/auth_service.dart';
+import 'package:note_sharing_project/services/firebase_service.dart';
 import 'package:note_sharing_project/ui/authentication/forgot_pass_page/forgot_pass_page.dart';
 import 'package:note_sharing_project/ui/authentication/sign_up_page/sign_up_page.dart';
 import 'package:note_sharing_project/ui/authentication/widgets/custom_text_field.dart';
 import 'package:note_sharing_project/ui/authentication/widgets/password_text_field.dart';
 import 'package:note_sharing_project/ui/authentication/widgets/title_text.dart';
+import 'package:note_sharing_project/utils/base_page.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends BaseStatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final GlobalKey<FormState> _globalKey = GlobalKey();
 
   late TextEditingController emailController;
@@ -42,12 +46,25 @@ class _LoginPageState extends State<LoginPage> {
     passwordController.dispose();
   }
 
-  _validateForm(WidgetRef ref) {
+  _validateForm(WidgetRef ref) async {
     if (_globalKey.currentState!.validate()) {
-      ref.read(authServiceProvider).signIn(
-            emailController.text.trim(),
-            passwordController.text.trim(),
-          );
+      widget.showProgressDialog(context);
+      try {
+        final response = await ref.read(authServiceProvider).signIn(
+              emailController.text.trim(),
+              passwordController.text.trim(),
+            );
+        if (response != null) {
+          Fluttertoast.showToast(msg: "Login success");
+          await FirebaseService().insertUser(response);
+          ref.read(authProviderNotifier).setUser(response);
+          widget.dismissProgressDialog();
+        }
+      } on FirebaseAuthException catch (e) {
+        widget.dismissProgressDialog();
+        Fluttertoast.showToast(msg: e.toString());
+        return;
+      }
     }
   }
 
@@ -133,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: 16.h),
             _divider(),
             SizedBox(height: 16.h),
-            _googleSignIn(),
+            _googleSignIn(ref),
             SizedBox(height: 10.h),
             _signUpText(context),
           ],
@@ -243,27 +260,45 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Container _googleSignIn() {
-    return Container(
-      height: 50.h,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        border: Border.all(color: bluePrimary),
-        borderRadius: BorderRadius.circular(30.r),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: Image.asset(
-              "assets/images/google.png",
-              width: 30.w,
-              height: 30.h,
+  _googleSignIn(WidgetRef ref) {
+    return GestureDetector(
+      onTap: () async {
+        try {
+          widget.showProgressDialog(context);
+          final response = await ref.read(authServiceProvider).googleSignIn();
+          widget.dismissProgressDialog();
+          if (response != null) {
+            Fluttertoast.showToast(msg: "Login success");
+            await FirebaseService().insertUser(response);
+            ref.read(authProviderNotifier).setUser(response);
+            return;
+          }
+        } on FirebaseAuthException catch (e) {
+          Fluttertoast.showToast(msg: e.toString());
+          return;
+        }
+      },
+      child: Container(
+        height: 50.h,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          border: Border.all(color: bluePrimary),
+          borderRadius: BorderRadius.circular(30.r),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: Image.asset(
+                "assets/images/google.png",
+                width: 30.w,
+                height: 30.h,
+              ),
             ),
-          ),
-          SizedBox(width: 20.w),
-          const Text("Sign in with Google "),
-        ],
+            SizedBox(width: 20.w),
+            const Text("Sign in with Google "),
+          ],
+        ),
       ),
     );
   }

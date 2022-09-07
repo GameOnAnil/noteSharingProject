@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:note_sharing_project/services/auth_service.dart';
+import 'package:note_sharing_project/providers/auth_provider.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
 class NavigationDrawer extends StatelessWidget {
@@ -27,7 +27,8 @@ class NavigationDrawer extends StatelessWidget {
             ),
             currentAccountPicture: const CircleAvatar(
                 backgroundImage: NetworkImage(
-                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmDmmRze0UvLaOtjgNVcOhRjmHH0dL0GP18w&usqp=CAU")),
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmDmmRze0UvLaOtjgNVcOhRjmHH0dL0GP18w&usqp=CAU",
+            )),
           ),
           Expanded(
             child: Column(
@@ -62,7 +63,8 @@ class NavigationDrawer extends StatelessWidget {
                     title: "Sign Out",
                     icon: FontAwesomeIcons.arrowRightFromBracket,
                     onTap: () {
-                      ref.read(authServiceProvider).signOut();
+                      // ref.read(authServiceProvider).signOut();
+                      ref.read(authProviderNotifier).reset();
                     },
                   );
                 }),

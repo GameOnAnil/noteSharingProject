@@ -30,57 +30,63 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Center(
-              child: Lottie.asset("assets/animations/forgotpass.json",
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.height * .35),
-            ),
-            Container(
-              alignment: Alignment.centerLeft,
-              child: TitleText(
-                title: "Reset Password",
-                fontSize: 24.sp,
+      appBar: _buildAppBar(context),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Center(
+                child: Lottie.asset("assets/animations/forgotpass.json",
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height * .35),
               ),
-            ),
-            CustomTextField(
-              controller: emailController,
-              label: "Enter Email Address",
-              validator: (value) {},
-            ),
-            SizedBox(height: 8.h),
-            Container(
-              height: 50.h,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30.r),
-                  color: purplePrimary),
-              child: TextButton(
-                onPressed: () {},
-                child: const Text(
-                  "Reset Password",
-                  style: TextStyle(color: Colors.white),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: TitleText(
+                  title: "Reset Password",
+                  fontSize: 24.sp,
                 ),
               ),
-            ),
-          ],
+              CustomTextField(
+                controller: emailController,
+                label: "Enter Email Address",
+                validator: (value) {},
+              ),
+              SizedBox(height: 8.h),
+              Container(
+                height: 50.h,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30.r),
+                    color: purplePrimary),
+                child: TextButton(
+                  onPressed: () {},
+                  child: const Text(
+                    "Reset Password",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      foregroundColor: Colors.black,
+      elevation: 0,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back_ios),
+        onPressed: () {
+          Navigator.pop(context);
+        },
       ),
     );
   }
