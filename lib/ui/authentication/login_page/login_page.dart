@@ -57,7 +57,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         if (response != null) {
           Fluttertoast.showToast(msg: "Login success");
           await FirebaseService().insertUser(response);
-          ref.read(authProviderNotifier).setUser(response);
+          await ref
+              .read(authProviderNotifier)
+              .setUser(response.user?.uid ?? "");
           widget.dismissProgressDialog();
         }
       } on FirebaseAuthException catch (e) {
@@ -249,7 +251,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30.r), color: purplePrimary),
       child: TextButton(
-        onPressed: () {
+        onPressed: () async {
           _validateForm(ref);
         },
         child: const Text(
@@ -270,7 +272,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           if (response != null) {
             Fluttertoast.showToast(msg: "Login success");
             await FirebaseService().insertUser(response);
-            ref.read(authProviderNotifier).setUser(response);
+            ref.read(authProviderNotifier).setUser(response.user?.uid ?? "");
             return;
           }
         } on FirebaseAuthException catch (e) {

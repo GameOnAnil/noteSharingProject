@@ -3,15 +3,15 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:note_sharing_project/services/firebase_service.dart';
+import 'package:note_sharing_project/models/user_model.dart';
+import 'package:note_sharing_project/services/api_service.dart';
 
-final authServiceProvider =
-    Provider(((ref) => AuthService(FirebaseAuth.instance)));
+final authServiceProvider = Provider(((ref) => AuthService()));
 
 class AuthService {
-  final FirebaseAuth _firebaseAuth;
+  final _firebaseAuth = FirebaseAuth.instance;
 
-  AuthService(this._firebaseAuth);
+  AuthService();
 
   Stream<User?> get authStateChange => _firebaseAuth.authStateChanges();
 
@@ -31,7 +31,16 @@ class AuthService {
       final response = await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
 
-      await FirebaseService().insertUser(response);
+      // await FirebaseService().insertUser(response);
+      if (response.user != null) {
+        await ApiService().postUser(
+            user: UserModel(
+          id: response.user!.uid,
+          name: response.user?.displayName ?? "",
+          email: email,
+          userType: "user",
+        ));
+      }
 
       return "Success";
     } on FirebaseAuthException catch (e) {
@@ -60,5 +69,9 @@ class AuthService {
 
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
+  }
+
+  String? getUser() {
+    return _firebaseAuth.currentUser?.uid;
   }
 }

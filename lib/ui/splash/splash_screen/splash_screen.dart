@@ -1,27 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
+import 'package:note_sharing_project/services/auth_service.dart';
 import 'package:note_sharing_project/ui/splash/auth_wrapper_page/auth_wrapper_page.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
-class SplashScreen extends StatefulWidget {
+import '../../../providers/auth_provider.dart';
+
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void initState() {
     super.initState();
     navigate();
   }
 
+  void checkUser() async {
+    final uid = AuthService().getUser();
+    if (uid != null) {
+      ref.read(authProviderNotifier).setUser(uid);
+    }
+  }
+
   void navigate() async {
     await Future.delayed(const Duration(seconds: 3));
 
-    Navigator.pushAndRemoveUntil(
+    await Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: ((context) => const AuthWrapperPage())),
         (route) => false);

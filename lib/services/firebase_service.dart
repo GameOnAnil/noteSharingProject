@@ -73,6 +73,7 @@ class FirebaseService {
           .doc(response.user!.uid)
           .set(
             UserModel(
+                    id: response.user?.uid ?? "",
                     name: response.user!.displayName ?? "",
                     email: response.user!.email ?? "",
                     userType: "user")
