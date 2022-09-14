@@ -39,7 +39,7 @@ class _HomePageCaroselState extends State<HomePageCarosel> {
                     mIndex = index;
                   });
                 },
-                autoPlay: true,
+                autoPlay: false,
                 //aspectRatio: .5,
                 enlargeCenterPage: true,
               ),

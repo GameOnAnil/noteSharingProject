@@ -33,7 +33,7 @@ class AuthService {
 
       // await FirebaseService().insertUser(response);
       if (response.user != null) {
-        await ApiService().postUser(
+        await ApiService().createUser(
             user: UserModel(
           id: response.user!.uid,
           name: response.user?.displayName ?? "",
@@ -64,6 +64,15 @@ class AuthService {
     } catch (error) {
       log(error.toString());
       rethrow;
+    }
+  }
+
+  Future<String> forgotPassword({required String email}) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      return "Success";
+    } on FirebaseAuthException catch (e) {
+      return e.message.toString();
     }
   }
 

@@ -32,7 +32,7 @@ class ApiService {
     }
   }
 
-  Future<String?> postUser({required UserModel user}) async {
+  Future<String?> createUser({required UserModel user}) async {
     try {
       await _dio.post(
         _postUsers,

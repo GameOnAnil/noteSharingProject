@@ -1,10 +1,11 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_sharing_project/utils/base_page.dart';
 import 'package:stylish_dialog/stylish_dialog.dart';
 
-abstract class BaseState<Page extends BaseStatefulWidget> extends State<Page> {
+abstract class BaseState<Page extends BaseStatefulWidget>
+    extends ConsumerState<Page> {
   bool enablePincodeObserver;
   BaseState({this.enablePincodeObserver = true});
   StylishDialog? _progressDialog;

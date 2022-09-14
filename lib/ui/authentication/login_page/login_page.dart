@@ -4,8 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
+import 'package:note_sharing_project/models/user_model.dart';
 import 'package:note_sharing_project/providers/auth_provider.dart';
 import 'package:note_sharing_project/providers/login_page_notifier.dart';
+import 'package:note_sharing_project/services/api_service.dart';
 import 'package:note_sharing_project/services/auth_service.dart';
 import 'package:note_sharing_project/services/firebase_service.dart';
 import 'package:note_sharing_project/ui/authentication/forgot_pass_page/forgot_pass_page.dart';
@@ -56,7 +58,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             );
         if (response != null) {
           Fluttertoast.showToast(msg: "Login success");
-          await FirebaseService().insertUser(response);
+          // await FirebaseService().insertUser(response);
+          ApiService().createUser(
+              user: UserModel(
+            id: response.user?.uid ?? "",
+            name: response.user?.displayName ?? "",
+            email: response.user?.email ?? "",
+            userType: "user",
+          ));
           await ref
               .read(authProviderNotifier)
               .setUser(response.user?.uid ?? "");

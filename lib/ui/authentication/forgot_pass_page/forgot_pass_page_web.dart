@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:note_sharing_project/ui/authentication/widgets/custom_text_field.dart';
 import 'package:note_sharing_project/ui/authentication/widgets/title_text.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
-class ForgotPasswordPageWeb extends StatefulWidget {
+import '../../../services/auth_service.dart';
+import '../../../utils/base_page.dart';
+import '../../../utils/base_state.dart';
+
+class ForgotPasswordPageWeb extends BaseStatefulWidget {
   const ForgotPasswordPageWeb({Key? key}) : super(key: key);
 
   @override
-  State<ForgotPasswordPageWeb> createState() => _ForgotPasswordPageWebState();
+  BaseState<ForgotPasswordPageWeb> createState() =>
+      _ForgotPasswordPageWebState();
 }
 
-class _ForgotPasswordPageWebState extends State<ForgotPasswordPageWeb> {
+class _ForgotPasswordPageWebState extends BaseState<ForgotPasswordPageWeb> {
   late TextEditingController emailController;
+  final globalkey = GlobalKey<FormState>();
   @override
   void initState() {
     emailController = TextEditingController();
@@ -33,45 +40,66 @@ class _ForgotPasswordPageWebState extends State<ForgotPasswordPageWeb> {
         child: Container(
           color: Colors.white,
           width: 600,
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Center(
-                  child: Lottie.asset("assets/animations/forgotpass.json",
-                      width: double.infinity,
-                      height: MediaQuery.of(context).size.height * .35),
-                ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  child: TitleText(
-                    title: "Reset Password",
-                    fontSize: 24.sp,
+          child: Form(
+            key: globalkey,
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Center(
+                    child: Lottie.asset("assets/animations/forgotpass.json",
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height * .35),
                   ),
-                ),
-                CustomTextField(
-                  controller: emailController,
-                  label: "Enter Email Address",
-                  validator: (value) {},
-                ),
-                SizedBox(height: 8.h),
-                Container(
-                  height: 50.h,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30.r),
-                      color: purplePrimary),
-                  child: TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      "Reset Password",
-                      style: TextStyle(color: Colors.white),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: TitleText(
+                      title: "Reset Password",
+                      fontSize: 24.sp,
                     ),
                   ),
-                ),
-              ],
+                  CustomTextField(
+                    controller: emailController,
+                    label: "Enter Email Address",
+                    validator: (value) {},
+                  ),
+                  SizedBox(height: 8.h),
+                  Container(
+                    height: 50.h,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30.r),
+                        color: purplePrimary),
+                    child: TextButton(
+                      onPressed: () async {
+                        if (globalkey.currentState?.validate() ?? false) {
+                          showProgressDialog();
+                          try {
+                            final response = await AuthService()
+                                .forgotPassword(email: emailController.text);
+                            dismissProgressDialog();
+                            if (response == "Success") {
+                              Fluttertoast.showToast(
+                                  msg: "Email Sent Successfully.");
+                            } else {
+                              Fluttertoast.showToast(msg: response);
+                            }
+                          } catch (e) {
+                            dismissProgressDialog();
+                            Fluttertoast.showToast(msg: e.toString());
+                          }
+                        }
+                      },
+                      child: const Text(
+                        "Reset Password",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
