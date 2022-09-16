@@ -16,7 +16,7 @@ class AdminPageNotifier extends ChangeNotifier {
 
   Future<void> getReportFiles() async {
     try {
-      final response = firebaseService.getRecentFiles();
+      final response = firebaseService.getReportedFiles();
       response.listen((event) {
         reportFileList = event;
         notifyListeners();

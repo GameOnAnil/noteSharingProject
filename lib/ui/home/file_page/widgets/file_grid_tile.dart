@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:note_sharing_project/models/files_model.dart';
 import 'package:note_sharing_project/providers/file_grid_notifer.dart';
 import 'package:note_sharing_project/services/firebase_service.dart';
-import 'package:note_sharing_project/utils/basestateless_widget.dart';
+import 'package:note_sharing_project/utils/base_page.dart';
+import 'package:note_sharing_project/utils/base_utils.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
-class FileGridTile extends BaseStatelessWidget {
+import '../../../../utils/base_state.dart';
+
+class FileGridTile extends BaseStatefulWidget {
   final FileModel fileModel;
   final String path;
   const FileGridTile({
@@ -17,15 +19,19 @@ class FileGridTile extends BaseStatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  BaseState<FileGridTile> createState() => _FileGridTileState();
+}
+
+class _FileGridTileState extends BaseState<FileGridTile> {
+  @override
+  Widget build(BuildContext context) {
     final progress =
-        ref.watch(fileGridNotifierProvider(fileModel.name)).progress;
+        ref.watch(fileGridNotifierProvider(widget.fileModel.name)).progress;
 
     return GestureDetector(
       onTap: () async {
-        ref
-            .read(fileGridNotifierProvider(fileModel.name))
-            .openFile(url: fileModel.url, fileName: fileModel.name);
+        ref.read(fileGridNotifierProvider(widget.fileModel.name)).openFile(
+            url: widget.fileModel.url, fileName: widget.fileModel.name);
       },
       child: Container(
         width: 200.w,
@@ -50,10 +56,10 @@ class FileGridTile extends BaseStatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Icon(Icons.star_outline),
-                _popUpButton(),
+                _popUpButton(context),
               ],
             ),
-            _getLogo(fileModel.fileType),
+            _getLogo(widget.fileModel.fileType),
             Expanded(child: _nameText()),
             (progress != 0) ? _progressIndicator(progress) : _divider(),
             _bottomPart(),
@@ -70,7 +76,7 @@ class FileGridTile extends BaseStatelessWidget {
     );
   }
 
-  Padding _popUpButton() {
+  Padding _popUpButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(right: 4.0),
       child: SizedBox(
@@ -80,29 +86,38 @@ class FileGridTile extends BaseStatelessWidget {
           onSelected: (value) {},
           itemBuilder: (context) => [
             PopupMenuItem(
-              child: ListTile(
-                onTap: () async {
-                  Navigator.pop(context);
-                  showProgressDialog(context);
-
-                  await FirebaseService().insertReportFile(
-                    path,
-                    fileModel,
-                    "Offensive Content",
-                  );
-                  dismissProgressDialog();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('File Reported Successfully'),
+              child: PopupMenuButton(
+                itemBuilder: (context) => [
+                  const PopupMenuItem(
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.download,
+                        color: Color.fromARGB(255, 37, 68, 38),
+                      ),
+                      title: Text("Download"),
                     ),
-                  );
-                },
-                leading: const Icon(Icons.report, color: Colors.red),
-                title: const Text("Report"),
+                  ),
+                ],
+                child: ListTile(
+                  onTap: () async {
+                    showCustomAlertDialog2(
+                      context,
+                      title: "Choose Report Type",
+                      btnText: "Dismiss",
+                      child: _buildReportListView(context),
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    );
+                  },
+                  leading: const Icon(Icons.report, color: Colors.red),
+                  title: const Text("Report"),
+                ),
               ),
             ),
             const PopupMenuItem(
               child: ListTile(
+                style: ListTileStyle.drawer,
                 leading: Icon(
                   Icons.download,
                   color: Color.fromARGB(255, 37, 68, 38),
@@ -116,6 +131,54 @@ class FileGridTile extends BaseStatelessWidget {
     );
   }
 
+  _buildReportListView(BuildContext context) {
+    final reportTypeList = [
+      "Inappropriate File",
+      "Corrupt File",
+      "Wrong subject",
+    ];
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: reportTypeList.length,
+      itemBuilder: (context, index) {
+        return InkWell(
+          onTap: () async {
+            await _handleReportFile(context, reportTypeList[index]);
+          },
+          child: Column(
+            children: [
+              Text(
+                reportTypeList[index],
+                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
+              ),
+              const Divider(
+                color: Colors.black,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _handleReportFile(BuildContext context, String message) async {
+    showProgressDialog();
+    if (mounted) Navigator.pop(context);
+    await FirebaseService().insertReportFile(
+      widget.path,
+      widget.fileModel,
+      message,
+    );
+    dismissProgressDialog();
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('File Reported Successfully'),
+        ),
+      );
+    }
+  }
+
   Padding _divider() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 8.0.w),
@@ -127,7 +190,7 @@ class FileGridTile extends BaseStatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.0.w, vertical: 4.h),
       child: Text(
-        fileModel.name,
+        widget.fileModel.name,
         style: TextStyle(
           color: purpleText,
           fontWeight: FontWeight.bold,
@@ -144,7 +207,7 @@ class FileGridTile extends BaseStatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _fileSize(),
+          Expanded(child: _fileSize()),
           _userProfile(),
         ],
       ),
@@ -187,7 +250,8 @@ class FileGridTile extends BaseStatelessWidget {
           ),
         ),
         Text(
-          fileModel.size,
+          widget.fileModel.size,
+          overflow: TextOverflow.ellipsis,
           style: TextStyle(
             color: bluePrimary,
             fontWeight: FontWeight.w500,

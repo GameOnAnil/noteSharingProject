@@ -4,9 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:note_sharing_project/models/report_file_model.dart';
 import 'package:note_sharing_project/providers/file_grid_notifer.dart';
+import 'package:note_sharing_project/services/firebase_service.dart';
 import 'package:note_sharing_project/utils/basestateless_widget.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
-import 'package:stylish_dialog/stylish_dialog.dart';
+
+import '../../../../utils/custom_alert_dialog.dart';
 
 class ReportFileGridTile extends BaseStatelessWidget {
   final ReportFileModel fileModel;
@@ -20,13 +22,6 @@ class ReportFileGridTile extends BaseStatelessWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final progress =
         ref.watch(fileGridNotifierProvider(fileModel.name)).progress;
-
-    final progressDialog = StylishDialog(
-      context: context,
-      alertType: StylishDialogType.PROGRESS,
-      contentText: 'Please wait...',
-      dismissOnTouchOutside: false,
-    );
 
     return GestureDetector(
       onTap: () async {
@@ -59,16 +54,24 @@ class ReportFileGridTile extends BaseStatelessWidget {
               children: [
                 IconButton(
                   onPressed: () async {
-                    StylishDialog(
-                      context: context,
-                      alertType: StylishDialogType.NORMAL,
-                      titleText: 'Delete File',
-                      contentText: 'Are you sure you want to delete?',
-                      confirmButton: ElevatedButton(
-                        onPressed: () {},
-                        child: const Text("Confirm"),
-                      ),
-                    ).show();
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return CustomAlertDialog(
+                            title: "Delete File",
+                            message: "Are you sure you want to delete?",
+                            positiveButtonText: "Confirm",
+                            negativeButtonText: "Cancel",
+                            onNegativeTap: () {
+                              Navigator.pop(context);
+                            },
+                            onPositiveTap: () async {
+                              Navigator.pop(context);
+                              await FirebaseService()
+                                  .deleteReportedFile(fileModel);
+                            },
+                          );
+                        });
                   },
                   icon: FaIcon(
                     FontAwesomeIcons.trash,
@@ -196,8 +199,8 @@ class ReportFileGridTile extends BaseStatelessWidget {
 
   _getLogo(String type) {
     return Container(
-      width: 90.w,
-      height: 90.h,
+      width: 60.w,
+      height: 60.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100),
         color: lightPurpleBackground,
@@ -205,8 +208,8 @@ class ReportFileGridTile extends BaseStatelessWidget {
       child: Center(
           child: Image.asset(
         getLogoUrl(type),
-        width: 40.w,
-        height: 40.h,
+        width: 30.w,
+        height: 30.h,
       )),
     );
   }

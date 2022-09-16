@@ -47,6 +47,7 @@ class _AdminHomePageState extends ConsumerState<AdminHomePage> {
               ),
               child: Column(
                 children: [
+                  const SizedBox(height: 16),
                   Expanded(
                     child: Consumer(
                       builder: (context, ref, child) {
@@ -95,9 +96,9 @@ class _AdminHomePageState extends ConsumerState<AdminHomePage> {
     return Column(
       children: [
         SizedBox(height: 40.h),
-        Lottie.asset("assets/animations/empty_list.json"),
+        Lottie.asset("assets/animations/no-report.json", repeat: true),
         Text(
-          'No Files Found.',
+          'No Files Reported',
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.w400,
@@ -152,7 +153,7 @@ class _AdminHomePageState extends ConsumerState<AdminHomePage> {
       backgroundColor: Colors.transparent,
       elevation: 0,
       title: Text(
-        "Admin",
+        "Reported Files",
         style: TextStyle(
           fontWeight: FontWeight.w600,
           fontSize: 24.sp,

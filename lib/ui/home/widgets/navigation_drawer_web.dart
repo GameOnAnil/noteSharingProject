@@ -33,9 +33,9 @@ class NavigationDrawerWeb extends StatelessWidget {
                 color: Colors.black,
               ),
             ),
-            currentAccountPicture: const CircleAvatar(
-                backgroundImage: NetworkImage(
-                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmDmmRze0UvLaOtjgNVcOhRjmHH0dL0GP18w&usqp=CAU")),
+            currentAccountPicture: Image.asset(
+              "assets/images/man.png",
+            ),
           ),
           Expanded(
             child: Column(

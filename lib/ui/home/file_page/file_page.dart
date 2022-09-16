@@ -154,10 +154,29 @@ class _FilePageState extends ConsumerState<FilePage> {
         ),
         IconButton(
           onPressed: () async {
-            await ref.read(filePageNotifierProvider(path)).setNotification();
-            await ref
-                .read(filePageNotifierProvider(path))
-                .getNewSubject(name: widget.subject.name);
+            showCustomAlertDialog(
+              context,
+              title: (notifitionOn ?? true)
+                  ? "Turn Notification On"
+                  : "Turn Notification Off",
+              message: (notifitionOn ?? true)
+                  ? "Are you sure you want to turn off notification?"
+                  : "Are you sure you want to turn on Notification?",
+              positiveButtonText: "Confirm",
+              negativeButtonText: "Cancel",
+              onNegativeTap: () {
+                Navigator.pop(context);
+              },
+              onPositiveTap: () async {
+                await ref
+                    .read(filePageNotifierProvider(path))
+                    .setNotification();
+                await ref
+                    .read(filePageNotifierProvider(path))
+                    .getNewSubject(name: widget.subject.name);
+                Navigator.pop(context);
+              },
+            );
           },
           icon: (notifitionOn ?? false)
               ? const FaIcon(FontAwesomeIcons.bell)

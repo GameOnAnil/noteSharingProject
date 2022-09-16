@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:note_sharing_project/models/files_model.dart';
@@ -21,7 +23,7 @@ class FirebaseService {
         );
   }
 
-  Stream<List<ReportFileModel>> getRecentFiles() {
+  Stream<List<ReportFileModel>> getReportedFiles() {
     return firestore.collection("report").snapshots().map(
           (event) =>
               event.docs.map((e) => ReportFileModel.fromMap(e.data())).toList(),
@@ -53,6 +55,21 @@ class FirebaseService {
                   report: report)
               .toMap(),
         );
+  }
+
+  Future<void> deleteReportedFile(ReportFileModel model) async {
+    try {
+      final collectionRef = firestore.collection("report");
+      final fileCollectionRef = firestore
+          .collection("file")
+          .doc(model.path)
+          .collection("data")
+          .doc(model.documentId);
+      await fileCollectionRef.delete();
+      await collectionRef.doc(model.documentId).delete();
+    } on FirebaseException catch (e) {
+      log(e.message.toString());
+    }
   }
 
   Future<void> insertDummyData(

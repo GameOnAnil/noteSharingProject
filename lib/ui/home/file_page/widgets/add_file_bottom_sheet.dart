@@ -133,7 +133,7 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
       File? file = File(result.files.first.path!);
       String name = result.files.first.name;
       int byte = await file.length();
-      final size = getFileSize(byte, 2);
+      final size = await getFileSize(byte, 2);
 
       _chageFile(file, name, size.toString());
     }
