@@ -275,12 +275,10 @@ class _AddFileBottomSheetState extends BaseState<AddFileBottomSheet> {
   }
 
   _handleNotification(bool notificationOn) async {
-    if (notificationOn) {
-      await NotificationService().sendWithTagNotification(
-          heading: "New Notes Added for $path",
-          content: "New Notes Added Click to check it out.",
-          tag: path);
-    }
+    await NotificationService().sendWithTagNotification(
+        heading: "New Notes Added for $path",
+        content: "New Notes Added Click to check it out.",
+        tag: path);
   }
 
   Future<String> getFileSize(int raw, int decimals) async {

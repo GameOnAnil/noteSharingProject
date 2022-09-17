@@ -3,19 +3,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
-import 'package:note_sharing_project/services/auth_service.dart';
 import 'package:note_sharing_project/ui/authentication/widgets/password_text_field.dart';
 import 'package:note_sharing_project/utils/base_page.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
-class SignUpPage extends BaseStatefulWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+import '../../../services/auth_service.dart';
+
+class SignUpPageWeb extends BaseStatefulWidget {
+  const SignUpPageWeb({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<SignUpPage> createState() => _SignUpPageState();
+  ConsumerState<SignUpPageWeb> createState() => _SignUpPageWebState();
 }
 
-class _SignUpPageState extends ConsumerState<SignUpPage> {
+class _SignUpPageWebState extends ConsumerState<SignUpPageWeb> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPassController = TextEditingController();
@@ -31,23 +32,24 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        foregroundColor: Colors.black,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-      ),
-      body: SingleChildScrollView(
-        child: Form(
-          key: _globalKey,
-          child: Column(
-            children: [
-              SizedBox(height: 20.h),
-              _header(context),
-              _textFieldsPart(),
-            ],
+    return Form(
+      key: _globalKey,
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        body: Center(
+          child: Container(
+            width: 600,
+            height: double.infinity,
+            color: Colors.white,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(height: 20.h),
+                  _header(context),
+                  _textFieldsPart(),
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -113,7 +115,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
             },
           ),
           SizedBox(height: 16.h),
-          _signupButton(ref)
+          _signupButton()
         ],
       ),
     );
@@ -130,7 +132,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     );
   }
 
-  Container _signupButton(WidgetRef ref) {
+  Container _signupButton() {
     return Container(
       height: 50.h,
       width: double.infinity,

@@ -4,28 +4,28 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
-import 'package:note_sharing_project/models/user_model.dart';
-import 'package:note_sharing_project/providers/auth_provider.dart';
 import 'package:note_sharing_project/providers/login_page_notifier.dart';
-import 'package:note_sharing_project/services/api_service.dart';
 import 'package:note_sharing_project/services/auth_service.dart';
-import 'package:note_sharing_project/services/firebase_service.dart';
-import 'package:note_sharing_project/ui/authentication/forgot_pass_page/forgot_pass_page.dart';
 import 'package:note_sharing_project/ui/authentication/sign_up_page/sign_up_page.dart';
 import 'package:note_sharing_project/ui/authentication/widgets/custom_text_field.dart';
 import 'package:note_sharing_project/ui/authentication/widgets/password_text_field.dart';
 import 'package:note_sharing_project/ui/authentication/widgets/title_text.dart';
-import 'package:note_sharing_project/utils/base_page.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
+
+import '../../../providers/auth_provider.dart';
+import '../../../services/firebase_service.dart';
+import '../../../utils/base_page.dart';
+import '../../../utils/base_state.dart';
+import '../forgot_pass_page/forgot_pass_page.dart';
 
 class LoginPage extends BaseStatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<LoginPage> createState() => _LoginPageState();
+  BaseState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends ConsumerState<LoginPage> {
+class _LoginPageState extends BaseState<LoginPage> {
   final GlobalKey<FormState> _globalKey = GlobalKey();
 
   late TextEditingController emailController;
@@ -36,9 +36,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     super.initState();
     emailController = TextEditingController();
     passwordController = TextEditingController();
-
-    emailController.text = "new@gmail.com";
-    passwordController.text = "password";
   }
 
   @override
@@ -50,31 +47,25 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   _validateForm(WidgetRef ref) async {
     if (_globalKey.currentState!.validate()) {
-      widget.showProgressDialog(context);
-      try {
-        final response = await ref.read(authServiceProvider).signIn(
-              emailController.text.trim(),
-              passwordController.text.trim(),
-            );
-        if (response != null) {
-          Fluttertoast.showToast(msg: "Login success");
-          // await FirebaseService().insertUser(response);
-          ApiService().createUser(
-              user: UserModel(
-            id: response.user?.uid ?? "",
-            name: response.user?.displayName ?? "",
-            email: response.user?.email ?? "",
-            userType: "user",
-          ));
-          await ref
-              .read(authProviderNotifier)
-              .setUser(response.user?.uid ?? "");
+      if (_globalKey.currentState!.validate()) {
+        widget.showProgressDialog(context);
+        try {
+          final response = await ref.read(authServiceProvider).signIn(
+                emailController.text.trim(),
+                passwordController.text.trim(),
+              );
+          if (response != null) {
+            Fluttertoast.showToast(msg: "Login success");
+            await ref
+                .read(authProviderNotifier)
+                .setUser(response.user?.uid ?? "");
+            widget.dismissProgressDialog();
+          }
+        } on FirebaseAuthException catch (e) {
           widget.dismissProgressDialog();
+          Fluttertoast.showToast(msg: e.toString());
+          return;
         }
-      } on FirebaseAuthException catch (e) {
-        widget.dismissProgressDialog();
-        Fluttertoast.showToast(msg: e.toString());
-        return;
       }
     }
   }
@@ -82,40 +73,42 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Form(
         key: _globalKey,
-        child: SizedBox(
-          width: double.infinity,
-          height: double.infinity,
-          child: Column(
-            children: [
-              SizedBox(height: 20.h),
-              _header(context),
-              Expanded(
-                child: Container(
-                  width: double.infinity,
-                  color: Colors.white,
-                  child: Consumer(builder: (context, ref, child) {
-                    final isLoading =
-                        ref.watch(loginPageNotifierProvider).isLoading;
-                    final error = ref.watch(loginPageNotifierProvider).error;
-                    ref.listen(loginPageNotifierProvider, (previous, next) {
-                      if (error != null) {
-                        Fluttertoast.showToast(msg: error);
+        child: Center(
+          child: Container(
+            color: Colors.white,
+            width: 600,
+            height: double.infinity,
+            child: Column(
+              children: [
+                SizedBox(height: 20.h),
+                _header(context),
+                Expanded(
+                  child: Container(
+                    width: double.infinity,
+                    color: Colors.white,
+                    child: Consumer(builder: (context, ref, child) {
+                      final isLoading =
+                          ref.watch(loginPageNotifierProvider).isLoading;
+                      final error = ref.watch(loginPageNotifierProvider).error;
+                      ref.listen(loginPageNotifierProvider, (previous, next) {
+                        if (error != null) {
+                          Fluttertoast.showToast(msg: error);
+                        }
+                      });
+                      if (isLoading) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        return _contentPart(context, ref);
                       }
-                    });
-                    if (isLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else {
-                      return _contentPart(context, ref);
-                    }
-                  }),
+                    }),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -153,7 +146,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             SizedBox(height: 10.h),
             _loginTextField(),
             SizedBox(height: 16.h),
-            _passwordTextField(),
+            PasswordTextField(
+                controller: passwordController,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "Please Enter Password";
+                  }
+                }),
             SizedBox(height: 16.h),
             _forgotPassword(),
             SizedBox(height: 16.h),
@@ -161,23 +160,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             SizedBox(height: 16.h),
             _divider(),
             SizedBox(height: 16.h),
-            _googleSignIn(ref),
+            _googleSignIn(),
             SizedBox(height: 10.h),
             _signUpText(context),
           ],
         ),
       ),
     );
-  }
-
-  PasswordTextField _passwordTextField() {
-    return PasswordTextField(
-        controller: passwordController,
-        validator: (value) {
-          if (value!.isEmpty) {
-            return "Please Enter Password";
-          }
-        });
   }
 
   GestureDetector _forgotPassword() {
@@ -235,7 +224,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: ((context) => const SignUpPage()),
+                  builder: ((context) => const SignUpPageWeb()),
                 ),
               );
             }),
@@ -260,7 +249,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30.r), color: purplePrimary),
       child: TextButton(
-        onPressed: () async {
+        onPressed: () {
           _validateForm(ref);
         },
         child: const Text(
@@ -271,13 +260,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     );
   }
 
-  _googleSignIn(WidgetRef ref) {
+  _googleSignIn() {
     return GestureDetector(
       onTap: () async {
         try {
-          widget.showProgressDialog(context);
           final response = await ref.read(authServiceProvider).googleSignIn();
-          widget.dismissProgressDialog();
           if (response != null) {
             Fluttertoast.showToast(msg: "Login success");
             await FirebaseService().insertUser(response);

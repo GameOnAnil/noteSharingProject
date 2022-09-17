@@ -39,7 +39,7 @@ class _FileGridTileState extends BaseState<FileGridTile> {
       },
       child: Container(
         width: 200.w,
-        height: 300.h,
+        height: 400.h,
         margin: EdgeInsets.all(5.r),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15.r),
@@ -97,10 +97,10 @@ class _FileGridTileState extends BaseState<FileGridTile> {
               );
             });
       },
-      icon: const FaIcon(
+      icon: FaIcon(
         FontAwesomeIcons.trash,
         color: Colors.red,
-        size: 18,
+        size: 18.r,
       ),
     );
   }
@@ -227,6 +227,8 @@ class _FileGridTileState extends BaseState<FileGridTile> {
       padding: EdgeInsets.symmetric(horizontal: 16.0.w, vertical: 4.h),
       child: Text(
         widget.fileModel.name,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
         style: TextStyle(
           color: purpleText,
           fontWeight: FontWeight.bold,
@@ -317,8 +319,8 @@ class _FileGridTileState extends BaseState<FileGridTile> {
 
   _getLogo(String type) {
     return Container(
-      width: 90.w,
-      height: 90.h,
+      width: 70.w,
+      height: 70.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100),
         color: lightPurpleBackground,
@@ -326,8 +328,8 @@ class _FileGridTileState extends BaseState<FileGridTile> {
       child: Center(
           child: Image.asset(
         getLogoUrl(type),
-        width: 40.w,
-        height: 40.h,
+        width: 30.w,
+        height: 30.h,
       )),
     );
   }

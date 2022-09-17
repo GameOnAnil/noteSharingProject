@@ -67,6 +67,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '410524606035',
     projectId: 'notesharingapp-1ef6f',
     storageBucket: 'notesharingapp-1ef6f.appspot.com',
+    androidClientId: '410524606035-aa37uls5vii9f6gitb7i41kul3293rle.apps.googleusercontent.com',
     iosClientId: '410524606035-g6qs8baf9cofb305fi3b71n2o2083f41.apps.googleusercontent.com',
     iosBundleId: 'com.example.noteSharingProject',
   );
@@ -77,6 +78,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '410524606035',
     projectId: 'notesharingapp-1ef6f',
     storageBucket: 'notesharingapp-1ef6f.appspot.com',
+    androidClientId: '410524606035-aa37uls5vii9f6gitb7i41kul3293rle.apps.googleusercontent.com',
     iosClientId: '410524606035-g6qs8baf9cofb305fi3b71n2o2083f41.apps.googleusercontent.com',
     iosBundleId: 'com.example.noteSharingProject',
   );

@@ -1,8 +1,9 @@
 import 'dart:developer';
-import 'dart:io' show Platform;
 
 import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
+// import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,7 +19,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  if (Platform.isAndroid || Platform.isIOS) {
+  if (!kIsWeb) {
     log("Platform ios or android");
     await initOneSignal();
   }

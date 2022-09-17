@@ -160,8 +160,8 @@ class _FilePageState extends BaseState<FilePage> {
             showCustomAlertDialog(
               context,
               title: (notifitionOn ?? true)
-                  ? "Turn Notification On"
-                  : "Turn Notification Off",
+                  ? "Turn Notification Off"
+                  : "Turn Notification On",
               message: (notifitionOn ?? true)
                   ? "Are you sure you want to turn off notification?"
                   : "Are you sure you want to turn on Notification?",
@@ -304,7 +304,7 @@ class _FilePageState extends BaseState<FilePage> {
   GridView _gridView(List<FileModel> fileList, int gridCount) {
     return GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: gridCount, childAspectRatio: .85),
+            crossAxisCount: gridCount, childAspectRatio: .80),
         itemCount: fileList.length,
         itemBuilder: (context, index) {
           return FileGridTile(

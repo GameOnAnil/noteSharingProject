@@ -25,55 +25,61 @@ class _AdminHomePageState extends ConsumerState<AdminHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: purplePrimary,
-      extendBodyBehindAppBar: false,
-      appBar: _buildAppBar(),
-      bottomNavigationBar: _bottomNavBar(context),
-      drawer: const NavigationDrawer(),
-      body: Column(
-        children: [
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(30.r),
-                  topLeft: Radius.circular(30.r),
-                ),
-                color: Colors.white,
-              ),
-              child: Column(
-                children: [
-                  const SizedBox(height: 16),
-                  Expanded(
-                    child: Consumer(
-                      builder: (context, ref, child) {
-                        final fileList =
-                            ref.watch(adminPageNotifierProvider).reportFileList;
-                        final isLoading =
-                            ref.watch(adminPageNotifierProvider).isLoading;
-
-                        if (isLoading) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                        if (fileList.isEmpty) {
-                          return _listEmpty();
-                        } else {
-                          return _gridView(fileList, 2);
-                        }
-                      },
+    return Center(
+      child: SizedBox(
+        width: 600,
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: purplePrimary,
+          extendBodyBehindAppBar: false,
+          appBar: _buildAppBar(),
+          bottomNavigationBar: _bottomNavBar(context),
+          drawer: const NavigationDrawer(),
+          body: Column(
+            children: [
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(30.r),
+                      topLeft: Radius.circular(30.r),
                     ),
+                    color: Colors.white,
                   ),
-                ],
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 16),
+                      Expanded(
+                        child: Consumer(
+                          builder: (context, ref, child) {
+                            final fileList = ref
+                                .watch(adminPageNotifierProvider)
+                                .reportFileList;
+                            final isLoading =
+                                ref.watch(adminPageNotifierProvider).isLoading;
+
+                            if (isLoading) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            if (fileList.isEmpty) {
+                              return _listEmpty();
+                            } else {
+                              return _gridView(fileList, 2);
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
