@@ -97,25 +97,9 @@ class FileGridTileWeb extends ConsumerWidget {
             title: Text("Report"),
           ),
         ),
-        PopupMenuItem(
-          child: GestureDetector(
-            onTap: () {
-              _handleDownload(fileModel.url);
-            },
-            child: const ListTile(
-              leading: Icon(
-                Icons.download,
-                color: Color.fromARGB(255, 37, 68, 38),
-              ),
-              title: Text("Download"),
-            ),
-          ),
-        ),
       ],
     );
   }
-
-  void _handleDownload(String url) async {}
 
   Padding _divider() {
     return Padding(

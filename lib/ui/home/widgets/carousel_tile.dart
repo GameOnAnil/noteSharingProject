@@ -35,7 +35,7 @@ class CarauselTile extends StatelessWidget {
                 ),
               ),
               Text(
-                "Files: 200",
+                "Program",
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w400,

@@ -239,9 +239,9 @@ class _AddFileBottomSheetState extends BaseState<AddFileBottomSheet> {
       try {
         setState(() => isLoading = true);
         final docRef = FirebaseStorage.instance.ref("docs/$_name");
-        final task = docRef.putFile(_file!);
+        final task = await docRef.putFile(_file!);
 
-        final url = await task.snapshot.ref.getDownloadURL();
+        final url = await task.ref.getDownloadURL();
         final newModel = FileModel(
             name: nameController.text,
             date: getTodaysDate(),

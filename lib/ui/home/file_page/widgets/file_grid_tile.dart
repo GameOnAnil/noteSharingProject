@@ -9,6 +9,7 @@ import 'package:note_sharing_project/utils/base_page.dart';
 import 'package:note_sharing_project/utils/base_utils.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
+import '../../../../services/storage_service.dart';
 import '../../../../utils/base_state.dart';
 import '../../../../utils/custom_alert_dialog.dart';
 
@@ -119,50 +120,47 @@ class _FileGridTileState extends BaseState<FileGridTile> {
         width: 30.w,
         height: 30.h,
         child: PopupMenuButton(
-          onSelected: (value) {},
-          itemBuilder: (context) => [
-            PopupMenuItem(
-              child: PopupMenuButton(
-                itemBuilder: (context) => [
-                  const PopupMenuItem(
+            itemBuilder: (context) => [
+                  PopupMenuItem(
                     child: ListTile(
-                      leading: Icon(
+                      onTap: () async {
+                        showCustomAlertDialog2(
+                          context,
+                          title: "Choose Report Type",
+                          btnText: "Dismiss",
+                          child: _buildReportListView(context),
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                        );
+                      },
+                      leading: const Icon(Icons.report, color: Colors.red),
+                      title: const Text("Report"),
+                    ),
+                  ),
+                  PopupMenuItem(
+                    child: ListTile(
+                      onTap: () async {
+                        showProgressDialog();
+                        final response = await StorageService()
+                            .downloadIntoInternal(widget.fileModel.url,
+                                "${widget.fileModel.name}.${widget.fileModel.fileType}");
+                        dismissProgressDialog();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(response ?? "Download Successful"),
+                          ),
+                        );
+                      },
+                      style: ListTileStyle.drawer,
+                      leading: const Icon(
                         Icons.download,
                         color: Color.fromARGB(255, 37, 68, 38),
                       ),
-                      title: Text("Download"),
+                      title: const Text("Download"),
                     ),
                   ),
-                ],
-                child: ListTile(
-                  onTap: () async {
-                    showCustomAlertDialog2(
-                      context,
-                      title: "Choose Report Type",
-                      btnText: "Dismiss",
-                      child: _buildReportListView(context),
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                    );
-                  },
-                  leading: const Icon(Icons.report, color: Colors.red),
-                  title: const Text("Report"),
-                ),
-              ),
-            ),
-            const PopupMenuItem(
-              child: ListTile(
-                style: ListTileStyle.drawer,
-                leading: Icon(
-                  Icons.download,
-                  color: Color.fromARGB(255, 37, 68, 38),
-                ),
-                title: Text("Download"),
-              ),
-            ),
-          ],
-        ),
+                ]),
       ),
     );
   }
@@ -172,6 +170,8 @@ class _FileGridTileState extends BaseState<FileGridTile> {
       "Inappropriate File",
       "Corrupt File",
       "Wrong subject",
+      "Misinformation",
+      "Others"
     ];
     return ListView.builder(
       shrinkWrap: true,

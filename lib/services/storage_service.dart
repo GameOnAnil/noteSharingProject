@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:lecle_downloads_path_provider/lecle_downloads_path_provider.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -50,6 +51,39 @@ class StorageService {
     } catch (e) {
       log("downloadFileEROR:$e");
       rethrow;
+    }
+  }
+
+  Future<String?> downloadIntoInternal(String url, String name) async {
+    try {
+      Directory? downloadsDirectory = await DownloadsPath.downloadsDirectory();
+      String? downloadsDirectoryPath = (downloadsDirectory)?.path;
+
+      log("url:$url");
+      if (downloadsDirectoryPath != null) {
+        final file = File("$downloadsDirectoryPath/$name");
+        final response = await Dio().get(
+          url,
+          onReceiveProgress: ((count, total) {
+            log((count / total).toString());
+          }),
+          options: Options(
+            responseType: ResponseType.bytes,
+          ),
+        );
+        final raf = file.openSync(mode: FileMode.write);
+        raf.writeFromSync(response.data);
+        await raf.close();
+
+        // final raf = file.openSync(mode: FileMode.write);
+        // raf.writeFromSync(response.data);
+        // await raf.close();
+        return null;
+      } else {
+        return "Download Directory not found.";
+      }
+    } catch (e) {
+      return e.toString();
     }
   }
 }

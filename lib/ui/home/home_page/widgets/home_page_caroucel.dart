@@ -97,7 +97,7 @@ class FolderHorizontalCard extends StatelessWidget {
                 ),
                 Center(
                   child: Text(
-                    '10 Files',
+                    'Files',
                     style: TextStyle(
                       color: purpleText,
                       fontWeight: FontWeight.w400,

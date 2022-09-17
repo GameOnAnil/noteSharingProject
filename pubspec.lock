@@ -392,6 +392,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.4"
+  lecle_downloads_path_provider:
+    dependency: "direct main"
+    description:
+      name: lecle_downloads_path_provider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.2+7"
   lints:
     dependency: transitive
     description:
