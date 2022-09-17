@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -35,6 +36,13 @@ class _ForgotPasswordPageWebState extends BaseState<ForgotPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: (!kIsWeb)
+          ? AppBar(
+              foregroundColor: Colors.black,
+              backgroundColor: Colors.white,
+              elevation: 0,
+            )
+          : null,
       body: Center(
         child: Container(
           color: Colors.white,

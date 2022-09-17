@@ -36,7 +36,9 @@ class _FileGridTileState extends BaseState<FileGridTile> {
     return GestureDetector(
       onTap: () async {
         ref.read(fileGridNotifierProvider(widget.fileModel.name)).openFile(
-            url: widget.fileModel.url, fileName: widget.fileModel.name);
+              url: widget.fileModel.url,
+              fileName: widget.fileModel.name,
+            );
       },
       child: Container(
         width: 200.w,
@@ -143,8 +145,8 @@ class _FileGridTileState extends BaseState<FileGridTile> {
                       onTap: () async {
                         showProgressDialog();
                         final response = await StorageService()
-                            .downloadIntoInternal(widget.fileModel.url,
-                                "${widget.fileModel.name}.${widget.fileModel.fileType}");
+                            .downloadIntoInternal(
+                                widget.fileModel.url, widget.fileModel.name);
                         dismissProgressDialog();
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(

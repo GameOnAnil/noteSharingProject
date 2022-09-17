@@ -1,26 +1,40 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
+import 'package:note_sharing_project/providers/auth_provider.dart';
+import 'package:note_sharing_project/services/auth_service.dart';
 import 'package:note_sharing_project/ui/splash/auth_wrapper_page/auth_wrapper_page.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
-class SplashScreen extends StatefulWidget {
+import '../../../utils/base_page.dart';
+import '../../../utils/base_state.dart';
+
+class SplashScreen extends BaseStatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  BaseState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends BaseState<SplashScreen> {
   @override
   void initState() {
     super.initState();
     navigate();
   }
 
+  checkUser() async {
+    final user = AuthService().getUser();
+    if (user != null) {
+      ref.read(authProviderNotifier).setUser(user);
+    }
+  }
+
   void navigate() async {
     await Future.delayed(const Duration(seconds: 3));
-
+    await checkUser();
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: ((context) => const AuthWrapperPage())),
@@ -29,6 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    log("splash");
     return Scaffold(
         backgroundColor: Colors.white,
         body: Center(

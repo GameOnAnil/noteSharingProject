@@ -243,7 +243,7 @@ class _AddFileBottomSheetState extends BaseState<AddFileBottomSheet> {
 
         final url = await task.ref.getDownloadURL();
         final newModel = FileModel(
-            name: nameController.text,
+            name: _name,
             date: getTodaysDate(),
             time: DateFormat('HH:mm:ss').format(DateTime.now()),
             size: _size,

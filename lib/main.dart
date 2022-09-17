@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 // import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -55,7 +54,7 @@ class MyApp extends StatelessWidget {
         splitScreenMode: true,
         builder: (BuildContext context, Widget? child) {
           return MaterialApp(
-            navigatorObservers: [ChuckerFlutter.navigatorObserver],
+            // navigatorObservers: [ChuckerFlutter.navigatorObserver],
             debugShowCheckedModeBanner: false,
             title: 'Flutter Demo',
             theme: ThemeData(
