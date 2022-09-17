@@ -61,7 +61,7 @@ class FirebaseService {
     try {
       final collectionRef = firestore.collection("report");
       final fileCollectionRef = firestore
-          .collection("file")
+          .collection("files")
           .doc(model.path)
           .collection("data")
           .doc(model.documentId);
@@ -72,14 +72,22 @@ class FirebaseService {
     }
   }
 
-  Future<void> insertDummyData(
-    String path,
-  ) async {
-    final collectionRef =
-        firestore.collection("files").doc(path).collection("data");
-
-    for (var element in dummyFileList) {
-      await collectionRef.doc().set(element.toMap());
+  Future<void> deleteFile(FileModel model, String path) async {
+    try {
+      log("path$path");
+      log(model.toString());
+      final collectionRef = firestore.collection("report");
+      final fileCollectionRef = firestore
+          .collection("files")
+          .doc(path)
+          .collection("data")
+          .doc(model.documentId);
+      await fileCollectionRef.delete();
+      await collectionRef.doc(model.documentId).delete();
+    } on FirebaseException catch (e) {
+      log("delete file error:${e.message}");
+    } catch (e) {
+      log("delete file error:$e");
     }
   }
 

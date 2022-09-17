@@ -9,13 +9,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:note_sharing_project/models/files_model.dart';
 import 'package:note_sharing_project/models/subject.dart';
+import 'package:note_sharing_project/providers/auth_provider.dart';
 import 'package:note_sharing_project/services/firebase_service.dart';
 import 'package:note_sharing_project/services/notification_service.dart';
 import 'package:note_sharing_project/ui/home/file_page/widgets/upload_file_container.dart';
+import 'package:note_sharing_project/utils/base_page.dart';
 import 'package:note_sharing_project/utils/base_utils.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
-class AddFileBottomSheet extends StatefulWidget {
+import '../../../../utils/base_state.dart';
+
+class AddFileBottomSheet extends BaseStatefulWidget {
   final String name;
   final String semester;
   final String program;
@@ -29,10 +33,10 @@ class AddFileBottomSheet extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<AddFileBottomSheet> createState() => _AddFileBottomSheetState();
+  BaseState<AddFileBottomSheet> createState() => _AddFileBottomSheetState();
 }
 
-class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
+class _AddFileBottomSheetState extends BaseState<AddFileBottomSheet> {
   File? _file;
   String _name = "";
   String _size = "";
@@ -163,7 +167,8 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
             size: await getFileSize(file.length, 2),
             filePath: "docs/$name",
             fileType: name.split(".")[1],
-            url: url);
+            url: url,
+            uploaderId: ref.read(authProviderNotifier).userId ?? "");
 
         await FirebaseService().insertData(path, newModel);
         await _handleNotification(widget.subject.notificationOn);
@@ -233,8 +238,8 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
     } else {
       try {
         setState(() => isLoading = true);
-        final ref = FirebaseStorage.instance.ref("docs/$_name");
-        final task = ref.putFile(_file!);
+        final docRef = FirebaseStorage.instance.ref("docs/$_name");
+        final task = docRef.putFile(_file!);
 
         final url = await task.snapshot.ref.getDownloadURL();
         final newModel = FileModel(
@@ -244,7 +249,9 @@ class _AddFileBottomSheetState extends State<AddFileBottomSheet> {
             size: _size,
             filePath: "docs/${nameController.text}",
             fileType: _name.split(".")[1],
-            url: url);
+            url: url,
+            uploaderId: ref.read(authProviderNotifier).userId ?? "",
+            documentId: '');
 
         await FirebaseService().insertData(path, newModel);
         await _handleNotification(widget.subject.notificationOn);

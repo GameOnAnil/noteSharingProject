@@ -6,7 +6,6 @@ import 'package:note_sharing_project/utils/constants.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class NotificationService {
-  // final _dio = Dio();
   final Dio _dio = Dio();
 
   NotificationService() {

@@ -64,7 +64,6 @@ class _AdminHomePageState extends ConsumerState<AdminHomePage> {
                         if (fileList.isEmpty) {
                           return _listEmpty();
                         } else {
-                          //return _listView(fileList);
                           return _gridView(fileList, 2);
                         }
                       },

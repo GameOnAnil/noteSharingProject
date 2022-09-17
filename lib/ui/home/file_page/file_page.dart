@@ -19,8 +19,11 @@ import 'package:note_sharing_project/services/shared_pref_service.dart';
 import 'package:note_sharing_project/ui/home/file_page/widgets/add_file_bottom_sheet.dart';
 import 'package:note_sharing_project/ui/home/file_page/widgets/file_grid_tile.dart';
 import 'package:note_sharing_project/utils/base_page.dart';
+import 'package:note_sharing_project/utils/base_state.dart';
 import 'package:note_sharing_project/utils/base_utils.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
+
+import '../../../providers/auth_provider.dart';
 
 class FilePage extends BaseStatefulWidget {
   final Subject subject;
@@ -32,10 +35,10 @@ class FilePage extends BaseStatefulWidget {
   }) : super(key: key);
 
   @override
-  ConsumerState<FilePage> createState() => _FilePageState();
+  BaseState<FilePage> createState() => _FilePageState();
 }
 
-class _FilePageState extends ConsumerState<FilePage> {
+class _FilePageState extends BaseState<FilePage> {
   late String path;
   @override
   void initState() {
@@ -174,7 +177,7 @@ class _FilePageState extends ConsumerState<FilePage> {
                 await ref
                     .read(filePageNotifierProvider(path))
                     .getNewSubject(name: widget.subject.name);
-                Navigator.pop(context);
+                if (mounted) Navigator.pop(context);
               },
             );
           },
@@ -225,7 +228,7 @@ class _FilePageState extends ConsumerState<FilePage> {
         }
         UploadTask task =
             FirebaseStorage.instance.ref().child("docs/$name").putData(file);
-        widget.showProgressDialog(context);
+        showProgressDialog();
 
         final url = await task.snapshot.ref.getDownloadURL();
         final newModel = FileModel(
@@ -235,7 +238,8 @@ class _FilePageState extends ConsumerState<FilePage> {
             size: await getFileSize(file.length, 2),
             filePath: "docs/$name",
             fileType: name.split(".")[1],
-            url: url);
+            url: url,
+            uploaderId: ref.read(authProviderNotifier).userId ?? "");
 
         await FirebaseService().insertData(path, newModel);
         widget.dismissProgressDialog();

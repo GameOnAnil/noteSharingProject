@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:note_sharing_project/models/files_model.dart';
+import 'package:note_sharing_project/providers/auth_provider.dart';
 import 'package:note_sharing_project/providers/file_grid_notifer.dart';
 import 'package:note_sharing_project/services/firebase_service.dart';
 import 'package:note_sharing_project/utils/base_page.dart';
@@ -8,6 +10,7 @@ import 'package:note_sharing_project/utils/base_utils.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
 import '../../../../utils/base_state.dart';
+import '../../../../utils/custom_alert_dialog.dart';
 
 class FileGridTile extends BaseStatefulWidget {
   final FileModel fileModel;
@@ -27,6 +30,7 @@ class _FileGridTileState extends BaseState<FileGridTile> {
   Widget build(BuildContext context) {
     final progress =
         ref.watch(fileGridNotifierProvider(widget.fileModel.name)).progress;
+    final userId = ref.watch(authProviderNotifier).userId;
 
     return GestureDetector(
       onTap: () async {
@@ -55,7 +59,9 @@ class _FileGridTileState extends BaseState<FileGridTile> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Icon(Icons.star_outline),
+                (userId == widget.fileModel.uploaderId)
+                    ? _buildDeleteButton()
+                    : const Icon(Icons.star_outline),
                 _popUpButton(context),
               ],
             ),
@@ -65,6 +71,36 @@ class _FileGridTileState extends BaseState<FileGridTile> {
             _bottomPart(),
           ],
         ),
+      ),
+    );
+  }
+
+  IconButton _buildDeleteButton() {
+    return IconButton(
+      onPressed: () {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return CustomAlertDialog(
+                title: "Delete File",
+                message: "Are you sure you want to delete?",
+                positiveButtonText: "Confirm",
+                negativeButtonText: "Cancel",
+                onNegativeTap: () {
+                  Navigator.pop(context);
+                },
+                onPositiveTap: () async {
+                  Navigator.pop(context);
+                  await FirebaseService()
+                      .deleteFile(widget.fileModel, widget.path);
+                },
+              );
+            });
+      },
+      icon: const FaIcon(
+        FontAwesomeIcons.trash,
+        color: Colors.red,
+        size: 18,
       ),
     );
   }

@@ -16,6 +16,8 @@ import 'package:note_sharing_project/ui/home/file_page/widgets/file_grid_tile_we
 import 'package:note_sharing_project/ui/home/widgets/navigation_drawer.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
+import '../../../providers/auth_provider.dart';
+
 class FilePageWeb extends ConsumerWidget {
   final Subject subject;
   final int gridCount;
@@ -38,7 +40,7 @@ class FilePageWeb extends ConsumerWidget {
             resizeToAvoidBottomInset: false,
             floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
             appBar: _appBar(ref, path, subject.notificationOn),
-            floatingActionButton: _floatingActionButton(path),
+            floatingActionButton: _floatingActionButton(path, ref),
             body: Column(
               children: [
                 _searchBar(path),
@@ -150,13 +152,13 @@ class FilePageWeb extends ConsumerWidget {
     });
   }
 
-  Builder _floatingActionButton(String path) {
+  Builder _floatingActionButton(String path, WidgetRef ref) {
     return Builder(builder: (context) {
       return FloatingActionButton(
         elevation: 8,
         backgroundColor: purplePrimary,
         onPressed: () {
-          _handleUploadWeb(context, path);
+          _handleUploadWeb(context, path, ref);
         },
         child: const Icon(Icons.add),
       );
@@ -190,7 +192,7 @@ class FilePageWeb extends ConsumerWidget {
     return '${(raw / pow(1024, i)).toStringAsFixed(decimals)} ${suffixes[i]}';
   }
 
-  _handleUploadWeb(BuildContext context, String path) async {
+  _handleUploadWeb(BuildContext context, String path, WidgetRef ref) async {
     try {
       FilePickerResult? result =
           await FilePicker.platform.pickFiles(allowMultiple: false);
@@ -211,7 +213,8 @@ class FilePageWeb extends ConsumerWidget {
             size: size,
             filePath: "docs/$name",
             fileType: name.split(".")[1],
-            url: url);
+            url: url,
+            uploaderId: ref.read(authProviderNotifier).userId ?? "");
 
         await FirebaseService().insertData(path, newModel);
 
