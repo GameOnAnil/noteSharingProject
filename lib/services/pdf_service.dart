@@ -5,7 +5,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
 class PDFService {
@@ -13,14 +12,14 @@ class PDFService {
     final data = await rootBundle.load(path);
     final bytes = data.buffer.asUint8List();
 
-    return _storeFile(path, bytes);
+    return _storeFile(path, bytes, "");
   }
 
-  static Future<File> loadNetwork(String url) async {
+  static Future<File> loadNetwork(String url, String fileName) async {
     final response = await http.get(Uri.parse(url));
     final bytes = response.bodyBytes;
 
-    return _storeFile(url, bytes);
+    return _storeFile(url, bytes, fileName);
   }
 
   static Future<File?> pickFile() async {
@@ -33,22 +32,24 @@ class PDFService {
     return File(result.paths.first ?? "");
   }
 
-  static Future<File?> loadFirebase(String url) async {
+  static Future<File?> loadFirebase(String url, String fileName) async {
     try {
       final refPDF = FirebaseStorage.instance.refFromURL(url);
       final bytes = await refPDF.getData();
 
-      return _storeFile(url, bytes ?? []);
+      return _storeFile(url, bytes ?? [], fileName);
     } catch (e) {
       rethrow;
     }
   }
 
-  static Future<File> _storeFile(String url, List<int> bytes) async {
-    final filename = basename(url);
+  static Future<File> _storeFile(
+      String url, List<int> bytes, String fileName) async {
+    // final filename = basename(url);
+
     final dir = await getApplicationDocumentsDirectory();
 
-    final file = File('${dir.path}/$filename');
+    final file = File('${dir.path}/$fileName');
     await file.writeAsBytes(bytes, flush: true);
     return file;
   }

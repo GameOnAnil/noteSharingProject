@@ -39,7 +39,8 @@ class _FileGridTileState extends BaseState<FileGridTile> {
     return GestureDetector(
       onTap: () async {
         if (widget.fileModel.fileType == "pdf") {
-          await _openPdfFile(context, widget.fileModel.url);
+          await _openPdfFile(
+              context, widget.fileModel.url, widget.fileModel.name);
         } else {
           Fluttertoast.showToast(msg: "File Not Supported");
         }
@@ -82,10 +83,11 @@ class _FileGridTileState extends BaseState<FileGridTile> {
     );
   }
 
-  Future<void> _openPdfFile(BuildContext context, String url) async {
+  Future<void> _openPdfFile(
+      BuildContext context, String url, String fileName) async {
     try {
       showProgressDialog();
-      final file = await PDFService.loadNetwork(url);
+      final file = await PDFService.loadNetwork(url, fileName);
       dismissProgressDialog();
 
       Navigator.of(context).push(

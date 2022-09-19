@@ -59,7 +59,6 @@ class StorageService {
       Directory? downloadsDirectory = await DownloadsPath.downloadsDirectory();
       String? downloadsDirectoryPath = (downloadsDirectory)?.path;
 
-      log("url:$url");
       if (downloadsDirectoryPath != null) {
         final file = File("$downloadsDirectoryPath/$name");
         final response = await Dio().get(
@@ -74,10 +73,6 @@ class StorageService {
         final raf = file.openSync(mode: FileMode.write);
         raf.writeFromSync(response.data);
         await raf.close();
-
-        // final raf = file.openSync(mode: FileMode.write);
-        // raf.writeFromSync(response.data);
-        // await raf.close();
         return null;
       } else {
         return "Download Directory not found.";

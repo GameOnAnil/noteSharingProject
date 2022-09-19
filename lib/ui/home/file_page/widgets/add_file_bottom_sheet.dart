@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:note_sharing_project/models/files_model.dart';
 import 'package:note_sharing_project/models/subject.dart';
@@ -134,12 +135,19 @@ class _AddFileBottomSheetState extends BaseState<AddFileBottomSheet> {
     );
 
     if (result != null) {
+      List<String> supportedList = ["pdf", "png", "jpg", "jpeg"];
       File? file = File(result.files.first.path!);
       String name = result.files.first.name;
       int byte = await file.length();
       final size = await getFileSize(byte, 2);
-
-      _chageFile(file, name, size.toString());
+      final split = name.split(".");
+      final type = split[1];
+      final supported = supportedList.contains(type);
+      if (supported) {
+        _chageFile(file, name, size.toString());
+      } else {
+        Fluttertoast.showToast(msg: "File Not Supported");
+      }
     }
   }
 
