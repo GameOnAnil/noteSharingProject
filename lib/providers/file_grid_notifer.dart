@@ -37,7 +37,8 @@ class FileGridNotifier extends ChangeNotifier {
     }
   }
 
-  Future<File?> downloadFile(String url, String name) async {
+  Future<File?> downloadFile(String url, String name,
+      {bool notify = true}) async {
     try {
       final appStorage = await getApplicationDocumentsDirectory();
       final file = File(".${appStorage.path}/$name");
@@ -47,7 +48,7 @@ class FileGridNotifier extends ChangeNotifier {
               followRedirects: false,
               receiveTimeout: 0), onReceiveProgress: (actual, total) {
         progress = actual / total * 100;
-        notifyListeners();
+        if (notify) notifyListeners();
       });
 
       final raf = file.openSync(mode: FileMode.write);

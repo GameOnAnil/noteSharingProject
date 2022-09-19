@@ -5,6 +5,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:note_sharing_project/providers/auth_provider.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
+import '../../../services/auth_service.dart';
+
 class NavigationDrawer extends StatelessWidget {
   const NavigationDrawer({
     Key? key,
@@ -62,7 +64,7 @@ class NavigationDrawer extends StatelessWidget {
                     title: "Sign Out",
                     icon: FontAwesomeIcons.arrowRightFromBracket,
                     onTap: () {
-                      // ref.read(authServiceProvider).signOut();
+                      ref.read(authServiceProvider).signOut();
                       ref.read(authProviderNotifier).reset();
                     },
                   );

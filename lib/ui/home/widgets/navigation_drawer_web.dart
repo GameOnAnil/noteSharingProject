@@ -5,6 +5,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:note_sharing_project/services/auth_service.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
+import '../../../providers/auth_provider.dart';
+
 class NavigationDrawerWeb extends StatelessWidget {
   const NavigationDrawerWeb({
     Key? key,
@@ -71,6 +73,7 @@ class NavigationDrawerWeb extends StatelessWidget {
                     icon: FontAwesomeIcons.arrowRightFromBracket,
                     onTap: () {
                       ref.read(authServiceProvider).signOut();
+                      ref.read(authProviderNotifier).reset();
                     },
                   );
                 }),

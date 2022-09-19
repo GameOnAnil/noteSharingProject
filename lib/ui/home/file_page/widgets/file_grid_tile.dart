@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:note_sharing_project/models/files_model.dart';
 import 'package:note_sharing_project/providers/auth_provider.dart';
 import 'package:note_sharing_project/providers/file_grid_notifer.dart';
 import 'package:note_sharing_project/services/firebase_service.dart';
+import 'package:note_sharing_project/services/pdf_service.dart';
 import 'package:note_sharing_project/utils/base_page.dart';
 import 'package:note_sharing_project/utils/base_utils.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
@@ -12,6 +14,7 @@ import 'package:note_sharing_project/utils/my_colors.dart';
 import '../../../../services/storage_service.dart';
 import '../../../../utils/base_state.dart';
 import '../../../../utils/custom_alert_dialog.dart';
+import '../../pdf_page/pdf_page.dart';
 
 class FileGridTile extends BaseStatefulWidget {
   final FileModel fileModel;
@@ -35,10 +38,11 @@ class _FileGridTileState extends BaseState<FileGridTile> {
 
     return GestureDetector(
       onTap: () async {
-        ref.read(fileGridNotifierProvider(widget.fileModel.name)).openFile(
-              url: widget.fileModel.url,
-              fileName: widget.fileModel.name,
-            );
+        if (widget.fileModel.fileType == "pdf") {
+          await _openPdfFile(context, widget.fileModel.url);
+        } else {
+          Fluttertoast.showToast(msg: "File Not Supported");
+        }
       },
       child: Container(
         width: 200.w,
@@ -76,6 +80,21 @@ class _FileGridTileState extends BaseState<FileGridTile> {
         ),
       ),
     );
+  }
+
+  Future<void> _openPdfFile(BuildContext context, String url) async {
+    try {
+      showProgressDialog();
+      final file = await PDFService.loadNetwork(url);
+      dismissProgressDialog();
+
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => PDFViewerPage(file: file)),
+      );
+    } catch (e) {
+      dismissProgressDialog();
+      Fluttertoast.showToast(msg: e.toString());
+    }
   }
 
   IconButton _buildDeleteButton() {

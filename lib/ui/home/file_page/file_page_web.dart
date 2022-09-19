@@ -199,11 +199,13 @@ class FilePageWeb extends ConsumerWidget {
       if (result != null) {
         Uint8List? file = result.files.first.bytes;
         String name = result.files.first.name;
-        UploadTask task =
-            FirebaseStorage.instance.ref().child("docs/$name").putData(file!);
+        final task = await FirebaseStorage.instance
+            .ref()
+            .child("docs/$name")
+            .putData(file!);
 
         showLoaderDialog(context);
-        final url = await task.snapshot.ref.getDownloadURL();
+        final url = await task.ref.getDownloadURL();
         final date = DateTime.now();
         final size = await getFileSize(file.length, 2);
         final newModel = FileModel(
