@@ -24,9 +24,12 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller,
+      maxLength: 12,
       decoration: InputDecoration(
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(15.r)),
           label: Text(widget.labelText ?? 'Enter Password'),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 15, vertical: 14),
           suffix: GestureDetector(
             onTap: () {
               setState(() {

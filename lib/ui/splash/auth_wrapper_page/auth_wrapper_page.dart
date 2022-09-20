@@ -9,6 +9,7 @@ import 'package:note_sharing_project/ui/admin/admin_home_page/admin_home_page.da
 import 'package:note_sharing_project/ui/authentication/login_page/login_page.dart';
 import 'package:note_sharing_project/ui/home/home_page/home_page_builder.dart';
 import 'package:note_sharing_project/ui/home/home_page/home_page_new.dart';
+import 'package:note_sharing_project/utils/auth_module.dart';
 
 import '../../../utils/base_page.dart';
 import '../../../utils/base_state.dart';
@@ -46,6 +47,7 @@ class _AuthWrapperPageState extends BaseState<AuthWrapperPage> {
             );
           } else {
             final user = snapshot.data;
+            AuthModule.shared.userModel = user;
             log("user type${user?.userType}");
             if (user?.userType == "admin") {
               return const AdminHomePage();

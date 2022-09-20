@@ -64,14 +64,15 @@ class HomePageNew extends StatelessWidget {
 
   Container _contentBody() {
     return Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(32.r),
-              topRight: Radius.circular(32.r),
-            ),
-            color: Colors.white),
-        child: const HomePageCarosel());
+      width: double.infinity,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(32.r),
+            topRight: Radius.circular(32.r),
+          ),
+          color: Colors.white),
+      child: const HomePageCarosel(),
+    );
   }
 
   Container _header() {

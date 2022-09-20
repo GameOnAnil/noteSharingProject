@@ -18,16 +18,8 @@ class CarauselTile extends StatelessWidget {
       width: MediaQuery.of(context).size.width * .8,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30.r),
-        border: Border.all(color: Colors.grey),
+        border: Border.all(color: Colors.grey.withOpacity(.7)),
         color: color.withOpacity(.4),
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: Colors.grey.withOpacity(.5),
-        //     spreadRadius: .25,
-        //     blurRadius: 5,
-        //     offset: Offset(5.w, 5.h),
-        //   ),
-        // ],
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

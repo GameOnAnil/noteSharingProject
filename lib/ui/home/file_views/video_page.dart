@@ -36,6 +36,7 @@ class _VideoPageState extends BaseState<VideoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: const Text("Video Page"),
         actions: [
           _buildDownloadButton(context),
         ],

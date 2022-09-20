@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:note_sharing_project/models/report_file_model.dart';
 import 'package:note_sharing_project/providers/file_grid_notifer.dart';
-import 'package:note_sharing_project/services/firebase_service.dart';
 import 'package:note_sharing_project/utils/basestateless_widget.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
-import '../../../../utils/custom_alert_dialog.dart';
-
 class ReportFileGridTile extends BaseStatelessWidget {
   final ReportFileModel fileModel;
+  final Function() onTap;
 
   const ReportFileGridTile({
     Key? key,
     required this.fileModel,
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -24,11 +22,12 @@ class ReportFileGridTile extends BaseStatelessWidget {
         ref.watch(fileGridNotifierProvider(fileModel.name)).progress;
 
     return GestureDetector(
-      onTap: () async {
-        ref
-            .read(fileGridNotifierProvider(fileModel.name))
-            .openFile(url: fileModel.url, fileName: fileModel.name);
-      },
+      onTap: () => onTap(),
+      // onTap: () async {
+      //   ref
+      //       .read(fileGridNotifierProvider(fileModel.name))
+      //       .openFile(url: fileModel.url, fileName: fileModel.name);
+      // },
       child: Container(
         width: 200.w,
         height: 300.h,
@@ -49,39 +48,9 @@ class ReportFileGridTile extends BaseStatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                  onPressed: () async {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return CustomAlertDialog(
-                            title: "Delete File",
-                            message: "Are you sure you want to delete?",
-                            positiveButtonText: "Confirm",
-                            negativeButtonText: "Cancel",
-                            onNegativeTap: () {
-                              Navigator.pop(context);
-                            },
-                            onPositiveTap: () async {
-                              Navigator.pop(context);
-                              await FirebaseService()
-                                  .deleteReportedFile(fileModel);
-                            },
-                          );
-                        });
-                  },
-                  icon: FaIcon(
-                    FontAwesomeIcons.trash,
-                    color: Colors.red,
-                    size: 18.r,
-                  ),
-                )
-              ],
-            ),
+            SizedBox(height: 16.h),
             _getLogo(fileModel.fileType),
+            SizedBox(height: 8.h),
             Expanded(child: _nameText()),
             (progress != 0) ? _progressIndicator(progress) : _divider(),
             _bottomPart(),

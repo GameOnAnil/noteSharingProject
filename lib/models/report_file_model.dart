@@ -10,6 +10,8 @@ class ReportFileModel {
   final String url;
   final String path;
   final String report;
+  final String reporterName;
+  final String reporterEmail;
   final String documentId;
 
   ReportFileModel({
@@ -20,6 +22,8 @@ class ReportFileModel {
     required this.filePath,
     required this.fileType,
     required this.url,
+    required this.reporterEmail,
+    required this.reporterName,
     this.path = "",
     required this.report,
     required this.documentId,
@@ -36,6 +40,8 @@ class ReportFileModel {
       'url': url,
       'path': path,
       'report': report,
+      'reporterName': reporterName,
+      'reporterEmail': reporterEmail,
       'documentId': documentId,
     };
   }
@@ -51,6 +57,8 @@ class ReportFileModel {
       url: map['url'] ?? '',
       path: map['path'] ?? '',
       report: map['report'] ?? '',
+      reporterName: map['reporterName'] ?? '',
+      reporterEmail: map['reporterEmail'] ?? '',
       documentId: map['documentId'] ?? '',
     );
   }
@@ -71,6 +79,8 @@ class ReportFileModel {
     String? path,
     String? report,
     String? documentId,
+    String? reporterEmail,
+    String? reporterName,
   }) {
     return ReportFileModel(
       name: name ?? this.name,
@@ -83,6 +93,8 @@ class ReportFileModel {
       path: path ?? this.path,
       report: report ?? this.report,
       documentId: documentId ?? this.documentId,
+      reporterEmail: reporterEmail ?? this.reporterEmail,
+      reporterName: reporterName ?? this.reporterName,
     );
   }
 

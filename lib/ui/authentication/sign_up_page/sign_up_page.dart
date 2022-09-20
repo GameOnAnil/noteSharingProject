@@ -17,6 +17,7 @@ class SignUpPageWeb extends BaseStatefulWidget {
 }
 
 class _SignUpPageWebState extends ConsumerState<SignUpPageWeb> {
+  final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPassController = TextEditingController();
@@ -24,6 +25,7 @@ class _SignUpPageWebState extends ConsumerState<SignUpPageWeb> {
 
   @override
   void dispose() {
+    nameController.dispose();
     emailController.dispose();
     passwordController.dispose();
     confirmPassController.dispose();
@@ -79,6 +81,25 @@ class _SignUpPageWebState extends ConsumerState<SignUpPageWeb> {
           SizedBox(height: 16.h),
           TextFormField(
             decoration: InputDecoration(
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 15, vertical: 14),
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(15.r)),
+              label: const Text("Enter Name"),
+            ),
+            controller: nameController,
+            validator: (value) {
+              if (value?.isEmpty ?? true) {
+                return "Please Enter Name";
+              }
+              return null;
+            },
+          ),
+          SizedBox(height: 16.h),
+          TextFormField(
+            decoration: InputDecoration(
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 15, vertical: 14),
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(15.r)),
               label: const Text("Enter Email"),
@@ -87,6 +108,12 @@ class _SignUpPageWebState extends ConsumerState<SignUpPageWeb> {
             validator: (value) {
               if (value?.isEmpty ?? true) {
                 return "Please Enter Email";
+              }
+              bool emailValid = RegExp(
+                      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                  .hasMatch(value!);
+              if (!emailValid) {
+                return "Please Enter Valid Email.";
               }
               return null;
             },
@@ -145,6 +172,7 @@ class _SignUpPageWebState extends ConsumerState<SignUpPageWeb> {
             final response = await ref.read(authServiceProvider).signUp(
                   emailController.text.trim(),
                   passwordController.text.trim(),
+                  nameController.text.trim(),
                 );
             widget.dismissProgressDialog();
             if (response == "Success") {

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:note_sharing_project/providers/auth_provider.dart';
+import 'package:note_sharing_project/utils/auth_module.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
 import '../../../services/auth_service.dart';
@@ -20,11 +21,11 @@ class NavigationDrawer extends StatelessWidget {
           UserAccountsDrawerHeader(
             decoration: const BoxDecoration(color: purplePrimary),
             accountEmail: Text(
-              "test@gmail.com",
+              AuthModule.shared.userModel?.email ?? "test@gmail.com",
               style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w400),
             ),
             accountName: Text(
-              "Anil Thapa",
+              AuthModule.shared.userModel?.name ?? "User Name",
               style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
             ),
             currentAccountPicture: Image.asset(

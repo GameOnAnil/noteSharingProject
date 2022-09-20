@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:note_sharing_project/models/report_file_model.dart';
 import 'package:note_sharing_project/providers/admin_page_notifier.dart';
+import 'package:note_sharing_project/ui/admin/admin_description_page/admin_description_page.dart';
 import 'package:note_sharing_project/ui/admin/admin_home_page/widgets/report_file_tile.dart';
 import 'package:note_sharing_project/ui/home/widgets/navigation_drawer.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
@@ -92,7 +93,19 @@ class _AdminHomePageState extends ConsumerState<AdminHomePage> {
               crossAxisCount: gridCount, childAspectRatio: .85),
           itemCount: fileList.length,
           itemBuilder: (context, index) {
-            return ReportFileGridTile(fileModel: fileList[index]);
+            return ReportFileGridTile(
+              fileModel: fileList[index],
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AdminDescriptionPage(
+                      reportedFile: fileList[index],
+                    ),
+                  ),
+                );
+              },
+            );
           }),
     );
   }

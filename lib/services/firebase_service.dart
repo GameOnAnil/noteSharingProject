@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:note_sharing_project/models/files_model.dart';
 import 'package:note_sharing_project/models/report_file_model.dart';
 import 'package:note_sharing_project/models/user_model.dart';
+import 'package:note_sharing_project/utils/auth_module.dart';
 
 class FirebaseService {
   final firestore = FirebaseFirestore.instance;
@@ -38,26 +39,31 @@ class FirebaseService {
   }
 
   Future<void> insertReportFile(
-      String path, FileModel fileModel, String report) async {
+    String path,
+    FileModel fileModel,
+    String report,
+  ) async {
     final collectionRef = firestore.collection("report");
 
     await collectionRef.doc(fileModel.documentId).set(
           ReportFileModel(
-                  name: fileModel.name,
-                  date: fileModel.date,
-                  time: fileModel.time,
-                  size: fileModel.size,
-                  filePath: fileModel.filePath,
-                  fileType: fileModel.fileType,
-                  url: fileModel.url,
-                  path: path,
-                  documentId: fileModel.documentId,
-                  report: report)
-              .toMap(),
+            name: fileModel.name,
+            date: fileModel.date,
+            time: fileModel.time,
+            size: fileModel.size,
+            filePath: fileModel.filePath,
+            fileType: fileModel.fileType,
+            url: fileModel.url,
+            path: path,
+            documentId: fileModel.documentId,
+            report: report,
+            reporterEmail: AuthModule.shared.userModel?.email ?? "",
+            reporterName: AuthModule.shared.userModel?.name ?? "",
+          ).toMap(),
         );
   }
 
-  Future<void> deleteReportedFile(ReportFileModel model) async {
+  Future<void> deleteAllReportedFile(ReportFileModel model) async {
     try {
       final collectionRef = firestore.collection("report");
       final fileCollectionRef = firestore
@@ -66,6 +72,15 @@ class FirebaseService {
           .collection("data")
           .doc(model.documentId);
       await fileCollectionRef.delete();
+      await collectionRef.doc(model.documentId).delete();
+    } on FirebaseException catch (e) {
+      log(e.message.toString());
+    }
+  }
+
+  Future<void> deleteReportedFileOnly(ReportFileModel model) async {
+    try {
+      final collectionRef = firestore.collection("report");
       await collectionRef.doc(model.documentId).delete();
     } on FirebaseException catch (e) {
       log(e.message.toString());
