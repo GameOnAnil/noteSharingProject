@@ -18,7 +18,7 @@ final List<String> programList = [
   "BBA",
   "BCA",
   "BE Civil",
-  "BE Electronic",
+  // "BE Electronic",
 ];
 
 final List<String> subList = [

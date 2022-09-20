@@ -7,14 +7,17 @@ import 'package:note_sharing_project/providers/auth_provider.dart';
 import 'package:note_sharing_project/providers/file_grid_notifer.dart';
 import 'package:note_sharing_project/services/firebase_service.dart';
 import 'package:note_sharing_project/services/pdf_service.dart';
+import 'package:note_sharing_project/ui/home/file_views/image_page.dart';
+import 'package:note_sharing_project/ui/home/file_views/video_page.dart';
 import 'package:note_sharing_project/utils/base_page.dart';
 import 'package:note_sharing_project/utils/base_utils.dart';
+import 'package:note_sharing_project/utils/file_type_enum.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
 
 import '../../../../services/storage_service.dart';
 import '../../../../utils/base_state.dart';
 import '../../../../utils/custom_alert_dialog.dart';
-import '../../pdf_page/pdf_page.dart';
+import '../../file_views/pdf_page.dart';
 
 class FileGridTile extends BaseStatefulWidget {
   final FileModel fileModel;
@@ -38,9 +41,15 @@ class _FileGridTileState extends BaseState<FileGridTile> {
 
     return GestureDetector(
       onTap: () async {
-        if (widget.fileModel.fileType == "pdf") {
-          await _openPdfFile(
-              context, widget.fileModel.url, widget.fileModel.name);
+        final type = widget.fileModel.fileType;
+        final url = widget.fileModel.url;
+        final name = widget.fileModel.name;
+        if (type == "pdf") {
+          await _openPdfFile(context, url, name);
+        } else if (type == "png" || type == "jpg" || type == "jpeg") {
+          await _openImage(context, url, name);
+        } else if (type == "mp4") {
+          await _openVideo(context, url, name);
         } else {
           Fluttertoast.showToast(msg: "File Not Supported");
         }
@@ -92,6 +101,38 @@ class _FileGridTileState extends BaseState<FileGridTile> {
 
       Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => PDFViewerPage(file: file)),
+      );
+    } catch (e) {
+      dismissProgressDialog();
+      Fluttertoast.showToast(msg: e.toString());
+    }
+  }
+
+  Future<void> _openImage(
+      BuildContext context, String url, String fileName) async {
+    try {
+      showProgressDialog();
+      final file = await StorageService.loadNetwork(url, fileName);
+      dismissProgressDialog();
+
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => ImagePage(file: file)),
+      );
+    } catch (e) {
+      dismissProgressDialog();
+      Fluttertoast.showToast(msg: e.toString());
+    }
+  }
+
+  Future<void> _openVideo(
+      BuildContext context, String url, String fileName) async {
+    try {
+      showProgressDialog();
+      final file = await StorageService.loadNetwork(url, fileName);
+      dismissProgressDialog();
+
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => VideoPage(file: file)),
       );
     } catch (e) {
       dismissProgressDialog();
@@ -355,5 +396,16 @@ class _FileGridTileState extends BaseState<FileGridTile> {
         height: 30.h,
       )),
     );
+  }
+
+  void openByType(FileType? type) async {
+    switch (type) {
+      case FileType.image:
+        // TODO: Handle this case.
+        break;
+      case FileType.pdf:
+        await _openPdfFile(
+            context, widget.fileModel.url, widget.fileModel.name);
+    }
   }
 }

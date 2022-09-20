@@ -14,22 +14,32 @@ class CarauselTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.all(8.r),
       width: MediaQuery.of(context).size.width * .8,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30.r),
-        color: color,
+        border: Border.all(color: Colors.grey),
+        color: color.withOpacity(.4),
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.grey.withOpacity(.5),
+        //     spreadRadius: .25,
+        //     blurRadius: 5,
+        //     offset: Offset(5.w, 5.h),
+        //   ),
+        // ],
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Expanded(child: SizedBox()),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
                 title,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontWeight: FontWeight.bold,
                   fontSize: 40.sp,
                 ),
@@ -37,39 +47,38 @@ class CarauselTile extends StatelessWidget {
               Text(
                 "Program",
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontWeight: FontWeight.w400,
-                  fontSize: 24.sp,
+                  fontSize: 20.sp,
                 ),
               ),
             ],
           ),
-          const Expanded(child: SizedBox()),
-          SizedBox(
-            width: 150.w,
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((context) => SemesterPageBuilder(
-                          selectedProgram: title,
-                        )),
-                  ),
-                );
-              },
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16.r))),
-                backgroundColor: MaterialStateProperty.all(Colors.white),
-              ),
-              child: Text(
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((context) => SemesterPageBuilder(
+                        selectedProgram: title,
+                      )),
+                ),
+              );
+            },
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16.r))),
+              backgroundColor:
+                  MaterialStateProperty.all(Colors.black.withOpacity(.8)),
+            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 4.0.h),
+              child: const Text(
                 "View",
-                style: TextStyle(color: color),
+                style: TextStyle(color: Colors.white),
               ),
             ),
           ),
-          SizedBox(height: 20.h),
         ],
       ),
     );

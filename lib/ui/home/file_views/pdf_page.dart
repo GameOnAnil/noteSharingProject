@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:lecle_downloads_path_provider/lecle_downloads_path_provider.dart';
 import 'package:note_sharing_project/utils/base_utils.dart';
 import 'package:path/path.dart';
 
@@ -108,24 +107,5 @@ class PDFViewerPageState extends BaseState<PDFViewerPage> {
       },
       icon: const FaIcon(Icons.download),
     );
-  }
-
-  Future<String?> downloadIntoInternal(File file) async {
-    try {
-      Directory? downloadsDirectory = await DownloadsPath.downloadsDirectory();
-      String? downloadsDirectoryPath = (downloadsDirectory)?.path;
-
-      final name = basename(widget.file.path);
-      if (downloadsDirectoryPath != null) {
-        final storageFile = File("$downloadsDirectoryPath/$name");
-
-        storageFile.writeAsBytes(await file.readAsBytes());
-        return null;
-      } else {
-        return "Download Directory not found.";
-      }
-    } catch (e) {
-      return e.toString();
-    }
   }
 }

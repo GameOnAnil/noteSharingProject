@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:note_sharing_project/ui/home/home_page/widgets/home_page_caroucel.dart';
-import 'package:note_sharing_project/ui/home/home_page/widgets/recent_file_list_view.dart';
 import 'package:note_sharing_project/ui/home/widgets/navigation_drawer.dart';
 import 'package:note_sharing_project/ui/home/widgets/title_text.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
@@ -35,13 +34,6 @@ class HomePage extends StatelessWidget {
             SizedBox(height: 20.h),
             const Expanded(
               child: SizedBox(width: double.infinity, child: HomePageCarosel()),
-            ),
-            SizedBox(height: 20.h),
-            _recentFolderText(),
-            SizedBox(
-              height: 130.h,
-              width: double.infinity,
-              child: const RecentFileLitView(),
             ),
           ],
         ),

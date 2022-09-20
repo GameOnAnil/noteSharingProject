@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:http/http.dart' as http;
 import 'package:lecle_downloads_path_provider/lecle_downloads_path_provider.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
@@ -80,5 +81,19 @@ class StorageService {
     } catch (e) {
       return e.toString();
     }
+  }
+
+  static Future<File> loadNetwork(String url, String fileName) async {
+    final response = await http.get(Uri.parse(url));
+    final bytes = response.bodyBytes;
+    return _storeFile(url, bytes, fileName);
+  }
+
+  static Future<File> _storeFile(
+      String url, List<int> bytes, String fileName) async {
+    final dir = await getApplicationDocumentsDirectory();
+    final file = File('${dir.path}/$fileName');
+    await file.writeAsBytes(bytes, flush: true);
+    return file;
   }
 }

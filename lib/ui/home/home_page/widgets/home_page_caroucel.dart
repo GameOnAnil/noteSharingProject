@@ -6,7 +6,6 @@ import 'package:note_sharing_project/ui/home/widgets/carousel_tile.dart';
 import 'package:note_sharing_project/utils/base_utils.dart';
 import 'package:note_sharing_project/utils/constants.dart';
 import 'package:note_sharing_project/utils/my_colors.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomePageCarosel extends StatefulWidget {
   const HomePageCarosel({
@@ -23,37 +22,43 @@ class _HomePageCaroselState extends State<HomePageCarosel> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        SizedBox(height: 16.h),
         Expanded(
-          child: SizedBox(
-            // width: double.infinity,
-            child: CarouselSlider(
-              items: programList.map((e) {
-                final index = programList.indexOf(e);
-
+          child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, childAspectRatio: .95),
+              itemCount: programList.length,
+              itemBuilder: (context, index) {
                 return CarauselTile(
-                    color: caroucelColorList[index % 4], title: e);
-              }).toList(),
-              options: CarouselOptions(
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    mIndex = index;
-                  });
-                },
-                autoPlay: false,
-                //aspectRatio: .5,
-                enlargeCenterPage: true,
-              ),
-            ),
-          ),
+                    color: caroucelColorList[index % 4],
+                    title: programList[index]);
+              }),
         ),
         SizedBox(height: 10.h),
-        AnimatedSmoothIndicator(
-          activeIndex: mIndex,
-          count: programList.length,
-          effect: ScrollingDotsEffect(
-              dotWidth: 10.w, dotHeight: 10.h, activeDotColor: purplePrimary),
-        ),
       ],
+    );
+  }
+
+  SizedBox _buildCaroucelSlider() {
+    return SizedBox(
+      // width: double.infinity,
+      child: CarouselSlider(
+        items: programList.map((e) {
+          final index = programList.indexOf(e);
+
+          return CarauselTile(color: caroucelColorList[index % 4], title: e);
+        }).toList(),
+        options: CarouselOptions(
+          onPageChanged: (index, reason) {
+            setState(() {
+              mIndex = index;
+            });
+          },
+          autoPlay: false,
+          //aspectRatio: .5,
+          enlargeCenterPage: true,
+        ),
+      ),
     );
   }
 }

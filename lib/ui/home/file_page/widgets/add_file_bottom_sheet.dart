@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -135,7 +134,7 @@ class _AddFileBottomSheetState extends BaseState<AddFileBottomSheet> {
     );
 
     if (result != null) {
-      List<String> supportedList = ["pdf", "png", "jpg", "jpeg"];
+      List<String> supportedList = ["pdf", "png", "jpg", "jpeg", "mp4"];
       File? file = File(result.files.first.path!);
       String name = result.files.first.name;
       int byte = await file.length();
@@ -148,61 +147,6 @@ class _AddFileBottomSheetState extends BaseState<AddFileBottomSheet> {
       } else {
         Fluttertoast.showToast(msg: "File Not Supported");
       }
-    }
-  }
-
-  _handleUploadMobile() async {
-    try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        allowMultiple: false,
-        withData: true,
-      );
-      if (result != null) {
-        Uint8List? file = result.files.first.bytes;
-        String name = result.files.first.name;
-        if (file == null) {
-          throw "Failed to upload file.";
-        }
-        UploadTask task =
-            FirebaseStorage.instance.ref().child("docs/$name").putData(file);
-        setState(() => isLoading = true);
-
-        final url = await task.snapshot.ref.getDownloadURL();
-        final newModel = FileModel(
-            name: name,
-            date: getTodaysDate(),
-            time: DateFormat('HH:mm:ss').format(DateTime.now()),
-            size: await getFileSize(file.length, 2),
-            filePath: "docs/$name",
-            fileType: name.split(".")[1],
-            url: url,
-            uploaderId: ref.read(authProviderNotifier).userId ?? "");
-
-        await FirebaseService().insertData(path, newModel);
-        await _handleNotification(widget.subject.notificationOn);
-        setState(() => isLoading = false);
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Successfully Added'),
-          ),
-        );
-        Navigator.pop(context);
-      }
-    } on FirebaseException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('ERROR:$e'),
-        ),
-      );
-      Navigator.pop(context);
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('ERROR:$e'),
-        ),
-      );
-      Navigator.pop(context);
     }
   }
 

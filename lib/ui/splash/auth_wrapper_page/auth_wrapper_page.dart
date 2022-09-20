@@ -7,8 +7,8 @@ import 'package:note_sharing_project/providers/auth_provider.dart';
 import 'package:note_sharing_project/services/api_service.dart';
 import 'package:note_sharing_project/ui/admin/admin_home_page/admin_home_page.dart';
 import 'package:note_sharing_project/ui/authentication/login_page/login_page.dart';
-import 'package:note_sharing_project/ui/home/home_page/home_page.dart';
 import 'package:note_sharing_project/ui/home/home_page/home_page_builder.dart';
+import 'package:note_sharing_project/ui/home/home_page/home_page_new.dart';
 
 import '../../../utils/base_page.dart';
 import '../../../utils/base_state.dart';
@@ -51,7 +51,7 @@ class _AuthWrapperPageState extends BaseState<AuthWrapperPage> {
               return const AdminHomePage();
             } else if (user?.userType == "user") {
               if (!kIsWeb) {
-                return const HomePage();
+                return const HomePageNew();
               } else {
                 return const HomePageBuilder();
               }

@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lecle_downloads_path_provider/lecle_downloads_path_provider.dart';
 import 'package:note_sharing_project/models/subject.dart';
 import 'package:note_sharing_project/utils/custom_alert_dialog.dart';
+import 'package:path/path.dart';
 
 import 'custom_alert_dialog2.dart';
 
@@ -57,4 +61,23 @@ showCustomAlertDialog2(BuildContext context,
           child: child,
         );
       });
+}
+
+Future<String?> downloadIntoInternal(File file) async {
+  try {
+    Directory? downloadsDirectory = await DownloadsPath.downloadsDirectory();
+    String? downloadsDirectoryPath = (downloadsDirectory)?.path;
+
+    final name = basename(file.path);
+    if (downloadsDirectoryPath != null) {
+      final storageFile = File("$downloadsDirectoryPath/$name");
+
+      storageFile.writeAsBytes(await file.readAsBytes());
+      return null;
+    } else {
+      return "Download Directory not found.";
+    }
+  } catch (e) {
+    return e.toString();
+  }
 }
